@@ -1,0 +1,50 @@
+# Project information
+site_name: Gluu Open Banking Distribution Version 1.0.0 Docs
+site_description: Documentation for Gluu Server Open Banking Distribution
+
+# Copyright
+copyright: Copyright &copy; 2021, Gluu, Inc.
+
+# Repository
+docs_dir: source
+repo_name: GluuFederation/docs-openbanking-prod
+repo_url: https://github.com/GluuFederation/docs-openbanking-prod/
+edit_uri: edit/1.0.0/docs/source
+
+# Configuration
+theme:
+    name: material
+    custom_dir: 'theme'
+    palette:
+        primary: 'green'
+        accent: 'green'
+    logo: 'gluu.jpg'
+    favicon: 'favicon.ico'
+extra:
+    version: '1.0.0'
+extra_css:
+  - css/tabs.css
+
+# Tracking
+google_analytics:
+  - 'UA-31008645-7'
+  - 'auto'
+
+# Extensions
+markdown_extensions:
+- admonition
+- attr_list
+- toc:
+     permalink: '#'
+- codehilite
+- pymdownx.superfences
+- pymdownx.tabbed
+
+# Navigation
+nav:
+- Overview: index.md
+- Installation: install.md
+- Use Cases: use-cases.md
+- Operation Guide: operation.md
+- Key Management: key-management.md
+- Mutual TLS Configuration: mtls.md
