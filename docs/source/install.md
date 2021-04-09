@@ -1,6 +1,6 @@
 # Installation Guide
 
-## Kubernetes Distribution
+## Cloud Native Distribution
 
 ## VM Distribution
 
