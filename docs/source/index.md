@@ -13,6 +13,10 @@ The Gluu Server is a distribution of open source software for identity and acces
 - Gluu Web Admin UI API
 - Gluu Web Admin GUI
 
+## Architecture
+
+![architecture diagram](./img/architecture.png)
+
 ## Support
 Gluu offers free and VIP support! Anyone can browse or register and post questions on the [Gluu support portal](https://support.gluu.org). Tickets opened by the community are public, and we do our best to answer them in a timely manner. 
 
