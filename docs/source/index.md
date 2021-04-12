@@ -1,8 +1,8 @@
-# Gluu Server Open Banking Distribution
+# Gluu Open Banking Identity Platform
 
 ## Overview
 
-The Gluu Server Open Banking Distribution is a specific profile of the [Gluu Server](https://gluu.org/docs/gluu-server) that is packaged and configured for Open Banking customers. 
+The Gluu Open Banking Identity Platform is a specific profile of the [Gluu Server](https://gluu.org/docs/gluu-server) that is packaged and configured for Open Banking customers. 
 
 The Gluu Server is a distribution of open source software for identity and access management (IAM). SaaS, custom, open source and commercial web and mobile applications can leverage a Gluu Server for user authentication, identity information, and policy decisions. 
 
