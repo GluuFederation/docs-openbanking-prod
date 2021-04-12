@@ -26,13 +26,4 @@ Private support, guaranteed response times and consultative support are availabl
 We want to keep improving our docs. Please help us improve by submitting any improvements to our [Documentation Github](https://github.com/GluuFederation/docs-open-banking-prod). If you're a Github pro, submit a pull request. If not, just open an issue on any typos, bugs, or improvements you'd like to see addressed. We need your help... even if you're not a coder, you can contribute! 
 
 ## License
-The Gluu Server is a container distribution of software written by Gluu and incorporated from other open source projects. Gluu projects are frequently prefixed with our open source handle: **ox** (e.g. oxAuth, oxTrust).
-
-The license for each software component included in the container is listed below.
-
-|	Component	|	License	            |
-|-----------------------|---------------|
-|	Janssen Auth server      | [Apache2](http://www.apache.org/licenses/LICENSE-2.0)|
-|	Janssen Config API      | [Apache2](http://www.apache.org/licenses/LICENSE-2.0)|
-| Gluu Web Admin UI API | [Apache2](http://www.apache.org/licenses/LICENSE-2.0) |
-| Gluu Web Admin UI | [Apache2](http://www.apache.org/licenses/LICENSE-2.0) |
+The Gluu Server is a container distribution of software written by Gluu and incorporated from other open source projects. This distribution and its components are offered under the [Apache2](http://www.apache.org/licenses/LICENSE-2.0) license. 
