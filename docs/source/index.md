@@ -6,15 +6,6 @@ The Gluu Server Open Banking Distribution is a specific profile of the [Gluu Ser
 
 The Gluu Server is a distribution of open source software for identity and access management (IAM). SaaS, custom, open source and commercial web and mobile applications can leverage a Gluu Server for user authentication, identity information, and policy decisions. 
 
-Common use cases include:
-
-- Single sign-on (SSO)   
-- Mobile authentication    
-- API access management  
-- Two-factor authentication (2FA)
-- Customer identity and access management (CIAM)   
-- Identity federation  
-
 ## Components
 
 - Janssen Auth Server
