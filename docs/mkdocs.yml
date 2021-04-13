@@ -1,5 +1,5 @@
 # Project information
-site_name: Gluu Open Banking Distribution
+site_name: Gluu Open Banking Identity Platform
 site_description: Documentation for Gluu Server Open Banking Distribution
 
 # Copyright
@@ -43,21 +43,21 @@ markdown_extensions:
 nav:
 - Overview: index.md
 - Installation: install.md
-- Use Cases:
-    - Authorization: use-cases/authz.md
-    - CIBA: use-cases/ciba.md
-    - Consent Management: use-cases/consent.md
-    - Dynamic Client Registration: use-cases/dynamic-registration.md
-    - Identity: use-cases/identity.md
-- Operation Guide: operation.md
-- Key Management: key-management.md
-- Mutual TLS Configuration: mtls.md
-- Requirements by Country:
-    - Australia: country/australia-reqs.md
-    - Brazil: country/brazil-reqs.md
-    - Germany: country/germany-reqs.md
-    - Hong Kong: country/hk-reqs.md
-    - Japan: country/japan-reqs.md
-    - Nigeria: country/nigeria-reqs.md
-    - Singapore: country/singapore-reqs.md
-    - UK: country/uk-reqs.md
+#- Use Cases:
+#    - Authorization: use-cases/authz.md
+#    - CIBA: use-cases/ciba.md
+#    - Consent Management: use-cases/consent.md
+#    - Dynamic Client Registration: use-cases/dynamic-registration.md
+#    - Identity: use-cases/identity.md
+#- Operation Guide: operation.md
+#- Key Management: key-management.md
+#- Mutual TLS Configuration: mtls.md
+#- Requirements by Country:
+#    - Australia: country/australia-reqs.md
+#    - Brazil: country/brazil-reqs.md
+#    - Germany: country/germany-reqs.md
+#    - Hong Kong: country/hk-reqs.md
+#    - Japan: country/japan-reqs.md
+#    - Nigeria: country/nigeria-reqs.md
+#    - Singapore: country/singapore-reqs.md
+#    - UK: country/uk-reqs.md
