@@ -1,5 +1,5 @@
 # Mutual TLS Configuration
-Mutual TLS(MTLS) helps servers and clients in identifying each other. It also establishes a two-way encrypted channel in between the server and clients. This document discusses setting up the MTLS in Gluu Open Banking Distribution. 
+Mutual TLS(MTLS) helps servers and clients in identifying each other. It also establishes a two-way encrypted channel in between the server and clients. This document discusses MTLS configuration in Gluu Open Banking Distribution. 
 
 To support MTLS configuration the token_endpoint_auth_method client property in the server should have at least one of the following two new values:
 * tls_client_auth: Indicates that client authentication to the authorization server will occur with mutual TLS utilizing the PKI method of associating a certificate to a client.
@@ -9,9 +9,9 @@ The following discussion is based on Ubuntu similar settings will be there for o
 
 apachectl -M | grep ssl
 
-If we get output as “ssl_module (shared)” then the ssl_module is installed.
+Its output as “ssl_module (shared)” confirms that the ssl_module is installed.
 
-Usually third party or Certbot SSL certs are used for web server ssl connections. In that case no extra configuration is necessary.
+Usually third party or Certbot SSL certificates are used for web server ssl connections. 
 
 The following lines should be included in Apache configuration which is responsible for ssl connection. The paths of cert files could be different so refer the details of your distribution. Like for CentOS /etc/pki/tls is the path. /etc/ssl/ is for Debian based distributions. 
 
