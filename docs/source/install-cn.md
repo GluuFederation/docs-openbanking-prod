@@ -45,26 +45,21 @@ Please calculate the minimum required resources as per services deployed. The fo
         Default  AWS deployment will install a classic load balancer with an `IP` that is not static. Don't worry about the `IP` changing. All pods will be updated automatically with our script when a change in the `IP` of the load balancer occurs. However, when deploying in production, **DO NOT** use our script. Instead, assign a CNAME record for the LoadBalancer DNS name, or use Amazon Route 53 to create a hosted zone. More details in this [AWS guide](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/using-domain-names-with-elb.html?icmpid=docs_elb_console).
       
     
-=== "MicroK8s"
+=== "Quick start with Microk8s"
     ## MicroK8s
     
     ### Requirements
     
-    1. Install [MicroK8s](https://microk8s.io/)
+    1. Create a fresh Ubuntu 20.04 on AWS.
     
-    1. Make sure all ports are open for [microk8s](https://microk8s.io/docs/)
+    1. Run the following command: 
+       
+       ```
+       sudo su -
+       wget https://raw.githubusercontent.com/GluuFederation/cloud-native-edition/master/automation/startopenabankingdemo.sh && chmod u+x startopenabankingdemo.sh && ./startopenabankingdemo.sh  
+       ```
     
-    1. Enable `helm3`, `storage`, `ingress` and `dns`.
-    
-        ```bash
-        sudo microk8s.enable helm3 storage ingress dns
-        ```
-        
-    1. **Optional[alpha]:** If using Istio please enable it.  Please note that at the moment Istio ingress is not supported with Microk8s.
-    
-        ```bash
-        sudo microk8s.enable istio
-        ```   
+    1. [Map](#non-registered-fqdn) your vm ip to the fqdn `demoexample.gluu.org`
       
 2. Install Gluu using Helm
 
