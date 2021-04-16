@@ -21,7 +21,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 |nginx             | 1          |    1GB      |   N/A            |  64 Bit        | Yes if not ALB or Istio                             |
 
 
-1. Configure cloud or local kubernetes cluster:
+### Configure cloud or local kubernetes cluster:
 
 === "EKS"
     ## Amazon Web Services (AWS) - EKS
@@ -58,7 +58,7 @@ Please calculate the minimum required resources as per services deployed. The fo
     
     1. [Map](#non-registered-fqdn) your vm ip to the fqdn `demoexample.gluu.org`
       
-2. Install Gluu using Helm
+### Install Gluu using Helm
 
     1. Create an Amazon Aurora database with MySQL compatibility version >= `Aurora(MySQL 5.7) 2.07.1` and capacity type `Serverless`. Make sure the EKS cluster can reach the database endpoint. You may choose to use the same VPC as the EKS cluster. Save the master user, master password, and initial database name for use in Gluus helm chart.
     
