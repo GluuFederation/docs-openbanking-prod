@@ -113,7 +113,7 @@ If during installation the release was not defined, release name is checked by r
 
 Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication) on the host level. Uncomment the following from your values.yaml or manually add them to your ingress.
 
-```helmyaml
+```yaml
     additionalAnnotations:
       # Enable client certificate authentication
       nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
@@ -130,7 +130,7 @@ Please note that enabling the following annotations in the values.yaml will enab
 
 ### Helm values.yaml
 
-```helmyaml
+```yaml
 auth-server:
   dnsPolicy: ""
   dnsConfig: {}
