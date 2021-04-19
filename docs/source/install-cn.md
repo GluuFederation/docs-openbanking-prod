@@ -60,29 +60,29 @@ Please calculate the minimum required resources as per services deployed. The fo
       
 ### Install Gluu using Helm
 
-1. Create an Amazon Aurora database with MySQL compatibility version >= `Aurora(MySQL 5.7) 2.07.1` and capacity type `Serverless`. Make sure the EKS cluster can reach the database endpoint. You may choose to use the same VPC as the EKS cluster. Save the master user, master password, and initial database name for use in Gluus helm chart.
+1.  Create an Amazon Aurora database with MySQL compatibility version >= `Aurora(MySQL 5.7) 2.07.1` and capacity type `Serverless`. Make sure the EKS cluster can reach the database endpoint. You may choose to use the same VPC as the EKS cluster. Save the master user, master password, and initial database name for use in Gluus helm chart.
 
-1. **Optional if not using istio ingress:** Install [nginx-ingress](https://github.com/kubernetes/ingress-nginx) Helm [Chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
+1.  **Optional if not using istio ingress:** Install [nginx-ingress](https://github.com/kubernetes/ingress-nginx) Helm [Chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
 
-   ```bash
-   kubectl create ns <nginx-namespace>
-   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-   helm repo update
-   helm install <nginx-release-name> ingress-nginx/ingress-nginx --namespace=<nginx-namespace>
-   ```
+    ```bash
+    kubectl create ns <nginx-namespace>
+    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    helm repo update
+    helm install <nginx-release-name> ingress-nginx/ingress-nginx --namespace=<nginx-namespace>
+    ```
 
-1. Copy the [values.yaml](#helm-valuesyaml) below into a file named `override-values.yaml`
+1.  Copy the [values.yaml](#helm-valuesyaml) below into a file named `override-values.yaml`
 
-1. Modify the values to fit the deployment. This is the time to inject your database connection parameters. You will find the file marked where you need to change the values.
+1.  Modify the values to fit the deployment. This is the time to inject your database connection parameters. You will find the file marked where you need to change the values.
 
 1.  Create a namespace and install:    
    
-   ```bash
-   kubectl create ns gluu
-   helm repo add gluu https://gluufederation.github.io/cloud-native-edition/pygluu/kubernetes/templates/helm
-   helm repo update
-   helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.0
-   ```
+    ```bash
+    kubectl create ns gluu
+    helm repo add gluu https://gluufederation.github.io/cloud-native-edition/pygluu/kubernetes/templates/helm
+    helm repo update
+    helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.0
+    ```
           
 ### Non registered FQDN      
 
