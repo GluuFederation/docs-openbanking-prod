@@ -42,7 +42,9 @@ markdown_extensions:
 # Navigation
 nav:
 - Overview: index.md
-- Installation: install.md
+- Installation: 
+    - VM: install-vm.md
+    - Cloud Native: install-cn.md
 #- Use Cases:
 #    - Authorization: use-cases/authz.md
 #    - CIBA: use-cases/ciba.md
@@ -51,7 +53,7 @@ nav:
 #    - Identity: use-cases/identity.md
 #- Operation Guide: operation.md
 #- Key Management: key-management.md
-#- Mutual TLS Configuration: mtls.md
+- Mutual TLS Configuration: mtls.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md
 #    - Brazil: country/brazil-reqs.md
