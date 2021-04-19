@@ -21,17 +21,17 @@ Please calculate the minimum required resources as per services deployed. The fo
 |nginx             | 1          |    1GB      |   N/A            |  64 Bit        | Yes if not ALB or Istio                             |
 
 
-### Configure cloud or local kubernetes cluster:
+## Configure cloud or local kubernetes cluster:
 
 === "EKS"
-    ## Amazon Web Services (AWS) - EKS
+    ### Amazon Web Services (AWS) - EKS
       
-    ### Setup Cluster
+    #### Setup Cluster
     
     -  Follow this [guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
      to install a cluster with worker nodes. Please make sure that you have all the `IAM` policies for the AWS user that will be creating the cluster and volumes.
     
-    ### Requirements
+    #### Requirements
     
     -   The above guide should also walk you through installing `kubectl` , `aws-iam-authenticator` and `aws cli` on the VM you will be managing your cluster and nodes from. Check to make sure.
     
@@ -43,22 +43,22 @@ Please calculate the minimum required resources as per services deployed. The fo
       
     
 === "Quick start with Microk8s"
-    ## MicroK8s
+    ### MicroK8s
     
-    ### Requirements
+    #### Requirements
     
-    1. Create a fresh Ubuntu 20.04 on AWS.
+    1.  Create a fresh Ubuntu 20.04 on AWS.
     
-    1. Run the following command: 
+    1.  Run the following command: 
        
-       ```
-       sudo su -
-       wget https://raw.githubusercontent.com/GluuFederation/cloud-native-edition/master/automation/startopenabankingdemo.sh && chmod u+x startopenabankingdemo.sh && ./startopenabankingdemo.sh  
-       ```
+        ```bash
+        sudo su -
+        wget https://raw.githubusercontent.com/GluuFederation/cloud-native-edition/master/automation/startopenabankingdemo.sh && chmod u+x startopenabankingdemo.sh && ./startopenabankingdemo.sh  
+        ```
     
-    1. [Map](#non-registered-fqdn) your vm ip to the fqdn `demoexample.gluu.org`
+    1.  [Map](#non-registered-fqdn) your vm ip to the fqdn `demoexample.gluu.org`
       
-### Install Gluu using Helm
+## Install Gluu using Helm
 
 1.  Create an Amazon Aurora database with MySQL compatibility version >= `Aurora(MySQL 5.7) 2.07.1` and capacity type `Serverless`. Make sure the EKS cluster can reach the database endpoint. You may choose to use the same VPC as the EKS cluster. Save the master user, master password, and initial database name for use in Gluus helm chart.
 
@@ -84,7 +84,7 @@ Please calculate the minimum required resources as per services deployed. The fo
     helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.0
     ```
           
-### Non registered FQDN      
+## Non registered FQDN      
 
 If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc/hosts` file  to the IP of the lb or microk8s vm as shown below.
 
@@ -101,7 +101,7 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
   ::1             localhost
   ```
       
-### Uninstalling the Chart
+## Uninstalling the Chart
 
 To uninstall/delete `my-release` deployment:
 
@@ -109,7 +109,7 @@ To uninstall/delete `my-release` deployment:
 
 If during installation the release was not defined, release name is checked by running `$ helm ls` then deleted using the previous command and the default release name.
 
-### Enabling mTLS in ingress-nginx
+## Enabling mTLS in ingress-nginx
 
 Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication) on the host level. Uncomment the following from your values.yaml or manually add them to your ingress.
 
@@ -128,7 +128,7 @@ Please note that enabling the following annotations in the values.yaml will enab
 ```
 
 
-### Helm values.yaml
+## Helm values.yaml
 
 ```yaml
 auth-server:
