@@ -111,23 +111,197 @@ If during installation the release was not defined, release name is checked by r
 
 ## Enabling mTLS in ingress-nginx
 
-Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication) on the host level. Uncomment the following from your values.yaml or manually add them to your ingress.
+1.  Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication). Uncomment the following from your values.yaml or manually add them to your ingress. 
 
+    ```yaml
+        additionalAnnotations:
+          # Enable client certificate authentication. Keep this optional. We force it on the path level for /token and /register endpoints.
+          nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
+          # Create the secret containing the trusted ca certificates
+          nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/ca-secret"
+          # Specify the verification depth in the client certificates chain
+          nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+          # Specify if certificates are passed to upstream server
+          nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+    ```
+
+    In the above secret `ca-secret` inside namespace `gluu` is created.
+
+1.  Set `nginx-ingress.ingress.authServerProtectedToken` and `nginx-ingress.ingress.authServerProtectedRegister` to `true`.
+   
+### Loading web https certs and keys. Coming soon...
+
+| Associated certificates and keys | Notes                                      |
+| -------------------------------- | ------------------------------------------ |
+| /etc/certs/web_https.crt         | This is commonly referred to as server.crt |
+| /etc/certs/web_https.key         | This is commonly referred to as server.key |
+| /etc/certs/web_https.csr         | This is commonly referred to as server.csr |
+| /etc/certs/ca.crt                ||
+| /etc/certs/ca.key                ||
+    
+
+!!! Note
+    This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` from `/etc/certs`.
+    
+1. Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
+
+    ```bash
+        kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace>` 
+    ```
+    
+1. Create a file named `load-web-key-rotation.yaml` with the following contents :
+                   
 ```yaml
-    additionalAnnotations:
-      # Enable client certificate authentication
-      nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
-      # Create the secret containing the trusted ca certificates
-      nginx.ingress.kubernetes.io/auth-tls-secret: "default/ca-secret"
-      # Specify the verification depth in the client certificates chain
-      nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
-      # Specify an error page to be redirected to verification errors
-      nginx.ingress.kubernetes.io/auth-tls-error-page: "https://demo.openbanking.org/error.html"
-      # Specify if certificates are passed to upstream server
-      nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+# License terms and conditions for Gluu Cloud Native Edition:
+# https://www.apache.org/licenses/LICENSE-2.0
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-web-key-rotation
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"                  
+    spec:
+      restartPolicy: Never
+      volumes:
+      - name: web-cert
+        secret:
+          secretName: web-cert-key
+          items:
+            - key: web_https.crt
+              path: web_https.crt
+      - name: web-key
+        secret:
+          secretName: web-cert-key
+          items:
+            - key: web_https.key
+              path: web_https.key
+      - name: web-csr
+        secret:
+          secretName: web-cert-key
+          items:
+            - key: web_https.csr
+              path: web_https.csr
+      - name: web-ca-cert
+        secret:
+          secretName: web-cert-key
+          items:
+            - key: ca.crt
+              path: ca.crt
+      - name: web-ca-key
+        secret:
+          secretName: web-cert-key
+          items:
+            - key: ca.key
+              path: ca.key                              
+      containers:
+        - name: load-web-key-rotation
+          image: janssenproject/certmanager:1.0.0_b2
+          envFrom:
+          - configMapRef:
+              name: gluu-config-cm  #This may be differnet in your Helm setup
+          volumeMounts:
+            - name: web-cert
+              mountPath: /etc/certs/web_https.crt
+              subPath: web_https.crt
+            - name: web-key
+              mountPath: /etc/certs/web_https.key
+              subPath: web_https.key
+            - name: web-csr
+              mountPath: /etc/certs/web_https.csr
+              subPath: web_https.csr
+            - name: web-ca-cert
+              mountPath: /etc/certs/ca.crt
+              subPath: ca.crt
+            - name: web-ca-key
+              mountPath: /etc/certs/ca.key
+              subPath: ca.key   
+          args: ["patch", "web", "--opts", "source:from-files"]
 ```
 
+1. Apply job
 
+    ```bash
+        kubectl apply -f load-web-key-rotation.yaml -n <gluu-namespace>
+    ```
+
+### Example using self signed certs and keys: Coming soon...
+
+1.  Follow the above steps to enable the annotations and protected endpoints before running the `helm install` command. 
+
+1.  Wait for services to be in a running state.
+
+1.  Get self signed certs and generate client crt and key. This assumes the namespace Gluu has been installed in is `gluu`.
+
+    ```bash
+    mkdir certs
+    cd certs
+    kubectl get secret cn -o json -n gluu | grep '"ssl_ca_cert":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > ca.crt
+    kubectl get secret cn -o json -n gluu | grep '"ssl_ca_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > ca.key
+    kubectl get secret cn -o json -n gluu | grep '"ssl_cert":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > server.crt
+    kubectl get secret cn -o json -n gluu | grep '"ssl_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > server.key
+    openssl req -new -newkey rsa:4096 -keyout client.key -out client.csr -nodes -subj '/CN=Openbanking'
+    openssl x509 -req -sha256 -days 365 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out client.crt
+    kubectl create secret generic ca-secret -n gluu --from-file=tls.crt=server.crt --from-file=tls.key=server.key --from-file=ca.crt=ca.crt
+    cd ..
+    ```
+
+1.  Try curling a protected endpoint. 
+
+    1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
+       
+        ```bash
+        TESTCLIENT=$(kubectl get cm cn -o json -n gluu | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
+        TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
+        ```
+    
+    1.  Curl the protected `/token` endpoint.
+    
+        ```bash
+        curl -X POST -k --cert client.crt --key client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
+        {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
+        ``` 
+
+### Example using self provided certs and keys: Coming soon...
+
+1.  Follow the above steps to enable the annotations and protected endpoints before running the `helm install` command. 
+
+1.  Wait for services to be in a running state.
+
+1.  Move all your certs and keys inside one folder called `certs` or any name that is convenient . The necessary certs and keys are highlighted in the [table](#loading-web-https-certs-and-keys-coming-soon). This assumes the namespace Gluu has been installed in is `gluu`.
+
+1.  Follow [instructions](#loading-web-https-certs-and-keys-coming-soon) to rotate all associated certs and keys. This is normally done right after installation. Please note that the fqdn inside the crts and keys must be the same as the one provided during installation.
+
+1.  Move all your certs and keys inside one folder. Generate client side crt, key and create the secret for nginx ingress. This assumes the namespace Gluu has been installed in is `gluu`.
+
+    ```bash
+    cd certs
+    openssl req -new -newkey rsa:4096 -keyout client.key -out client.csr -nodes -subj '/CN=Openbanking'
+    openssl x509 -req -sha256 -days 365 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out client.crt
+    kubectl create secret generic ca-secret -n gluu --from-file=tls.crt=web_https.crt --from-file=tls.key=web_https.key --from-file=ca.crt=ca.crt
+    cd ..
+    ```
+
+1. If you are using a seperate secret for TLS `tls-certificate`. Please update that with `tls.crt=web_https.crt` and `tls.key=web_https.key`.
+
+1.  Try curling a protected endpoint. 
+
+    1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
+       
+        ```bash
+        TESTCLIENT=$(kubectl get cm cn -o json -n gluu | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
+        TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
+        ```
+    
+    1.  Curl the protected `/token` endpoint.
+    
+        ```bash
+        curl -X POST -k --cert client.crt --key client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
+        {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
+        ```
+                   
 ## Helm values.yaml
 
 ```yaml
@@ -282,6 +456,10 @@ nginx-ingress:
     u2fConfigEnabled: true
     # /jans-auth
     authServerEnabled: true
+    #/jans-auth/restv1/token
+    authServerProtectedToken: false
+    #/jans-auth/restv1/register
+    authServerProtectedRegister: false
       # in the format of {cert-manager.io/cluster-issuer: nameOfClusterIssuer, kubernetes.io/tls-acme: "true"}
     additionalAnnotations: {}
       # Enable client certificate authentication
