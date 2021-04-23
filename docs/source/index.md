@@ -25,10 +25,6 @@ The core software is developed at the [Linux Foundation Janssen Project](https:/
 
 * **Open Banking OpenID Provider**: Based on Janssen Auth Server, this is Internet facing component provides the FAPI OpenID Connect API for dynamic  client registration, transaction authorization, and CIBA.
 * **Config API**: Service which configures the OpenID Provider. The Client must present an access token authorized by a trusted issuer with certain scopes.  
-    <!-- 
-    * **Admin UI frontend**: Used for development, a user friendly web portal that makes it easy for admins to configure the OpenID Provider.
-    * **Admin API backend**: A helper API for the Admin UI frontend.  
-    -->  
 * **Cloud Database**: Database used to store configuration, client metadata, tokens, and other information required for the operation of the OpenID Provider.
 * **Open Banking API Gateway**: An Internet facing gateway for the core open banking API, should enforce the presence of a token with certain scopes.
 * **Open Banking API**: The core banking API.
