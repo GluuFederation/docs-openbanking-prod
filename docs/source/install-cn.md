@@ -284,12 +284,12 @@ spec:
     cd ..
     ```
 
-1. By default secret used for TLS `tls-certificate` is created upon installation. This secret must be updated with with the server cert and key `tls.crt=web_https.crt` and `tls.key=web_https.key`.
+1.  By default secret used for TLS `tls-certificate` is created upon installation. This secret must be updated with with the server cert and key `tls.crt=web_https.crt` and `tls.key=web_https.key`.
 
-   ```bash
+    ```bash
     kubectl delete secret tls-certificate -n gluu
     kubectl create secret generic tls-certificate --from-file=tls.crt=server.crt --from-file=tls.key=server.key -n gluu
-   ```
+    ```
 
 1.  Try curling a protected endpoint. 
 
