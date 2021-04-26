@@ -20,8 +20,60 @@ The Gluu Open Banking Identity Platform can be installed on one of the following
 
 ## Installation
 
-## Setup
 
-## Post-setup
+
+## MTLS Configuration
+
+For MTLS, OBIE issued certificates and keys should be used. The following discussion assumes that the file `ca.crt` has a CA certificate and `ca.key` has a CA private key. 
+
+The following command is an example of how to create the server’s private key (`server.key`), Certificate Signing Request (CSR) (`server.csr`) and certificate (`server.crt)`:
+
+```
+$ openssl genrsa -out server.key 2048
+$ openssl req -new -key server.key -out server.csr
+$ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -set_serial 100 -days 365 -outform PEM -out server.crt
+```
+
+Now, store the server key (`server.key`) and certificate (`server.crt`) file in some location (preferably inside `/etc/certs`) and set its path in the `.conf` file (`/etc/apache2/sites-enabled/https_jans.conf`) with  `SSLCertificateFile` and  S`SLCertificateKeyFile` directives as:
+
+```
+	SSLCertificateFile /etc/certs/bankgluu/server.crt
+	SSLCertificateKeyFile /etc/certs/bankorg/server.key
+```
+
+The path of CA certificate file should be set to SSLCACertificateFile directive as:
+
+```
+	SSLCACertificateFile /etc/apache2/certs/matls.pem    
+```
+
+The following commands will create client’s private key (`client.key`), CSR (`client.csr`) and certificate (`client.crt`):
+
+```
+$ openssl genrsa -out client.key 2048
+$ openssl req -new -key client.key -out client.csr
+$ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -set_serial 101 -days 365 -outform PEM -out client.crt
+```
+
+The following command will create a client certification chain (private key, public certificate and ca certificate) into the file `client.pem`:
+
+```
+$ cat client.key client.crt ca.crt >client.pem
+```
+
+Use this pem file to create JWKs for the clients (if required). To create a JWK, you can use a free utility published at [https://mkjwk.org](https://mkjwk.org). Or you can download the command-line tool from [GitHub](https://github.com/mitreid-connect/json-web-key-generator). There are numerous other online PEM-to-JWKS tools available like [JWKConvertFunctions](https://8gwifi.org/jwkconvertfunctions.jsp). We may need to add/update some data in these generated JWKs.
+
+!!!Note 
+    It is important to give different values of the Common Name field (“Common Name (e.g. server FQDN or YOUR name) []”) for the CA, Server and  clients. Other fields may have common values but the same values for Common Name of all certificates results in certificate verification failed at runtime.
+
+### Importing the CA and signing certificates into Auth-Server keystore: 
+
+The command line utility keytool is installed with JDK, it can be used to import the certificate and keys into the JVM keystore and jans-auth server’s keystore.
+
+```
+./keytool -importcert -file /path/to/file/filename.cer -keystore /path/to/file/filename.jks -alias yourkeystore
+
+./keytool -importkeystore -srckeystore /path/to/file/filename.jks -srcstoretype JKS -destkeystore /opt/jre/lib/security/cacerts -deststoretype JKS
+```
 
 ## Persistence
