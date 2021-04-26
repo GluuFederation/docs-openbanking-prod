@@ -20,6 +20,21 @@ The Gluu Open Banking Identity Platform can be installed on one of the following
 
 ## Installation
 
+To install the Gluu Open Banking Identity platform, just follow these steps:
+
+1. Download the installation script:
+
+    `curl https://raw.githubusercontent.com/JanssenProject/jans-setup/openbank/install.py > install.py`
+
+2. Execute the installation script:
+
+    `python3 install.py`
+
+### Uninstalling Janssen Server
+
+Execute the installation script with the `-uninstall` argument
+
+`python3 install.py -uninstall`
 
 
 ## MTLS Configuration
