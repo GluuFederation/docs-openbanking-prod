@@ -129,7 +129,7 @@ If during installation the release was not defined, release name is checked by r
 
 1.  Set `nginx-ingress.ingress.authServerProtectedToken` and `nginx-ingress.ingress.authServerProtectedRegister` to `true`.
    
-### Loading web https certs and keys. Coming soon...
+### Loading web https certs and keys.
 
 | Associated certificates and keys | Notes                                      |
 | -------------------------------- | ------------------------------------------ |
@@ -146,7 +146,7 @@ If during installation the release was not defined, release name is checked by r
 1. Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
 
     ```bash
-        kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace>` 
+        kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace> 
     ```
     
 1. Create a file named `load-web-key-rotation.yaml` with the following contents :
@@ -227,9 +227,9 @@ spec:
         kubectl apply -f load-web-key-rotation.yaml -n <gluu-namespace>
     ```
 
-### Example using self signed certs and keys: Coming soon...
+### Example using self signed certs and keys:
 
-1.  Follow the above steps to enable the annotations and protected endpoints before running the `helm install` command. 
+1.  Follow the above [steps](#enabling-mtls-in-ingress-nginx) to enable the annotations and protected endpoints before running the [`helm install`](#install-gluu-using-helm) command. 
 
 1.  Wait for services to be in a running state.
 
@@ -264,15 +264,15 @@ spec:
         {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
         ``` 
 
-### Example using self provided certs and keys: Coming soon...
+### Example using self provided certs and keys:
 
-1.  Follow the above steps to enable the annotations and protected endpoints before running the `helm install` command. 
+1.  Follow the above [steps](#enabling-mtls-in-ingress-nginx) to enable the annotations and protected endpoints before running the [`helm install`](#install-gluu-using-helm) command. 
 
 1.  Wait for services to be in a running state.
 
-1.  Move all your certs and keys inside one folder called `certs` or any name that is convenient . The necessary certs and keys are highlighted in the [table](#loading-web-https-certs-and-keys-coming-soon). This assumes the namespace Gluu has been installed in is `gluu`.
+1.  Move all your certs and keys inside one folder called `certs` or any name that is convenient . The necessary certs and keys are highlighted in the [table](#loading-web-https-certs-and-keys). This assumes the namespace Gluu has been installed in is `gluu`.
 
-1.  Follow [instructions](#loading-web-https-certs-and-keys-coming-soon) to rotate all associated certs and keys. This is normally done right after installation. Please note that the fqdn inside the crts and keys must be the same as the one provided during installation.
+1.  Follow [instructions](#loading-web-https-certs-and-keys) to rotate all associated certs and keys. This is normally done right after installation. Please note that the fqdn inside the crts and keys must be the same as the one provided during installation.
 
 1.  Move all your certs and keys inside one folder. Generate client side crt, key and create the secret for nginx ingress. This assumes the namespace Gluu has been installed in is `gluu`.
 
@@ -284,7 +284,12 @@ spec:
     cd ..
     ```
 
-1. If you are using a seperate secret for TLS `tls-certificate`. Please update that with `tls.crt=web_https.crt` and `tls.key=web_https.key`.
+1. By default secret used for TLS `tls-certificate` is created upon installation. This secret must be updated with with the server cert and key `tls.crt=web_https.crt` and `tls.key=web_https.key`.
+
+   ```bash
+    kubectl delete secret tls-certificate -n gluu
+    kubectl create secret generic tls-certificate --from-file=tls.crt=server.crt --from-file=tls.key=server.key -n gluu
+   ```
 
 1.  Try curling a protected endpoint. 
 
@@ -311,7 +316,7 @@ auth-server:
   image:
     pullPolicy: IfNotPresent
     repository: janssenproject/auth-server
-    tag: 1.0.0_b1
+    tag: 1.0.0_b2
   replicas: 1
   resources:
     limits:
@@ -355,7 +360,7 @@ config:
   email: support@gluu.org # Change to your email
   image:
     repository: janssenproject/configuration-manager
-    tag: 1.0.0_b1
+    tag: 1.0.0_b2
   orgName: Gluu # Change to your orgnization name
   resources:
     limits:
@@ -377,7 +382,7 @@ config-api:
   image:
     pullPolicy: Always
     repository: janssenproject/config-api
-    tag: 1.0.0_b1
+    tag: 1.0.0_b2
   replicas: 1
   resources:
     limits:
@@ -485,7 +490,7 @@ persistence:
   image:
     pullPolicy: Always
     repository: janssenproject/persistence-loader
-    tag: 1.0.0_b1
+    tag: 1.0.0_b2
   resources:
     limits:
       cpu: 300m
