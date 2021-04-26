@@ -143,85 +143,85 @@ If during installation the release was not defined, release name is checked by r
 !!! Note
     This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` from `/etc/certs`.
     
-1. Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
+1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
 
     ```bash
         kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace> 
     ```
     
-1. Create a file named `load-web-key-rotation.yaml` with the following contents :
+1.  Create a file named `load-web-key-rotation.yaml` with the following contents :
                    
-```yaml
-# License terms and conditions for Gluu Cloud Native Edition:
-# https://www.apache.org/licenses/LICENSE-2.0
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: load-web-key-rotation
-spec:
-  template:
+    ```yaml
+    # License terms and conditions for Gluu Cloud Native Edition:
+    # https://www.apache.org/licenses/LICENSE-2.0
+    apiVersion: batch/v1
+    kind: Job
     metadata:
-      annotations:
-        sidecar.istio.io/inject: "false"                  
+      name: load-web-key-rotation
     spec:
-      restartPolicy: Never
-      volumes:
-      - name: web-cert
-        secret:
-          secretName: web-cert-key
-          items:
-            - key: web_https.crt
-              path: web_https.crt
-      - name: web-key
-        secret:
-          secretName: web-cert-key
-          items:
-            - key: web_https.key
-              path: web_https.key
-      - name: web-csr
-        secret:
-          secretName: web-cert-key
-          items:
-            - key: web_https.csr
-              path: web_https.csr
-      - name: web-ca-cert
-        secret:
-          secretName: web-cert-key
-          items:
-            - key: ca.crt
-              path: ca.crt
-      - name: web-ca-key
-        secret:
-          secretName: web-cert-key
-          items:
-            - key: ca.key
-              path: ca.key                              
-      containers:
-        - name: load-web-key-rotation
-          image: janssenproject/certmanager:1.0.0_b2
-          envFrom:
-          - configMapRef:
-              name: gluu-config-cm  #This may be differnet in your Helm setup
-          volumeMounts:
-            - name: web-cert
-              mountPath: /etc/certs/web_https.crt
-              subPath: web_https.crt
-            - name: web-key
-              mountPath: /etc/certs/web_https.key
-              subPath: web_https.key
-            - name: web-csr
-              mountPath: /etc/certs/web_https.csr
-              subPath: web_https.csr
-            - name: web-ca-cert
-              mountPath: /etc/certs/ca.crt
-              subPath: ca.crt
-            - name: web-ca-key
-              mountPath: /etc/certs/ca.key
-              subPath: ca.key   
-          args: ["patch", "web", "--opts", "source:from-files"]
-```
-
-1. Apply job
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"                  
+        spec:
+          restartPolicy: Never
+          volumes:
+          - name: web-cert
+            secret:
+              secretName: web-cert-key
+              items:
+                - key: web_https.crt
+                  path: web_https.crt
+          - name: web-key
+            secret:
+              secretName: web-cert-key
+              items:
+                - key: web_https.key
+                  path: web_https.key
+          - name: web-csr
+            secret:
+              secretName: web-cert-key
+              items:
+                - key: web_https.csr
+                  path: web_https.csr
+          - name: web-ca-cert
+            secret:
+              secretName: web-cert-key
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - name: web-ca-key
+            secret:
+              secretName: web-cert-key
+              items:
+                - key: ca.key
+                  path: ca.key                              
+          containers:
+            - name: load-web-key-rotation
+              image: janssenproject/certmanager:1.0.0_b2
+              envFrom:
+              - configMapRef:
+                  name: gluu-config-cm  #This may be differnet in your Helm setup
+              volumeMounts:
+                - name: web-cert
+                  mountPath: /etc/certs/web_https.crt
+                  subPath: web_https.crt
+                - name: web-key
+                  mountPath: /etc/certs/web_https.key
+                  subPath: web_https.key
+                - name: web-csr
+                  mountPath: /etc/certs/web_https.csr
+                  subPath: web_https.csr
+                - name: web-ca-cert
+                  mountPath: /etc/certs/ca.crt
+                  subPath: ca.crt
+                - name: web-ca-key
+                  mountPath: /etc/certs/ca.key
+                  subPath: ca.key   
+              args: ["patch", "web", "--opts", "source:from-files"]
+    ```
+    
+1.  Apply job
 
     ```bash
         kubectl apply -f load-web-key-rotation.yaml -n <gluu-namespace>
