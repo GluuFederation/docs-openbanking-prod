@@ -53,7 +53,6 @@ nav:
 #    - Identity: use-cases/identity.md
 #- Operation Guide: operation.md
 #- Key Management: key-management.md
-- Mutual TLS Configuration: mtls.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md
 #    - Brazil: country/brazil-reqs.md
