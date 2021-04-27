@@ -51,7 +51,8 @@ nav:
 #    - Consent Management: use-cases/consent.md
 #    - Dynamic Client Registration: use-cases/dynamic-registration.md
 #    - Identity: use-cases/identity.md
-#- Operation Guide: operation.md
+- Operation Guide:
+    - Managing scripts with CURL: curl.md
 #- Key Management: key-management.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md
