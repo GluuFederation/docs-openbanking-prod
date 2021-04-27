@@ -201,7 +201,7 @@ If during installation the release was not defined, release name is checked by r
               image: janssenproject/certmanager:1.0.0_b2
               envFrom:
               - configMapRef:
-                  name: gluu-config-cm  #This may be differnet in your Helm setup
+                  name: gluu-config-cm  #This may be different in your Helm setup
               volumeMounts:
                 - name: web-cert
                   mountPath: /etc/certs/web_https.crt
