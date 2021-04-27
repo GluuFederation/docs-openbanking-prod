@@ -335,7 +335,30 @@ If during installation the release was not defined, release name is checked by r
             ```bash
             ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
             ```
-                
+
+## Using jans-cli
+
+`jans-cli` is a Command Line Interface for Gluu Configuration. It also has menu-driven interface that makes it easier to understand how to use Gluu Server through the Interactive Mode.
+          
+1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
+
+    ```
+    git clone https://github.com/JanssenProject/jans-cli.git
+    ```
+
+1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
+   
+    ```bash
+    TESTCLIENT=$(kubectl get cm cn -o json -n gluu | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
+    TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
+    ```
+            
+1.  Run the jans-cli in interactive mode and try it out: 
+   
+    ```bash
+    ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+    ```
+                 
 ## Helm values.yaml
 
 ```yaml
