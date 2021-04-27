@@ -262,7 +262,22 @@ If during installation the release was not defined, release name is checked by r
         ```bash
         curl -X POST -k --cert client.crt --key client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
         {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
-        ``` 
+        ```
+         
+    1.  Try using the `jans-cli`:
+    
+        1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
+
+            ```
+            git clone https://github.com/JanssenProject/jans-cli.git
+            ```
+            
+        1.  Run the jans-cli in interactive mode and try it out: 
+           
+            ```bash
+            ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.crt --key-file client.key -noverify
+            ```
+           
 
 ### Example using self provided certs and keys:
 
@@ -303,10 +318,24 @@ If during installation the release was not defined, release name is checked by r
     1.  Curl the protected `/token` endpoint.
     
         ```bash
-        curl -X POST -k --cert client.crt --key client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
+        curl -X POST --cert client.crt --key client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
         {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
         ```
-                   
+
+    1.  Try using the `jans-cli`:
+    
+        1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
+
+            ```
+            git clone https://github.com/JanssenProject/jans-cli.git
+            ```
+            
+        1.  Run the jans-cli in interactive mode and try it out: 
+           
+            ```bash
+            ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+            ```
+                
 ## Helm values.yaml
 
 ```yaml
@@ -333,9 +362,14 @@ auth-server:
 #    initialDelaySeconds: 30
   volumes: []
     # Configure any additional volumes that need to be attached to the pod
+    #- name: jose4j
+    #  configMap:
+    #    name: jose4j
   volumeMounts: []
     # Configure any additional volumesMounts that need to be attached to the containers
-
+    #- name: jose4j
+    #  mountPath: "/opt/jans/jetty/jans-auth/custom/libs/jose4j-0.7.7.jar"
+    #  subPath: jose4j-0.7.7.jar
 config:
   city: Austin # Change to your city
   configmap:
