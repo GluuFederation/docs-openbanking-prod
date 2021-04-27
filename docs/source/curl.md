@@ -67,8 +67,8 @@
                
     1.  The following command will add a new custom script (Obtain token with write scope) and if it is successful it will display the added script in JSON format. The scriptformat.json file has script details according to the custom script schema.
     
-        ````bash
-        curl -X POST "https://<FQDN>/jans-config-api/api/v1/config/scripts" -H  "accept: application/json" -H "Authorization:Bearer <access_token>" -H "Content-Type: application/json" --data @/home/user/scriptformat.json
+        ```bash
+        curl -X POST "https://<FQDN>/jans-config-api/api/v1/config/scripts" -H  "Accept: application/json" -H "Authorization:Bearer <access_token>" -H "Content-Type: application/json" --data @/home/user/scriptformat.json
         ```
         
         Example:
