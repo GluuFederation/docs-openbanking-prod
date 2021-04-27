@@ -18,17 +18,30 @@ The Gluu Open Banking Identity Platform can be installed on one of the following
 - RHEL 7, 8
 - Debian 9, 10
 
-## Installation
+## Prerequisites
 
-To install the Gluu Open Banking Identity platform, just follow these steps:
+Prior to installation, the following are needed:
+
+- `curl`
+- `Python 3.x`
+- [MySql](https://www.mysql.com/)
+
+!!! Important
+    MySQL can be installed either on the same machine or remotely. It will be configured for the Gluu Open Banking Identity Platform upon setup.
+
+## Installation 
+
+To install the Gluu Open Banking Identity Platform, just follow these steps:
 
 1. Download the installation script:
 
     `curl https://raw.githubusercontent.com/JanssenProject/jans-setup/openbank/install.py > install.py`
 
-2. Execute the installation script:
+1. Execute the installation script:
 
     `python3 install.py`
+
+
 
 ### Uninstalling Janssen Server
 
@@ -90,5 +103,3 @@ The command line utility keytool is installed with JDK, it can be used to import
 
 ./keytool -importkeystore -srckeystore /path/to/file/filename.jks -srcstoretype JKS -destkeystore /opt/jre/lib/security/cacerts -deststoretype JKS
 ```
-
-## Persistence
