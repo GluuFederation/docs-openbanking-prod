@@ -26,6 +26,7 @@
     ```bash
     ```
 
+### curl operations
     
 1.  The curl commands to list, add, or update custom script requires a token, so first call the token end point to get the token using:
 

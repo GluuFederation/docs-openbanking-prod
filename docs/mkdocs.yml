@@ -53,6 +53,7 @@ nav:
 #    - Identity: use-cases/identity.md
 - Operation Guide:
     - Managing scripts with CURL: curl.md
+    - Managing Scripts with the jans-cli: jans-cli.md
 #- Key Management: key-management.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md
