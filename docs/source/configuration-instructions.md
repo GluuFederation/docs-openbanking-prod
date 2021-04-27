@@ -52,7 +52,7 @@ This section presents details about useful interception scripts for an OBIE depl
         
         1.  Add the volume and volume mount to `auth-server` in your [`override.yaml`](https://gluu.org/docs/openbanking/install-cn/#helm-valuesyaml) helm configuration.
         
-           ```yaml
+            ```yaml
              volumes:
                - name: jose4j
                  configMap:
@@ -61,13 +61,13 @@ This section presents details about useful interception scripts for an OBIE depl
                - name: jose4j
                  mountPath: "/opt/jans/jetty/jans-auth/custom/libs/jose4j-0.7.7.jar"
                  subPath: jose4j-0.7.7.jar
-           ```
+            ```
         
         1.  Run helm upgrade.
         
-           ```bash
-           helm upgrade gluu gluu/gluu -n <gluu-namespace> --version=5.0.0 -f override.yaml
-           ```
+            ```bash
+            helm upgrade gluu gluu/gluu -n <gluu-namespace> --version=5.0.0 -f override.yaml
+            ```
             
     === "VM"
     

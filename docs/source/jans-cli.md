@@ -41,6 +41,8 @@ Jans-cli supports the following six operations on custom scripts:
  
     The jans-cli will automatically be avaialbe at `/opt/jans/jans-cli/config-cli.py`. Please use that location to run the next comming commands. Please note that you do not need to pass `--host`, `--client-id`, and `--client-secret` options to the `cli` as they will automatically be picked up. 
     
+### Overview
+    
 The post-config-scripts and put-config-scripts require various details about the scripts. The following command gives the basic schema of the custom scripts to pass to these operations. 
 
 ```bash
