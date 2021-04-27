@@ -264,19 +264,19 @@ If during installation the release was not defined, release name is checked by r
         {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
         ```
          
-    1.  Try using the `jans-cli`:
-    
-        1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
+1.  Try using the `jans-cli`:
 
-            ```
-            git clone https://github.com/JanssenProject/jans-cli.git
-            ```
-            
-        1.  Run the jans-cli in interactive mode and try it out: 
-           
-            ```bash
-            ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.crt --key-file client.key -noverify
-            ```
+    1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
+
+        ```
+        git clone https://github.com/JanssenProject/jans-cli.git
+        ```
+        
+    1.  Run the jans-cli in interactive mode and try it out: 
+       
+        ```bash
+        ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.crt --key-file client.key -noverify
+        ```
            
 
 ### Example using self provided certs and keys:
@@ -322,19 +322,19 @@ If during installation the release was not defined, release name is checked by r
         {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
         ```
 
-    1.  Try using the `jans-cli`:
-    
-        1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
+1.  Try using the `jans-cli`:
 
-            ```
-            git clone https://github.com/JanssenProject/jans-cli.git
-            ```
-            
-        1.  Run the jans-cli in interactive mode and try it out: 
-           
-            ```bash
-            ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
-            ```
+    1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
+
+        ```
+        git clone https://github.com/JanssenProject/jans-cli.git
+        ```
+        
+    1.  Run the jans-cli in interactive mode and try it out: 
+       
+        ```bash
+        ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+        ```
 
 ## Using jans-cli
 
