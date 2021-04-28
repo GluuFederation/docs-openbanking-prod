@@ -41,6 +41,28 @@ To install the Gluu Open Banking Identity Platform, just follow these steps:
 
     `python3 install.py`
 
+1. The installation script will install required programs and packages and then will prompt the user for setup instructions. Answer the following questions:
+
+### Certificate Generation Setup
+
+| Prompt | Description |
+| ------ | ----------- |
+| Enter IP Address |  |
+| Enter Hostname | |
+| Enter your city or locality | |
+| Enter your state or province two letter code | |
+| Enter two letter Country Code | |
+| Enter Organization Name | |
+| Enter email address for support at your organization | |
+
+### Architecture Setup
+
+| Prompt | Description |
+| ---- | --------- |
+| Enter maximum RAM for applications in MB | |
+| RDBM Type | |
+| Use remote RDBM | |
+| Use external key | |
 
 
 ### Uninstalling Janssen Server
@@ -52,7 +74,7 @@ Execute the installation script with the `-uninstall` argument
 
 ## MTLS Configuration
 
-For MTLS, OBIE issued certificates and keys should be used. The following discussion assumes that the file `ca.crt` has a CA certificate and `ca.key` has a CA private key. 
+For MTLS, OBIE-issued certificates and keys should be used. The following discussion assumes that the file `ca.crt` has a CA certificate and `ca.key` has a CA private key. 
 
 The following command is an example of how to create the server’s private key (`server.key`), Certificate Signing Request (CSR) (`server.csr`) and certificate (`server.crt)`:
 
@@ -103,3 +125,5 @@ The command line utility keytool is installed with JDK, it can be used to import
 
 ./keytool -importkeystore -srckeystore /path/to/file/filename.jks -srcstoretype JKS -destkeystore /opt/jre/lib/security/cacerts -deststoretype JKS
 ```
+
+## Accessing the Platform
