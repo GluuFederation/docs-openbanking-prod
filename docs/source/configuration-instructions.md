@@ -3,7 +3,7 @@
 This section covers details about setting up the keys and certificates in both VM and Cloud-Native distribution.
 
 * For for Cloud-Native Distribution, see the document about [Enabling NGINX MTLS Ingress](https://gluu.org/docs/openbanking/install-cn/#enabling-mtls-in-ingress-nginx)
-* For the VM Distribution, see [wiki page](https://gluu.org/docs/openbanking/install-vm/#mtls-configuration)
+* For the VM Distribution, see [this page](https://gluu.org/docs/openbanking/install-vm/#mtls-configuration)
 
 Remember, MTLS is needed not only for the TPP's to call the authorization and token endpoints for OpenID Connect flows, but also by clients that are calling the configuration API.
 
@@ -27,7 +27,7 @@ This section presents details about useful interception scripts for an OBIE depl
 
     ### Client Registration Script:
     
-    The properties required for this script are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/clientregistration.json) that follows the custom script schema as discussed [here](https://github.com/GluuFederation/docs-openbanking-prod/wiki/Managing-Scripts-with-the-CLI). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/Registration.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/clientregistration.json) and keep them in a folder. 
+    The properties required for this script are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/clientregistration.json) that follows the custom script schema as discussed [here](https://gluu.org/docs/openbanking/jans-cli/). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/Registration.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/clientregistration.json) and keep them in a folder. 
     
     From this folder, run the following command: 
     
@@ -83,7 +83,7 @@ This section presents details about useful interception scripts for an OBIE depl
 
     ### Person Authentication Script: 
     
-    The properties required for this script are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/personauthentication.json) that follows the custom script schema as discussed [here](https://github.com/GluuFederation/docs-openbanking-prod/wiki/Managing-Scripts-with-the-CLI). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/OpenBanking.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/personauthentication.json) and keep them in a folder. 
+    The properties required for this script are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/personauthentication.json) that follows the custom script schema as discussed [here](https://gluu.org/docs/openbanking/jans-cli/). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/OpenBanking.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/personauthentication.json) and keep them in a folder. 
     
     From this folder, run the following command: 
     
@@ -132,7 +132,7 @@ This section presents details about useful interception scripts for an OBIE depl
 
     ### Introspection Script:
     
-    To easily setup this script, parameters are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/introspection/introspection.json) that follows the custom script schema as discussed [here](https://github.com/GluuFederation/docs-openbanking-prod/wiki/Managing-Scripts-with-the-CLI). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/introspection/IntrospectionScript.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/introspection/introspection.json) and keep them in a folder. 
+    To easily setup this script, parameters are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/introspection/introspection.json) that follows the custom script schema as discussed [here](https://gluu.org/docs/openbanking/jans-cli/). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/introspection/IntrospectionScript.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/introspection/introspection.json) and keep them in a folder. 
     
     From this folder, run the following command: 
     
@@ -165,7 +165,7 @@ This section presents details about useful interception scripts for an OBIE depl
 
     ### Update Token Script:
     
-    To easily setup this script, parameters are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/update_token/updatetoken.json) that follows the custom script schema as discussed [here](https://github.com/GluuFederation/docs-openbanking-prod/wiki/Managing-Scripts-with-the-CLI). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/update_token/UpdateToken.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/update_token/updatetoken.json) and keep them in a folder. 
+    To easily setup this script, parameters are defined in a [json file](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/update_token/updatetoken.json) that follows the custom script schema as discussed [here](https://gluu.org/docs/openbanking/jans-cli/). Download the [script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/update_token/UpdateToken.py), [JSON](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/update_token/updatetoken.json) and keep them in a folder. 
     
     From this folder, run the following command: 
     

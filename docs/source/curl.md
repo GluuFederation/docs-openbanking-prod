@@ -1,6 +1,6 @@
 # Managing scripts with CURL
  
-## Prerequists
+## Prerequisites
 
 - Gluu open banking distribution
 - client-id
