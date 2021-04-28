@@ -23,6 +23,9 @@ Note: you can normally find `jans-cli.py` in the `/opt/jans/jans-cli/` folder.
 
 This section presents details about useful interception scripts for an OBIE deployment. The scripts are accessible [here] (https://github.com/JanssenProject/jans-setup/tree/openbank/static/extension). Please setup [`jans-cli`](https://gluu.org/docs/openbanking/jans-cli/#using-jans-cli) prior to continuing. 
 
+!!!note
+    If using the VM installation the jans-cli will automatically be available at `/opt/jans/jans-cli/config-cli.py`. Please use that location to run the next commands. Please note that you do not need to pass `--host`, `--client-id`, and `--client-secret` options to the `cli` as they will automatically be picked up.
+    
 === "Client Registration Script"
 
     ### Client Registration Script:
@@ -201,8 +204,8 @@ This section presents details about useful interception scripts for an OBIE depl
     
     ```
 
-
-__Note: After any changes in the custom scripts remember to restart the jans-auth service to apply them (`systemctl restart jans-auth`).__
+!!!note
+    After any changes in the custom scripts remember to restart the jans-auth service to apply them by restarting `kubectl rollout restart deployment gluu-auth-server -n <gluu-namespace>`, or if using the VM installation `systemctl restart jans-auth`.
 
 ## Open Banking Demo 
 
