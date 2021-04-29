@@ -22,6 +22,22 @@ At this time, the only database supported by the Open Banking Platform is [MySql
 
 If installing MySQL on the same machine, simply download the [MySQL Community Server](https://dev.mysql.com/downloads/mysql/) and continue with [installation](#installation). The Gluu Open Banking Platform installation script will fully configure MySQL.
 
+If installing MySQL remotely, a couple of extra steps are required. On the remote server, perform the following steps:
+
+- Create a new blank schema
+- Create a new user and password
+- Give the new user administrative rights on the new schema.
+
+For example:
+
+```
+CREATE DATABASE jansdb;
+CREATE USER 'jans'@'client_host_or_ip' IDENTIFIED BY 'TopSecret';
+GRANT ALL PRIVILEGES ON jansdb.* TO 'jans'@'client_host_or_ip';
+```
+
+These credentials will be requested when [setting up](#architecture-setup) the Gluu Open Banking Platform.
+
 ## Installation 
 
 To install the Gluu Open Banking Identity Platform, just follow these steps:
@@ -57,9 +73,9 @@ To install the Gluu Open Banking Identity Platform, just follow these steps:
 | Use remote RDBM | Select if connecting to an external MySQL server |
 | MySQL Host | Remote RDBM: Hostname of RDBM Server | 
 | MySQL Port | Remote RDBM : Port for RDBM Server |
-| Jans Database | Name of empty schema set up in MySQL Server |
-| Jans Database Username | Name of OB Platform user in MySQL server |
-| Jans Database Password | Password for OB Platform user in MySQL server |
+| Jans Database | Name of empty schema set up in [MySQL Server](#mysql-setup) |
+| Jans Database Username | Name of OB Platform user in [MySQL Server](#mysql-setup) |
+| Jans Database Password | Password for OB Platform user in [MySQL Server](#mysql-setup) |
 | Use external key | If yes, link to an external Open Banking key file |
 
 ### Uninstalling Janssen Server
