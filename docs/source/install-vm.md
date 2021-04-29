@@ -22,7 +22,7 @@ At this time, the only database supported by the Open Banking Platform is [MySql
 
 If installing MySQL on the same machine, simply download the [MySQL Community Server](https://dev.mysql.com/downloads/mysql/) and continue with [installation](#installation). The Gluu Open Banking Platform installation script will fully configure MySQL.
 
-If installing MySQL remotely, a couple of extra steps are required. On the remote server, perform the following steps:
+If installing MySQL remotely, a couple of extra steps are required. On the remote server, perform the following steps in MySQL:
 
 - Create a new blank schema
 - Create a new user and password
