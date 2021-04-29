@@ -13,10 +13,8 @@ The VM must have a static IP address and a resolvable hostname. A fully qualifie
 
 The Gluu Open Banking Identity Platform can be installed on one of the following supported operating systems:
 
-- Ubuntu 18, 20
-- CentOS 7, 8
-- RHEL 7, 8
-- Debian 9, 10
+- Ubuntu 20
+- CentOS 8
 
 ## Prerequisites
 
