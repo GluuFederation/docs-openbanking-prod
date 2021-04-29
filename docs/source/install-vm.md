@@ -47,21 +47,26 @@ To install the Gluu Open Banking Identity Platform, just follow these steps:
 
 | Prompt | Description |
 | ------ | ----------- |
-| Enter IP Address |  |
-| Enter Hostname | |
-| Enter your city or locality | |
-| Enter your state or province two letter code | |
-| Enter two letter Country Code | |
-| Enter Organization Name | |
-| Enter email address for support at your organization | |
+| Enter IP Address | The IP address for the VM. **Use an IP address assigned to one of this server's network interfaces (usage of addresses assigned to loopback interfaces is not supported)** |
+| Enter Hostname | The hostname for the VM. Recommended to be a FQDN |
+| Enter your city or locality | Used to generate X.509 certificates. |
+| Enter your state or province two letter code | Used to generate X.509 certificates. |
+| Enter two letter Country Code | Used to generate X.509 certificates. |
+| Enter Organization Name | Used to generate X.509 certificates. |
+| Enter email address for support at your organization | Used to generate X.509 certificates.|
 
 ### Architecture Setup
 
 | Prompt | Description |
 | ---- | --------- |
-| Enter maximum RAM for applications in MB | |
-| RDBM Type | |
-| Use remote RDBM | |
+| Enter maximum RAM for applications in MB | Maximum  |
+| RDBM Type | Backend type. Currently only MySQL is supported |
+| Use remote RDBM | Select if connecting to an external MySQL server |
+| MySQL Host | Remote RDBM: Hostname of RDBM Server| 
+| MySQL Port | Remote RDBM : Port for RDBM Server|
+| Jans Database | |
+| Jans Database Username | |
+| Jans Database Password | |
 | Use external key | |
 
 
@@ -70,7 +75,6 @@ To install the Gluu Open Banking Identity Platform, just follow these steps:
 Execute the installation script with the `-uninstall` argument
 
 `python3 install.py -uninstall`
-
 
 ## MTLS Configuration
 
