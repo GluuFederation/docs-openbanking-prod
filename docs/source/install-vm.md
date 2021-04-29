@@ -16,16 +16,11 @@ The Gluu Open Banking Identity Platform can be installed on one of the following
 - Ubuntu 20
 - CentOS 8
 
-## Prerequisites
+## MySQL Setup
 
-Prior to installation, the following are needed:
+At this time, the only database supported by the Open Banking Platform is [MySql](https://www.mysql.com/). For the VM installation, MySQL can either be installed on the same machine or remotely.
 
-- `curl`
-- `Python 3.x`
-- [MySql](https://www.mysql.com/)
-
-!!! Important
-    MySQL can be installed either on the same machine or remotely. It will be configured for the Gluu Open Banking Identity Platform upon setup.
+If installing MySQL on the same machine, simply download the [MySQL Community Server](https://dev.mysql.com/downloads/mysql/) and continue with [installation](#installation). The Gluu Open Banking Platform installation script will fully configure MySQL.
 
 ## Installation 
 
