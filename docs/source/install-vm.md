@@ -72,10 +72,10 @@ To install the Gluu Open Banking Identity Platform, just follow these steps:
 | RDBM Type | Backend type. Currently only MySQL is supported |
 | Use remote RDBM | Select if connecting to an external MySQL server |
 | MySQL Host | Remote RDBM: Hostname of RDBM Server | 
-| MySQL Port | Remote RDBM : Port for RDBM Server |
-| Jans Database | Name of empty schema set up in [MySQL Server](#mysql-setup) |
-| Jans Database Username | Name of OB Platform user in [MySQL Server](#mysql-setup) |
-| Jans Database Password | Password for OB Platform user in [MySQL Server](#mysql-setup) |
+| MySQL Port | Remote RDBM: Port for RDBM Server |
+| Jans Database | Remote RDBM: Name of empty schema set up in [MySQL Server](#mysql-setup) |
+| Jans Database Username | Remote RDBM: Name of OB Platform user in [MySQL Server](#mysql-setup) |
+| Jans Database Password | Remote RDBM: Password for OB Platform user in [MySQL Server](#mysql-setup) |
 | Use external key | If yes, link to an external Open Banking key file |
 
 ### Uninstalling Janssen Server
