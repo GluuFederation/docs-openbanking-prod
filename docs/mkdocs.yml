@@ -43,8 +43,8 @@ markdown_extensions:
 nav:
 - Overview: index.md
 - Installation: 
-    - VM: install-vm.md
     - Cloud Native: install-cn.md
+    - VM: install-vm.md
 #- Use Cases:
 #    - Authorization: use-cases/authz.md
 #    - CIBA: use-cases/ciba.md
@@ -52,9 +52,9 @@ nav:
 #    - Dynamic Client Registration: use-cases/dynamic-registration.md
 #    - Identity: use-cases/identity.md
 - Operation Guide:
+    - Configuration Instructions: configuration-instructions.md
     - Managing scripts with CURL: curl.md
     - Managing Scripts with the jans-cli: jans-cli.md
-    - Configuration Instructions: configuration-instructions.md
 #- Key Management: key-management.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md
