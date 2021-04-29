@@ -111,6 +111,9 @@ If during installation the release was not defined, release name is checked by r
 
 ## Enabling mTLS in ingress-nginx
 
+!!!Note 
+    For MTLS, OBIE-issued certificates and keys should be used. 
+
 1.  Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication). Uncomment the following from your values.yaml or manually add them to your ingress. 
 
     ```yaml
@@ -141,7 +144,7 @@ If during installation the release was not defined, release name is checked by r
     
 
 !!! Note
-    This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` from `/etc/certs`.
+    This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` to `/etc/certs`.
     
 1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
 
@@ -198,7 +201,7 @@ If during installation the release was not defined, release name is checked by r
                   path: ca.key                              
           containers:
             - name: load-web-key-rotation
-              image: janssenproject/certmanager:1.0.0_b2
+              image: janssenproject/certmanager:1.0.0_b3
               envFrom:
               - configMapRef:
                   name: gluu-config-cm  #This may be different in your Helm setup
@@ -368,7 +371,7 @@ auth-server:
   image:
     pullPolicy: IfNotPresent
     repository: janssenproject/auth-server
-    tag: 1.0.0_b2
+    tag: 1.0.0_b3
   replicas: 1
   resources:
     limits:
@@ -417,7 +420,7 @@ config:
   email: support@gluu.org # Change to your email
   image:
     repository: janssenproject/configuration-manager
-    tag: 1.0.0_b2
+    tag: 1.0.0_b3
   orgName: Gluu # Change to your orgnization name
   resources:
     limits:
@@ -439,7 +442,7 @@ config-api:
   image:
     pullPolicy: Always
     repository: janssenproject/config-api
-    tag: 1.0.0_b2
+    tag: 1.0.0_b3
   replicas: 1
   resources:
     limits:
@@ -547,7 +550,7 @@ persistence:
   image:
     pullPolicy: Always
     repository: janssenproject/persistence-loader
-    tag: 1.0.0_b2
+    tag: 1.0.0_b3
   resources:
     limits:
       cpu: 300m
