@@ -24,6 +24,8 @@
     Get a client and its associated password. Here, we will use the client id and secret created for config-api.
     
     ```bash
+    TESTCLIENTSECRET=$(/opt/jans/bin/encode.py -d  `sed -n '12 p' /opt/jans/jans-setup/output/jans-config-api/clients.json |cut -d '"' -f 4|tr -d '[:space:]'`)
+    TESTCLIENT=$(sed -n '7 p' /opt/jans/jans-setup/output/jans-config-api/clients.json |cut -d '"' -f 4|tr -d '[:space:]')
     ```
 
 ### curl operations
