@@ -96,11 +96,11 @@ $ openssl req -new -key server.key -out server.csr
 $ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -set_serial 100 -days 365 -outform PEM -out server.crt
 ```
 
-Now, store the server key (`server.key`) and certificate (`server.crt`) file in some location (preferably inside `/etc/certs`) and set its path in the `.conf` file (`/etc/apache2/sites-enabled/https_jans.conf`) with  `SSLCertificateFile` and  S`SLCertificateKeyFile` directives as:
+Now, store the server key (`server.key`) and certificate (`server.crt`) file in some location (preferably inside `/etc/certs`) and set its path in the `.conf` file (`/etc/apache2/sites-enabled/https_jans.conf`) with  `SSLCertificateFile` and  `SSLCertificateKeyFile` (Line 29-30) directives as:
 
 ```
 	SSLCertificateFile /etc/certs/bankgluu/server.crt
-	SSLCertificateKeyFile /etc/certs/bankorg/server.key
+	SSLCertificateKeyFile /etc/certs/bankgluu/server.key
 ```
 
 The path of CA certificate file should be set to SSLCACertificateFile directive as:
