@@ -21,9 +21,9 @@ Please calculate the minimum required resources as per services deployed. The fo
 |nginx             | 1          |    1GB      |   N/A            |  64 Bit        | Yes if not ALB or Istio                             |
 
 
-## Configure cloud or local kubernetes cluster:
+## Configure cloud or local kubernetes cluster with database:
 
-=== "EKS"
+=== "AWS"
     ### Amazon Web Services (AWS) - EKS
       
     #### Setup Cluster
@@ -41,7 +41,22 @@ Please calculate the minimum required resources as per services deployed. The fo
     
     - **Optional[alpha]:** If using Istio please [install](https://istio.io/latest/docs/setup/install/standalone-operator/) it prior to installing Gluu. You may choose to use any installation method Istio supports. If you have insalled istio ingress , a loadbalancer will have been created. Please save the address of loadblancer for use later during installation.
       
+    ### Amazon Aurora
     
+    [Amazon Aurora](https://aws.amazon.com/rds/aurora/?aurora-whats-new.sort-by=item.additionalFields.postDateTime&aurora-whats-new.sort-order=desc) is a MySQL and PostgreSQL-compatible relational database built for the cloud, that combines the performance and availability of traditional enterprise databases with the simplicity and cost-effectiveness of open source databases. Gluu fully supports Amazon Aurora, and recommends it in production.
+     
+    1.  Create an Amazon Aurora database with MySQL compatibility version >= `Aurora(MySQL 5.7) 2.07.1` and capacity type `Serverless`. Make sure the EKS cluster can reach the database endpoint. You may choose to use the same VPC as the EKS cluster. Save the master user, master password, and initial database name for use in Gluus helm chart.
+    
+    1.  Inject the Aurora endpoint, master user, master password, and initial database name for use in Gluus helm chart. 
+ 
+        |Helm values configuration                | Description                                                                     | default      |
+        |-----------------------------------------|---------------------------------------------------------------------------------|--------------|
+        |config.configmap.cnSqlDbHost             | Aurora database endpoint i.e `gluu.cluster-xxxxxxx.eu-central.rds.amazonaws.com`|    empty     |
+        |config.configmap.cnSqlDbPort             | Aurora database port                                                            |    `3306`    |
+        |config.configmap.cnSqlDbName             | Aurora initial database name                                                    |    `jans`    |
+        |config.configmap.cnSqlDbUser             | Aurora master user                                                              |    `jans`    |
+        |config.configmap.cnSqldbUserPassword     | Aurora master password                                                          |   `Test1234#`|
+
 === "Quick start with Microk8s"
     ### MicroK8s
     
@@ -59,8 +74,6 @@ Please calculate the minimum required resources as per services deployed. The fo
     1.  [Map](#non-registered-fqdn) your vm ip to the fqdn `demoexample.gluu.org`
       
 ## Install Gluu using Helm
-
-1.  Create an Amazon Aurora database with MySQL compatibility version >= `Aurora(MySQL 5.7) 2.07.1` and capacity type `Serverless`. Make sure the EKS cluster can reach the database endpoint. You may choose to use the same VPC as the EKS cluster. Save the master user, master password, and initial database name for use in Gluus helm chart.
 
 1.  **Optional if not using istio ingress:** Install [nginx-ingress](https://github.com/kubernetes/ingress-nginx) Helm [Chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
 
