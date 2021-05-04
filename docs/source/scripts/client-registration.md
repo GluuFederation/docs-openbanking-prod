@@ -12,8 +12,8 @@ The Janssen Authorization Server uses **interception scripts** to enable you to 
 ## Adding the custom script
 
 1. To add or update custom scripts, you can use either jans-cli or curl. jans-cli in interactive mode, option 13 enables you manage custom scripts. For more info, see the [docs](https://github.com/JanssenProject/home/wiki/Custom-Scripts-using-jans-cli).
-1. jans-cli in command line argument mode is more conducive to scripting and automation. To display the available operations for custom scripts, use config-cli.py --info CustomScripts. See the [docs](https://github.com/GluuFederation/docs-openbanking-prod/wiki/Managing-Scripts-with-the-CLI) for more info.
-1. To use `curl` see these [docs](https://github.com/GluuFederation/docs-openbanking-prod/wiki/Managing-scripts-with-CURL)
+1. jans-cli in command line argument mode is more conducive to scripting and automation. To display the available operations for custom scripts, use config-cli.py --info CustomScripts. See the [docs](../jans-cli.md) for more info.
+1. To use `curl` see these [docs](../curl.md)
 
 !!! Note
     You can normally find `jans-cli.py` in the `/opt/jans/jans-cli/` folder. 
@@ -92,11 +92,11 @@ This script uses [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home) library fo
     helm upgrade gluu gluu/gluu -n <gluu-namespace> --version=5.0.0 -f override.yaml
     ```       
        
-### Pseudocode (Understanding the script)
+### Understanding the Script
 
-You can get see the [Client Registration script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/Registration.py)
+The [Client Registration script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/client_registration/Registration.py) is available
 
-Following are the ***mandatory*** functions which need to be implemented in order to perform registration - 
+The following are the ***mandatory*** functions which need to be implemented in order to perform registration:
 
 1. Create a class of the type ```ClientRegistrationType``` and initialize the script
 
@@ -125,7 +125,7 @@ Following are the ***mandatory*** functions which need to be implemented in orde
             return True
     ```
 
-2. createClient method contains the main business logic
+2. The createClient method contains the main business logic:
 
     ```
     def createClient(self, registerRequest, client, configurationAttributes):
@@ -146,7 +146,7 @@ Following are the ***mandatory*** functions which need to be implemented in orde
         client.setTrustedClient(True)
         client.setPersistClientAuthorizations(False)
 
-        # 4. inorder to run introspection script, assign it to run for this client
+        # 4. in order to run introspection script, assign it to run for this client
         client.setAccessTokenAsJwt(True)
         client.getAttributes().setRunIntrospectionScriptBeforeAccessTokenAsJwtCreationAndIncludeClaims(True)  
         dnOfIntrospectionScript = "inum=CABA-2222,ou=scripts,o=jans"
@@ -161,21 +161,21 @@ Following are the ***mandatory*** functions which need to be implemented in orde
 
 3. Miscellaneous mandatory functions
 
-Used for signing the software statement
+Used for signing the software statement:
 
     ```
     def getSoftwareStatementJwks(self, context):
          return JwtUtil.getJSONWebKeys(self.jwks_endpoint).toString()
     ```
 
- HMAC not applicable, return empty string  
+ HMAC not applicable, return an empty string:  
  
     ```
     def getDcrHmacSecret(self, context):
         return ""
     ```    
 
-Used for signing the request object (DCR) 
+Used for signing the request object (DCR): 
 
     ```
     def getDcrJwks(self, context):
