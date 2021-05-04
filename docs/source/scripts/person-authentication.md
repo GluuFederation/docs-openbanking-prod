@@ -34,7 +34,7 @@ The person authentication custom script will use configuration parameters like r
 -cert-file yourcertfile.pem -key-file yourkey.key
 ```
 
-### Pseudocode (Understanding the script):
+### Methods
 You can get see the [Person Authentication script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/OpenBanking.py)
 
 Following are the ***mandatory*** functions which need to be implemented in order to perform authentication - 
