@@ -55,6 +55,11 @@ nav:
     - Configuration Instructions: configuration-instructions.md
     - Managing scripts with CURL: curl.md
     - Managing Scripts with the jans-cli: jans-cli.md
+- Custom Scripts:
+    - Client Registration: scripts/client-registration.md
+    - Person Authentication: scripts/person-authentication.md
+    - Introspection: scripts/introspection.md
+    - Update Token: scripts/update-token.md
 #- Key Management: key-management.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md
