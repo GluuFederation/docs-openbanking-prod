@@ -61,7 +61,7 @@ nav:
     - Introspection: scripts/introspection.md
     - Update Token: scripts/update-token.md
 - Tutorials:
-    - Install on EKS: tutorials/cn-prod-tutorial.md
+    - Install on EKS - coming soon: tutorials/cn-prod-tutorial.md
 #- Key Management: key-management.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md
