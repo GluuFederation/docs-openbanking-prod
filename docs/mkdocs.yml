@@ -42,9 +42,7 @@ markdown_extensions:
 # Navigation
 nav:
 - Overview: index.md
-- Installation: 
-    - Cloud Native: install-cn.md
-    - VM: install-vm.md
+- Installation: install-cn.md
 #- Use Cases:
 #    - Authorization: use-cases/authz.md
 #    - CIBA: use-cases/ciba.md
