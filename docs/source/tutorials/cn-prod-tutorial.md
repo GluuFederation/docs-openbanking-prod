@@ -18,7 +18,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 |nginx             | 1          |    1GB      |   N/A            |  64 Bit        | Yes.                                        |
 
 
-## Configure cloud or local kubernetes cluster with database:
+## Configure EKS with Aurora
 
 ### Amazon Web Services (AWS) - EKS
   
@@ -62,11 +62,16 @@ Please calculate the minimum required resources as per services deployed. The fo
     kubectl create ns <nginx-namespace>
     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
     helm repo update
-    helm install <nginx-release-name> ingress-nginx/ingress-nginx --namespace=<nginx-namespace>
-    # The below command is needed currently as the admission webhook of nginx upon initial installation sometimes revokes the ingress definitions incorrectly.
-    helm upgrade <nginx-release-name> ingress-nginx/ingress-nginx --namespace=<nginx-namespace>
+    # The below `set`  is needed currently as the admission webhook of nginx upon initial installation sometimes revokes the ingress definitions incorrectly.
+    helm install <nginx-release-name> ingress-nginx/ingress-nginx --namespace=<nginx-namespace> --set controller.admissionWebhooks.enabled=false
     ```
-
+    
+1.  Create a namespace  for gluu openbanking distribution:    
+   
+    ```bash
+    kubectl create ns gluu
+    ```
+    
 1.  Enable mTLS. 
 
     | certificates and keys of interest in mTLS | Notes                                      |
@@ -139,7 +144,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 
     Please note that the FQDN **must** be resolvable or the `config-api` will fail to find the host. You may choose to modify the `CoreDNS` to reroute the domain internally to the nginx-ingress as following:
     
-    Add rewrite rule to CoreDNS `ConfigMap`. In the following example we will be using ingress-nginx which the installer in the steps below will install. The internal address of this service will be `ingress-nginx-controller.ingress-nginx.svc.cluster.local` which is in the following format `<releasename>-controller.<namespace>.svc.cluster.local` and our example domain will be `demo.openbanking.org`:
+    Add rewrite rule to CoreDNS `ConfigMap`. In the following example we will be using ingress-nginx which the installer in the steps below will install. The internal address of this service will be `nginx-ingress-nginx-controller.nginx.svc.cluster.local` which is in the following format `<releasename>-ingress-nginx-controller.<namespace>.svc.cluster.local` and our example domain will be `demo.openbanking.org`:
     
     1.  Take a copy of the `ConfigMap`:
     
@@ -157,7 +162,7 @@ Please calculate the minimum required resources as per services deployed. The fo
         ```yaml
            .:53 {
                     ....
-                    rewrite name demo.openbanking.org ingress-nginx.ingress-nginx.svc.cluster.local
+                    rewrite name demo.openbanking.org nginx-ingress-nginx-controller.nginx.svc.cluster.local
                 }
         ```
     
@@ -167,10 +172,9 @@ Please calculate the minimum required resources as per services deployed. The fo
         kubectl apply -f gluu_modified_coredns_cm.yaml
         ```    
     
-1.  Create a namespace and install gluu openbanking distribution:    
+1.  Install gluu openbanking distribution:    
    
     ```bash
-    kubectl create ns gluu
     helm repo add gluu https://gluufederation.github.io/cloud-native-edition/pygluu/kubernetes/templates/helm
     helm repo update
     helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.0
@@ -195,8 +199,15 @@ Please calculate the minimum required resources as per services deployed. The fo
     1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
     
         ```bash
-            kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace> 
+            kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace>
         ```
+               
+        If using the common server names:
+        
+        ```bash
+        kubectl create secret generic web-cert-key --from-file=web_https.crt=server.crt --from-file=web_https.key=server.key --from-file=web_https.csr=server.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace>
+        ```
+        
         
     1.  Create a file named `load-web-key-rotation.yaml` with the following contents :
                        
@@ -275,6 +286,14 @@ Please calculate the minimum required resources as per services deployed. The fo
         ```bash
             kubectl apply -f load-web-key-rotation.yaml -n <gluu-namespace>
         ```
+          
+1.  Preform a rolling restart for the auth-server and config-api
+
+    ```bash
+    kubectl rollout restart deployment <gluu-relase-name>-auth-server -n <gluu-namespace>
+    kubectl rollout restart deployment <gluu-relase-name>-config-api -n <gluu-namespace>
+    #kubectl rollout restart deployment gluu-auth-server -n gluu
+    ```
           
 ## Testing the setup
 
@@ -497,13 +516,11 @@ nginx-ingress:
       # in the format of {cert-manager.io/cluster-issuer: nameOfClusterIssuer, kubernetes.io/tls-acme: "true"}
     additionalAnnotations: {}
       # Enable client certificate authentication
-      #nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+      #nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
       # Create the secret containing the trusted ca certificates
-      #nginx.ingress.kubernetes.io/auth-tls-secret: "default/ca-secret"
+      #nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/tls-ca-certificate"
       # Specify the verification depth in the client certificates chain
       #nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
-      # Specify an error page to be redirected to verification errors
-      #nginx.ingress.kubernetes.io/auth-tls-error-page: "https://demo.openbanking.org/error.html"
       # Specify if certificates are passed to upstream server
       #nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
     path: /

@@ -564,13 +564,11 @@ nginx-ingress:
       # in the format of {cert-manager.io/cluster-issuer: nameOfClusterIssuer, kubernetes.io/tls-acme: "true"}
     additionalAnnotations: {}
       # Enable client certificate authentication
-      #nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+      #nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
       # Create the secret containing the trusted ca certificates
       #nginx.ingress.kubernetes.io/auth-tls-secret: "default/ca-secret"
       # Specify the verification depth in the client certificates chain
       #nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
-      # Specify an error page to be redirected to verification errors
-      #nginx.ingress.kubernetes.io/auth-tls-error-page: "https://demo.openbanking.org/error.html"
       # Specify if certificates are passed to upstream server
       #nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
     path: /
