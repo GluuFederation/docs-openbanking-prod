@@ -60,6 +60,8 @@ nav:
     - Person Authentication: scripts/person-authentication.md
     - Introspection: scripts/introspection.md
     - Update Token: scripts/update-token.md
+- Tutorials:
+    - Install on EKS: tutorials/cn-prod-tutorial.md
 #- Key Management: key-management.md
 #- Requirements by Country:
 #    - Australia: country/australia-reqs.md

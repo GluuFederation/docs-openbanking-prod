@@ -113,6 +113,28 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
   255.255.255.255	broadcasthost
   ::1             localhost
   ```
+
+## Using OBIE signing certificates and keys   
+
+1.  When using OBIE signed certificates and keys, there are three main objects to have. The certificate pem file i.e `obsigning.pem`, the key i.e `obsigning-oajsdij8927123.key`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
+
+1.  base64 encrypt both the `.pem` and `.key` as they will be injected as base64 strings inside the helm [`override-values.yaml`](#helm-valuesyaml).
+
+    ```bash
+    cat obsigning.pem | base64 | tr -d '\n' > obsigningbase64.pem
+    cat obsigning-oajsdij8927123.key | base64 | tr -d '\n' > obsigningbase64.key
+    ```
+1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `config.configmap.cnExtSigningJwksCrt`
+
+1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `config.configmap.cnExtSigningJwksKey`
+
+1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnExtSigningJwksUri`
+
+|Helm values configuration                | Description                                                                                         | default      |
+|-----------------------------------------|-----------------------------------------------------------------------------------------------------|--------------|
+|global.cnExtSigningJwksUri               | external signing jwks uri string                                                                    |    empty     |
+|config.configmap.cnExtSigningJwksCrt     | base64 string for the external signing jwks crt. Activated when .global.cnExtSigningJwksUri is set  |    empty     |
+|config.configmap.cnExtSigningJwksKey     | base64 string for the external signing jwks key . Activated when .global.cnExtSigningJwksUri is set |    empty     |
       
 ## Uninstalling the Chart
 
@@ -157,7 +179,7 @@ If during installation the release was not defined, release name is checked by r
     
 
 !!! Note
-    This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` to `/etc/certs`.
+    This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` to `/etc/certs`. This step is important in order for mTLS to fully work as nginx-ingress will pass the client certificate down to the auth-server and the auth-server will validate the client certificate.
     
 1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
 
