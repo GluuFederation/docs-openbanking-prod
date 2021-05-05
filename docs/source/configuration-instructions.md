@@ -203,6 +203,3 @@ This section presents details about useful interception scripts for an OBIE depl
 !!!note
     After any changes in the custom scripts remember to restart the jans-auth service to apply them by restarting `kubectl rollout restart deployment gluu-auth-server -n <gluu-namespace>`.
 
-## Open Banking Demo 
-
-The details and instructions to test the flow of open banking distribution demo are given [here](https://github.com/JanssenProject/jans-setup/wiki/Open-Banking-Demo).
