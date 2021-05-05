@@ -144,7 +144,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 
     Please note that the FQDN **must** be resolvable or the `config-api` will fail to find the host. You may choose to modify the `CoreDNS` to reroute the domain internally to the nginx-ingress as following:
     
-    Add rewrite rule to CoreDNS `ConfigMap`. In the following example we will be using ingress-nginx which the installer in the steps below will install. The internal address of this service will be `nginx-ingress-nginx-controller.nginx.svc.cluster.local` which is in the following format `<releasename>-ingress-nginx-controller.<namespace>.svc.cluster.local` and our example domain will be `demo.openbanking.org`:
+    Add rewrite rule to CoreDNS `ConfigMap`. In the following example we will be using ingress-nginx which you have installed previously. The internal address of this service will be `nginx-ingress-nginx-controller.nginx.svc.cluster.local` which is in the following format `<releasename>-ingress-nginx-controller.<namespace>.svc.cluster.local` and our example domain will be `demo.openbanking.org`:
     
     1.  Take a copy of the `ConfigMap`:
     
