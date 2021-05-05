@@ -1,11 +1,10 @@
-## Generate/install keys and certs for Gluu Open Banking Identity Platform: 
+## Generate/install keys and certs for Gluu Open Banking Identity Platform 
 
 This section covers details about setting up the keys and certificates in both VM and Cloud-Native distribution.
 
-* For for Cloud-Native Distribution, see the document about [Enabling NGINX MTLS Ingress](https://gluu.org/docs/openbanking/install-cn/#enabling-mtls-in-ingress-nginx)
-* For the VM Distribution, see [this page](https://gluu.org/docs/openbanking/install-vm/#mtls-configuration)
+* For MTLS keys, see the document about [Enabling NGINX MTLS Ingress](https://gluu.org/docs/openbanking/install-cn/#enabling-mtls-in-ingress-nginx)
 
-Remember, MTLS is needed not only for the TPP's to call the authorization and token endpoints for OpenID Connect flows, but also by clients that are calling the configuration API.
+Remember, MTLS is needed not only for the TPPs to call the authorization and token endpoints for OpenID Connect flows, but also by clients that are calling the configuration API.
 
 ## Add/Update Custom Scripts: 
 
@@ -22,9 +21,6 @@ Note: you can normally find `jans-cli.py` in the `/opt/jans/jans-cli/` folder.
 ## New Custom Scripts: 
 
 This section presents details about useful interception scripts for an OBIE deployment. The scripts are accessible [here] (https://github.com/JanssenProject/jans-setup/tree/openbank/static/extension). Please setup [`jans-cli`](https://gluu.org/docs/openbanking/jans-cli/#using-jans-cli) prior to continuing. 
-
-!!!note
-    If using the VM installation the jans-cli will automatically be available at `/opt/jans/jans-cli/config-cli.py`. Please use that location to run the next commands. Please note that you do not need to pass `--host`, `--client-id`, and `--client-secret` options to the `cli` as they will automatically be picked up.
     
 === "Client Registration Script"
 
@@ -205,7 +201,7 @@ This section presents details about useful interception scripts for an OBIE depl
     ```
 
 !!!note
-    After any changes in the custom scripts remember to restart the jans-auth service to apply them by restarting `kubectl rollout restart deployment gluu-auth-server -n <gluu-namespace>`, or if using the VM installation `systemctl restart jans-auth`.
+    After any changes in the custom scripts remember to restart the jans-auth service to apply them by restarting `kubectl rollout restart deployment gluu-auth-server -n <gluu-namespace>`.
 
 ## Open Banking Demo 
 
