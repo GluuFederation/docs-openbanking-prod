@@ -111,6 +111,7 @@ Please calculate the minimum required resources as per services deployed. The fo
         cat obsigning.pem | base64 | tr -d '\n' > obsigningbase64.pem
         cat obsigning-oajsdij8927123.key | base64 | tr -d '\n' > obsigningbase64.key
         ```
+        
     1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `config.configmap.cnExtSigningJwksCrt`
     
     1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `config.configmap.cnExtSigningJwksKey`
@@ -162,9 +163,9 @@ Please calculate the minimum required resources as per services deployed. The fo
     
     1.  Apply the changes:
     
-       ```bash
+        ```bash
         kubectl apply -f gluu_modified_coredns_cm.yaml
-       ```    
+        ```    
     
 1.  Create a namespace and install gluu openbanking distribution:    
    

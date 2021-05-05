@@ -124,6 +124,7 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
     cat obsigning.pem | base64 | tr -d '\n' > obsigningbase64.pem
     cat obsigning-oajsdij8927123.key | base64 | tr -d '\n' > obsigningbase64.key
     ```
+    
 1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `config.configmap.cnExtSigningJwksCrt`
 
 1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `config.configmap.cnExtSigningJwksKey`
