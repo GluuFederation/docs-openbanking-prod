@@ -18,6 +18,7 @@ To add or update custom scripts, you can use either `jans-cli` or `curl`.
 
 Note: If using VM installation you can normally find `jans-cli.py` in the `/opt/jans/jans-cli/` folder. 
 
+<!--
 ## New Custom Scripts: 
 
 This section presents details about useful interception scripts for an OBIE deployment. The scripts are accessible [here] (https://github.com/JanssenProject/jans-setup/tree/openbank/static/extension). Please setup [`jans-cli`](https://gluu.org/docs/openbanking/jans-cli/#using-jans-cli) prior to continuing. 
@@ -191,3 +192,4 @@ This section presents details about useful interception scripts for an OBIE depl
 !!!note
     After any changes in the custom scripts remember to restart the jans-auth service to apply them by restarting `kubectl rollout restart deployment gluu-auth-server -n <gluu-namespace>`.
 
+-->
