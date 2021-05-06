@@ -30,7 +30,7 @@ The person authentication custom script will use configuration parameters like r
 1. From this folder, run the following command: 
 
 ```
-/opt/jans/jans-cli/config-cli.py --operation-id post-config-scripts --data /personauthentication.json \
+python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /personauthentication.json \
 -cert-file yourcertfile.pem -key-file yourkey.key
 ```
 

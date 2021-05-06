@@ -43,7 +43,7 @@ The client registration custom script will use configuration parameters like SSA
 1. From this folder, run the following command: 
 
     ```
-    /opt/jans/jans-cli/config-cli.py --operation-id post-config-scripts --data /clientregistration.json \
+    python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /clientregistration.json \
     -cert-file yourcertfile.pem -key-file yourkey.key
     ```
 
