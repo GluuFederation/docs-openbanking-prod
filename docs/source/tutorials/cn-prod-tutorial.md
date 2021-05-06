@@ -76,13 +76,13 @@ Please calculate the minimum required resources as per services deployed. The fo
 
     | certificates and keys of interest in mTLS | Notes                                      |
     | ----------------------------------------  | ------------------------------------------ |
-    | web_https.crt         | This is commonly referred to as server.crt |
-    | web_https.key         | This is commonly referred to as server.key |
-    | web_https.csr         | This is commonly referred to as server.csr |
-    | ca.crt                ||
-    | ca.key                ||
+    | web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
+    | web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
+    | web_https.csr         | (nginx) web server certificate signing request. This is commonly referred to as server.csr |
+    | ca.crt                | Certificate authority certificate that signed/signs the web server certificate. |
+    | ca.key                | Certificate authority key that signed/signs the web server certificate.|
     
-    These are used by nginx ingress for client-authentication and TLS. These may be provided to you by your domain provider or may be [self-signed](https://kubernetes.github.io/ingress-nginx/examples/PREREQUISITES/#client-certificate-authentication) and maintained.
+    These are used by nginx ingress for client-authentication and TLS. These may be provided to you by your domain provider or may be [self-signed](https://kubernetes.github.io/ingress-nginx/examples/PREREQUISITES/#client-certificate-authentication) and maintained. The auth-server needs these in order to validate client authentication.
      
     1.  Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication). Uncomment the following from the helm charts [`override-values.yaml`](#helm-valuesyaml)
 
