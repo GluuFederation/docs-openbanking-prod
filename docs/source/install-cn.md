@@ -305,11 +305,7 @@ If during installation the release was not defined, release name is checked by r
          
 1.  Try using the `jans-cli`:
 
-    1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
-
-        ```
-        git clone https://github.com/JanssenProject/jans-cli.git
-        ```
+    1.  Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
         
     1.  Run the jans-cli in interactive mode and try it out: 
        
@@ -363,11 +359,7 @@ If during installation the release was not defined, release name is checked by r
 
 1.  Try using the `jans-cli`:
 
-    1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
-
-        ```
-        git clone https://github.com/JanssenProject/jans-cli.git
-        ```
+    1.  Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
         
     1.  Run the jans-cli in interactive mode and try it out: 
        
@@ -379,7 +371,7 @@ If during installation the release was not defined, release name is checked by r
 
 `jans-cli` is a Command Line Interface for Gluu Configuration. It also has menu-driven interface that makes it easier to understand how to use Gluu Server through the Interactive Mode.
           
-1. Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
+1.  Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
 
 1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
    

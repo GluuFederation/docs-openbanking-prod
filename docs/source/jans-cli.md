@@ -18,7 +18,7 @@ Jans-cli supports the following six operations on custom scripts:
 
 === "Cloud Native"
 
-    1. Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
+    1.  Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
 
     1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
        
