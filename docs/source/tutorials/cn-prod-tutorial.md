@@ -1,4 +1,4 @@
-# Gluu Openbanking Cloud Native Production tutorial setup - Coming soon
+# Gluu Openbanking Cloud Native Production tutorial setup
 
 ## Cloud Native Distribution
 
