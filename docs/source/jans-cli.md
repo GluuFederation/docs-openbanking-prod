@@ -16,27 +16,21 @@ Jans-cli supports the following six operations on custom scripts:
 
 ### Using jans-cli
 
-=== "Cloud Native"
+1.  Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
 
-    1.  Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
-
-    1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
+1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
        
-        ```bash
-        TESTCLIENT=$(kubectl get cm cn -o json -n gluu | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
-        TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
-        ```
+    ```bash
+    TESTCLIENT=$(kubectl get cm cn -o json -n gluu | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
+    TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
+    ```
                 
-    1.  Run the jans-cli in interactive mode and try it out: 
+1.  Run the jans-cli in interactive mode and try it out: 
        
-        ```bash
-        python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
-        ```
-        
-=== "VM"
- 
-    The jans-cli will automatically be available at `/opt/jans/jans-cli/config-cli.py`. Please use that location to run the next commands. Please note that you do not need to pass `--host`, `--client-id`, and `--client-secret` options to the `cli` as they will automatically be picked up. 
-    
+    ```bash
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+    ```
+
 ### Overview
     
 The post-config-scripts and put-config-scripts require various details about the scripts. The following command gives the basic schema of the custom scripts to pass to these operations. 
