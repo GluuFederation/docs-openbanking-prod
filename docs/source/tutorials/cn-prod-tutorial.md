@@ -184,13 +184,13 @@ Please calculate the minimum required resources as per services deployed. The fo
 
 1.  Load your web https certs and keys.
 
-    | Associated certificates and keys | Notes                                      |
-    | -------------------------------- | ------------------------------------------ |
-    | /etc/certs/web_https.crt         | This is commonly referred to as server.crt |
-    | /etc/certs/web_https.key         | This is commonly referred to as server.key |
-    | /etc/certs/web_https.csr         | This is commonly referred to as server.csr |
-    | /etc/certs/ca.crt                ||
-    | /etc/certs/ca.key                ||
+    | certificates and keys of interest in mTLS | Notes                                      |
+    | ----------------------------------------  | ------------------------------------------ |
+    | web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
+    | web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
+    | web_https.csr         | (nginx) web server certificate signing request. This is commonly referred to as server.csr |
+    | ca.crt                | Certificate authority certificate that signed/signs the web server certificate. |
+    | ca.key                | Certificate authority key that signed/signs the web server certificate.|
         
     
     !!! Note
