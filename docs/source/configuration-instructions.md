@@ -37,9 +37,7 @@ This section presents details about useful interception scripts for an OBIE depl
     
     Note: You will need keys and certificates to call the config-api using mutually authenticated TLS. 
     
-    1. This script uses [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home) library for JavaScript object signing and encryption.
-    
-    === "Cloud Native"
+    1. This script uses [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home) library for JavaScript object signing and encryption
     
         1.  Download the [`jose4j-0.7.7.jar`](https://bitbucket.org/b_c/jose4j/downloads/)
         
@@ -67,16 +65,6 @@ This section presents details about useful interception scripts for an OBIE depl
             ```bash
             helm upgrade gluu gluu/gluu -n <gluu-namespace> --version=5.0.0 -f override.yaml
             ```
-            
-    === "VM"
-    
-        1.  Download the [`jose4j-0.7.7.jar`](https://bitbucket.org/b_c/jose4j/downloads/) and  Place  in `/opt/jans/jetty/jans-auth/custom/libs/`
-        
-        1.  Change your current working directory to `/opt/jans/jetty/jans-auth/webapps` and edit `jans-auth.xml` to add this line:   
-            ```xml
-            <Set name="extraClasspath">/opt/jans/jetty/jans-auth/custom/libs/jose4j-0.7.7.jar</Set>
-            ```
-        1. Restart the Auth Server, `systemctl restart jans-auth` 
 
 === "Person Authentication Script"
 
