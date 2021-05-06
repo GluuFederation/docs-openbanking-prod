@@ -10,22 +10,11 @@
 
 ### Get the client-id and client-secret
 
-=== "Cloud Native"
-
-    Get a client and its associated password. Here, we will use the client id and secret created for config-api. In the commands below, please change the namespace to where Gluu was installed.
+Get a client and its associated password. Here, we will use the client id and secret created for config-api. In the commands below, please change the namespace to where Gluu was installed.
        
     ```bash
     TESTCLIENT=$(kubectl get cm cn -o json -n <gluu-namespace> | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
     TESTCLIENTSECRET=$(kubectl get secret cn -o json -n <gluu-namespace> | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
-    ```
-
-=== "VM"
- 
-    Get a client and its associated password. Here, we will use the client id and secret created for config-api.
-    
-    ```bash
-    TESTCLIENTSECRET=$(/opt/jans/bin/encode.py -d  `sed -n '12 p' /opt/jans/jans-setup/output/jans-config-api/clients.json |cut -d '"' -f 4|tr -d '[:space:]'`)
-    TESTCLIENT=$(sed -n '7 p' /opt/jans/jans-setup/output/jans-config-api/clients.json |cut -d '"' -f 4|tr -d '[:space:]')
     ```
 
 ### curl operations
@@ -78,4 +67,3 @@
         ```bash
         curl -X POST "https://bank.gluu.org/jans-config-api/api/v1/config/scripts" -H  "Accept: application/json" -H "Authorization:Bearer ad34ac-8f2d-4bec-aed3-343adasda2" -H "Content-Type: application/json" --data @/home/user/scriptformat.json
         ```
-
