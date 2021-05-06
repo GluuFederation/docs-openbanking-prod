@@ -128,12 +128,12 @@ Use this pem file to create JWKs for the clients (if required). To create a JWK,
 !!!Note 
     It is important to give different values of the Common Name field (“Common Name (e.g. server FQDN or YOUR name) []”) for the CA, Server and  clients. Other fields may have common values but the same values for Common Name of all certificates results in certificate verification failed at runtime.
 
-### Importing the CA and signing certificates into Auth-Server keystore: 
+### Importing the CA certificates in JVM truststore and signing and encryption keys into Auth-Server keystore: 
 
-The command line utility keytool is installed with JDK, it can be used to import the certificate and keys into the JVM keystore and jans-auth server’s keystore.
+The command line utility keytool is installed with JDK, it can be used to import the CA certificate in JVM truststore (/opt/jre/lib/security/cacerts) and  signing,encryption keys into the jans-auth server’s keystore(/etc/certs/jans-auth-keys.jks).
 
 ```
-./keytool -importcert -file /path/to/file/filename.cer -keystore /path/to/file/filename.jks -alias yourkeystore
+./keytool -importcert -file /path/to/file/filename.cer -keystore /etc/certs/jans-auth-keys.jks -alias yourkeystore
 
 ./keytool -importkeystore -srckeystore /path/to/file/filename.jks -srcstoretype JKS -destkeystore /opt/jre/lib/security/cacerts -deststoretype JKS
 ```
