@@ -18,12 +18,8 @@ Jans-cli supports the following six operations on custom scripts:
 
 === "Cloud Native"
 
-    1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
-    
-        ```
-        git clone https://github.com/JanssenProject/jans-cli.git
-        ```
-    
+    1. Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
+
     1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
        
         ```bash
@@ -34,7 +30,7 @@ Jans-cli supports the following six operations on custom scripts:
     1.  Run the jans-cli in interactive mode and try it out: 
        
         ```bash
-        ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+        python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
         ```
         
 === "VM"
@@ -46,7 +42,7 @@ Jans-cli supports the following six operations on custom scripts:
 The post-config-scripts and put-config-scripts require various details about the scripts. The following command gives the basic schema of the custom scripts to pass to these operations. 
 
 ```bash
-./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --schema /components/schemas/CustomScript 
+python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --schema /components/schemas/CustomScript 
 ```
 
 The output of the above command will be similar as: 
@@ -119,21 +115,21 @@ In next few commands, `client.pem`, `client.key` are the certificate and key fil
 The following command will add a new script with details given in /tmp/sampleadd.json file. __The jans-cli will generate a unique inum of this new script if we skip inum in the json file.__
  
 ```bash 
-./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /tmp/sampleadd.json \
+python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /tmp/sampleadd.json \
 -cert-file client.pem -key-file client.key
 ```
 
 The following command will modify/update the existing script with details given in /tmp/samplemodify.json file. __Remember to set inum field in samplemodify.json to the inum of the script to update.__ 
 
 ```bash 
-./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id put-config-scripts --data /tmp/samplemodify.json \
+python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id put-config-scripts --data /tmp/samplemodify.json \
 -cert-file client.pem -key-file client.key
 ```
 
 To delete a custom script by its inum, use the following command: 
 
 ```bash
-./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id delete-config-scripts-by-inum --url-suffix inum:HKM-TEST \
+python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id delete-config-scripts-by-inum --url-suffix inum:HKM-TEST \
 -cert-file client.pem -key-file client.key
 ```
 
@@ -144,20 +140,20 @@ These commands to print the details are important, as using them we can get the 
 1.  The following command will display the details of all the existing custom scripts. This will be helpful to get the inum of scripts to perform the update and delete operation.
  
     ```bash
-    ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts -cert-file client.pem -key-file client.key
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts -cert-file client.pem -key-file client.key
     ```
 
 1.  Following command displays the details of selected custom script (by inum). 
 
     ```bash 
-    ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts-by-inum --url-suffix inum:_____  \
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts-by-inum --url-suffix inum:_____  \
     -cert-file client.pem -key-file client.key
     ```
 
 1.  Use the following command to display the details of existing custom scripts of a given type (for example: INTROSPECTION).
  
     ```bash
-    ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts-by-type --url-suffix type:INTROSPECTION \
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts-by-type --url-suffix type:INTROSPECTION \
     -cert-file client.pem -key-file client.key
     ```
 

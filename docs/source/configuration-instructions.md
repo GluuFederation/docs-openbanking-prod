@@ -10,13 +10,13 @@ Remember, MTLS is needed not only for the TPPs to call the authorization and tok
 
 To add or update custom scripts, you can use either `jans-cli` or `curl`. 
 
-* `jans-cli` in interactive mode, `option 13` enables you manage custom scripts. For more info, see the [docs](https://github.com/JanssenProject/home/wiki/Custom-Scripts-using-jans-cli).
+* `jans-cli` in interactive mode, `option 13` enables you manage custom scripts. For more info, see the [docs](https://gluu.org/docs/openbanking/jans-cli/).
 
 * `jans-cli` in command line argument mode is more conducive to scripting and automation. To display the available operations for custom scripts, use `config-cli.py --info CustomScripts`. See the [docs](https://gluu.org/docs/openbanking/jans-cli) for more info.
 
 * To use `curl` see these [docs](https://gluu.org/docs/openbanking/curl/#managing-scripts-with-curl)
 
-Note: you can normally find `jans-cli.py` in the `/opt/jans/jans-cli/` folder. 
+Note: If using VM installation you can normally find `jans-cli.py` in the `/opt/jans/jans-cli/` folder. 
 
 ## New Custom Scripts: 
 
@@ -31,7 +31,7 @@ This section presents details about useful interception scripts for an OBIE depl
     From this folder, run the following command: 
     
     ```bash
-    ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /clientregistration.json \
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /clientregistration.json \
     -cert-file yourcertfile.pem -key-file yourkey.key
     ```
     
@@ -87,7 +87,7 @@ This section presents details about useful interception scripts for an OBIE depl
     From this folder, run the following command: 
     
     ```bash
-    ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /personauthentication.json \
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /personauthentication.json \
     -cert-file yourcertfile.pem -key-file yourkey.key
     ```
     
@@ -136,7 +136,7 @@ This section presents details about useful interception scripts for an OBIE depl
     From this folder, run the following command: 
     
     ```bash
-    ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /introspection.json \
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /introspection.json \
     -cert-file yourcertfile.pem -key-file yourkey.key
     ```
     
@@ -169,7 +169,7 @@ This section presents details about useful interception scripts for an OBIE depl
     From this folder, run the following command: 
     
     ```bash
-    ./jans-cli/config-cli.py --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /updatetoken.json \
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /updatetoken.json \
     -cert-file yourcertfile.pem -key-file yourkey.key
     ```
     Note: You will need keys and certificates to call the config-api using mutually authenticated TLS. 

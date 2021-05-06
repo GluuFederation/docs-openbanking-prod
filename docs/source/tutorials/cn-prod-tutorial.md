@@ -299,11 +299,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 
 `jans-cli` is a Command Line Interface for Gluu Configuration. It also has menu-driven interface that makes it easier to understand how to use Gluu Server through the Interactive Mode.
           
-1.  Clone the [`jans-cli`](https://github.com/JanssenProject/jans-cli/) repo 
-
-    ```
-    git clone https://github.com/JanssenProject/jans-cli.git
-    ```
+1. Download [`jans-cli.pyz`](https://github.com/JanssenProject/jans-cli/releases). This package can be built [manually](https://github.com/JanssenProject/jans-cli#build-jans-clipyz-manually).
 
 1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
    
@@ -322,7 +318,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 1.  Run the jans-cli in interactive mode and try it out: 
    
     ```bash
-    ./jans-cli/config-cli.py --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.crt --key-file client.key
+    python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.crt --key-file client.key
     ```
     
 Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configuration-instructions/).
