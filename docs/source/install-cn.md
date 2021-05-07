@@ -114,28 +114,51 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
   ::1             localhost
   ```
 
-## Using OBIE signing certificates and keys   
+## Using OBIE signing certificates and keys
+   
+1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the certificate transport pem file i.e `obtruststore.pem`, the transport key i.e `obtruststore-ertre3.key`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
 
-1.  When using OBIE signed certificates and keys, there are three main objects to have. The certificate pem file i.e `obsigning.pem`, the key i.e `obsigning-oajsdij8927123.key`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
-
-1.  base64 encrypt both the `.pem` and `.key` as they will be injected as base64 strings inside the helm [`override-values.yaml`](#helm-valuesyaml).
+1.  base64 encrypt all `.pem` and `.key` files as they will be injected as base64 strings inside the helm [`override-values.yaml`](#helm-valuesyaml).
 
     ```bash
     cat obsigning.pem | base64 | tr -d '\n' > obsigningbase64.pem
     cat obsigning-oajsdij8927123.key | base64 | tr -d '\n' > obsigningbase64.key
+    cat obtransport.pem | base64 | tr -d '\n' > obtransportbase64.pem
+    cat obtransport-sdfe4234234.key | base64 | tr -d '\n' > obtransportbase64.key
+    cat obtruststore.pem | base64 | tr -d '\n' > obtruststorebase64.pem
+    cat obtruststore-ertre3.key | base64 | tr -d '\n' > obtruststorebase64.key        
     ```
     
-1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `config.configmap.cnExtSigningJwksCrt`
+1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksCrt`
 
-1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `config.configmap.cnExtSigningJwksKey`
+1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObExtSigningJwksKey`
 
-1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnExtSigningJwksUri`
+1.  Copy the base64 string in `obtransportbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTransportCrt`
 
-|Helm values configuration                | Description                                                                                         | default      |
-|-----------------------------------------|-----------------------------------------------------------------------------------------------------|--------------|
-|global.cnExtSigningJwksUri               | external signing jwks uri string                                                                    |    empty     |
-|config.configmap.cnExtSigningJwksCrt     | base64 string for the external signing jwks crt. Activated when .global.cnExtSigningJwksUri is set  |    empty     |
-|config.configmap.cnExtSigningJwksKey     | base64 string for the external signing jwks key . Activated when .global.cnExtSigningJwksUri is set |    empty     |
+1.  Copy the base64 string in `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKey`
+
+1.  Copy the base64 string in `obtruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTrustStoreCrt`
+
+1.  Copy the base64 string in `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKey`    
+    
+1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
+
+|Helm values configuration        | Description                                                                                                                   | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
+|---------------------------------|-------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
+|global.cnObExtSigningJwksUri     | external signing jwks uri string                                                                                              |    empty     | `obextjwksuri.crt` parsed from the URI and added to the JVM                                            |
+|global.cnObExtSigningJwksCrt     | Used in SSA Validation. base64 string for the external signing jwks crt. Activated when .global.cnObExtSigningJwksUri is set  |    empty     | `ob-ext-signing.crt`                                                                                   |
+|global.cnObExtSigningJwksKey     | Used in SSA Validation. base64 string for the external signing jwks key . Activated when .global.cnObExtSigningJwksUri is set |    empty     | `ob-ext-signing.key`. With the above crt `ob-ext-signing.jks`, and `ob-ext-signing.pkcs12` get created.|
+|global.cnObTransportCrt          | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set              |    empty     | `ob-transport.crt`                                                                                     |
+|global.cnObTransportKey          | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set              |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
+|global.cnObTrustStoreCrt         | Used in SSA Validation. base64 string for the truststore crt. Activated when .global.cnObExtSigningJwksUri is set             |    empty     | `ob-truststore.crt`                                                                                    |
+|global.cnObTrustStoreKey         | Used in SSA Validation. base64 string for the truststore key. Activated when .global.cnObExtSigningJwksUri is set             |    empty     | `ob-truststore.key`. With the above crt `ob-truststore.jks`, and `ob-truststore.pkcs12` get created.   |
+    
+Please note that the password for the keystores created can be fetched by executing the following command:
+ 
+ ```bash
+ AUTH_JKS_PASS=$(kubectl get secret cn -o json -n gluu | grep '"auth_openid_jks_pass":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
+ ```
+The above password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
       
 ## Uninstalling the Chart
 
@@ -395,7 +418,7 @@ auth-server:
   image:
     pullPolicy: IfNotPresent
     repository: janssenproject/auth-server
-    tag: 1.0.0_b3
+    tag: 1.0.0_b4
   replicas: 1
   resources:
     limits:
@@ -434,9 +457,6 @@ config:
     cnSqldbUserPassword: Test1234# # Change to your Aurora master password
     cnCacheType: NATIVE_PERSISTENCE
     cnConfigKubernetesConfigMap: cn
-    # base64 string for the external signing jwks crt and key. Used when .global.cnExtSigningJwksUri is set.
-    cnExtSigningJwksCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks crt
-    cnExtSigningJwksKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks key
     cnMaxRamPercent: "75.0"
     cnSecretKubernetesSecret: cn
     containerMetadataName: kubernetes
@@ -493,7 +513,16 @@ global:
     enabled: true
   awsStorageType: io1
   cnPersistenceType: sql
-  cnExtSigningJwksUri: "https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks" # Change to the external signing jwks uri
+  cnObExtSigningJwksUri: "https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks" # Change to the external signing jwks uri
+  # base64 string for the external signing jwks crt and key. Used when .global.cnObExtSigningJwksUri is set.
+  cnObExtSigningJwksCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks crt
+  cnObExtSigningJwksKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks key
+  # base64 string for the open banking transport crt and keys. Used when .global.cnObExtSigningJwksUri is set.
+  cnObTransportCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your transport crt
+  cnObTransportKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob transport key
+  # base64 string for the open banking truststore crt and keys. Used when .global.cnObExtSigningJwksUri is set.
+  cnObTrustStoreCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
+  cnObTrustStoreKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
   config:
     enabled: true
   #google/kubernetes
