@@ -23,7 +23,7 @@ This script can be used to add custom claims to the id_token. As per the open ba
 
 ```
 python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /updatetoken.json \
--cert-file yourcertfile.pem -key-file yourkey.key
+--cert-file jans_cli_client.crt --key-file jans_cli_client.key
 ```
 
 ## Methods
