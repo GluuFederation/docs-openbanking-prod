@@ -28,7 +28,7 @@ Jans-cli supports the following six operations on custom scripts:
 1.  Run the jans-cli in interactive mode and try it out: 
        
     ```bash
-    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file jans_cli_client.crt --key-file jans_cli_client.key
     ```
 
 ### Overview
@@ -102,7 +102,7 @@ To add or modify a script first, we need to create the script's python file (e.g
 }
 ```
 
-In next few commands, `client.pem`, `client.key` are the certificate and key files respectively for MTLS. We need to pass this certificate, key as the token endpoint is under MTLS and jans-cli obtains an appropriate token before performing the operation. You will replace these with your actual certificate and key files. 
+In next few commands, `jans_cli_client.crt`, `jans_cli_client.key` are the certificate and key files respectively for MTLS. We need to pass this certificate, key as the token endpoint is under MTLS and jans-cli obtains an appropriate token before performing the operation. You will replace these with your actual certificate and key files. 
 
 ### Add a new custom script, update and delete existing custom script
 
@@ -110,21 +110,21 @@ The following command will add a new script with details given in /tmp/sampleadd
  
 ```bash 
 python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id post-config-scripts --data /tmp/sampleadd.json \
--cert-file client.pem -key-file client.key
+--cert-file jans_cli_client.crt --key-file jans_cli_client.key
 ```
 
 The following command will modify/update the existing script with details given in /tmp/samplemodify.json file. __Remember to set inum field in samplemodify.json to the inum of the script to update.__ 
 
 ```bash 
 python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id put-config-scripts --data /tmp/samplemodify.json \
--cert-file client.pem -key-file client.key
+--cert-file jans_cli_client.crt --key-file jans_cli_client.key
 ```
 
 To delete a custom script by its inum, use the following command: 
 
 ```bash
 python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id delete-config-scripts-by-inum --url-suffix inum:HKM-TEST \
--cert-file client.pem -key-file client.key
+--cert-file jans_cli_client.crt --key-file jans_cli_client.key
 ```
 
 ### Print details of existing custom scripts
@@ -134,20 +134,20 @@ These commands to print the details are important, as using them we can get the 
 1.  The following command will display the details of all the existing custom scripts. This will be helpful to get the inum of scripts to perform the update and delete operation.
  
     ```bash
-    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts -cert-file client.pem -key-file client.key
+    python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts --cert-file jans_cli_client.crt --key-file jans_cli_client.key
     ```
 
 1.  Following command displays the details of selected custom script (by inum). 
 
     ```bash 
     python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts-by-inum --url-suffix inum:_____  \
-    -cert-file client.pem -key-file client.key
+    --cert-file jans_cli_client.crt --key-file jans_cli_client.key
     ```
 
 1.  Use the following command to display the details of existing custom scripts of a given type (for example: INTROSPECTION).
  
     ```bash
     python3 jans-cli-linux-amd64.pyz --host <FQDN> --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --operation-id get-config-scripts-by-type --url-suffix type:INTROSPECTION \
-    -cert-file client.pem -key-file client.key
+    --cert-file jans_cli_client.crt --key-file jans_cli_client.key
     ```
 
