@@ -44,7 +44,7 @@ The client registration custom script will use configuration parameters like SSA
 
     ```
     python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /clientregistration.json \
-    -cert-file yourcertfile.pem -key-file yourkey.key
+    --cert-file jans_cli_client.crt --key-file jans_cli_client.key
     ```
 
 ## Adding Jose4j library in classpath
