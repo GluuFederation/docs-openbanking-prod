@@ -114,51 +114,85 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
   ::1             localhost
   ```
 
-## Using OBIE signing certificates and keys
-   
-1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the certificate transport pem file i.e `obtruststore.pem`, the transport key i.e `obtruststore-ertre3.key`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
+## Enabling mTLS in ingress-nginx 
+         
+1.  Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication). Uncomment the following from the helm charts [`override-values.yaml`](#helm-valuesyaml)
 
-1.  base64 encrypt all `.pem` and `.key` files as they will be injected as base64 strings inside the helm [`override-values.yaml`](#helm-valuesyaml).
-
-    ```bash
-    cat obsigning.pem | base64 | tr -d '\n' > obsigningbase64.pem
-    cat obsigning-oajsdij8927123.key | base64 | tr -d '\n' > obsigningbase64.key
-    cat obtransport.pem | base64 | tr -d '\n' > obtransportbase64.pem
-    cat obtransport-sdfe4234234.key | base64 | tr -d '\n' > obtransportbase64.key
-    cat obtruststore.pem | base64 | tr -d '\n' > obtruststorebase64.pem
-    cat obtruststore-ertre3.key | base64 | tr -d '\n' > obtruststorebase64.key        
+    ```yaml
+        additionalAnnotations:
+          # Enable client certificate authentication. Keep this optional. We force it on the path level for /token and /register endpoints.
+          nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
+          # Create the secret containing the trusted ca certificates
+          nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/tls-ob-ca-certificates"
+          # Specify the verification depth in the client certificates chain
+          nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+          # Specify if certificates are passed to upstream server
+          nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
     ```
     
-1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksCrt`
+1.  Set `nginx-ingress.ingress.authServerProtectedToken` and `nginx-ingress.ingress.authServerProtectedRegister` in the helm charts [`override-values.yaml`](#helm-valuesyaml) to `true`.
 
-1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObExtSigningJwksKey`
+1.  Create a secret containing the OB CA certificates (issuing, root, and signing CAs) and the OB AS transport crt. For more information read [here](https://kubernetes.github.io/ingress-nginx/examples/auth/client-certs/).
 
-1.  Copy the base64 string in `obtransportbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTransportCrt`
+    ```bash
+    cat web_https_ca.crt issuingca.crt rootca.crt signingca.crt >> ca.crt
+    kubectl create secret generic tls-ob-ca-certificates -n gluu --from-file=tls.crt=web_https.crt --from-file=tls.key=web_https.key --from-file=ca.crt=ca.crt
+    ```
+        
+1.  Inject OBIE signed certs, keys and uri: 
 
-1.  Copy the base64 string in `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKey`
-
-1.  Copy the base64 string in `obtruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTrustStoreCrt`
-
-1.  Copy the base64 string in `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKey`    
+    1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the certificate transport pem file i.e `obtruststore.pem`, the transport key i.e `obtruststore-ertre3.key`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
     
-1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
-
-|Helm values configuration        | Description                                                                                                                   | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
-|---------------------------------|-------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
-|global.cnObExtSigningJwksUri     | external signing jwks uri string                                                                                              |    empty     | `obextjwksuri.crt` parsed from the URI and added to the JVM                                            |
-|global.cnObExtSigningJwksCrt     | Used in SSA Validation. base64 string for the external signing jwks crt. Activated when .global.cnObExtSigningJwksUri is set  |    empty     | `ob-ext-signing.crt`                                                                                   |
-|global.cnObExtSigningJwksKey     | Used in SSA Validation. base64 string for the external signing jwks key . Activated when .global.cnObExtSigningJwksUri is set |    empty     | `ob-ext-signing.key`. With the above crt `ob-ext-signing.jks`, and `ob-ext-signing.pkcs12` get created.|
-|global.cnObTransportCrt          | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set              |    empty     | `ob-transport.crt`                                                                                     |
-|global.cnObTransportKey          | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set              |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
-|global.cnObTrustStoreCrt         | Used in SSA Validation. base64 string for the truststore crt. Activated when .global.cnObExtSigningJwksUri is set             |    empty     | `ob-truststore.crt`                                                                                    |
-|global.cnObTrustStoreKey         | Used in SSA Validation. base64 string for the truststore key. Activated when .global.cnObExtSigningJwksUri is set             |    empty     | `ob-truststore.key`. With the above crt `ob-truststore.jks`, and `ob-truststore.pkcs12` get created.   |
+    1.  base64 encrypt all `.pem` and `.key` files as they will be injected as base64 strings inside the helm [`override-values.yaml`](#helm-valuesyaml).
     
-Please note that the password for the keystores created can be fetched by executing the following command:
- 
- ```bash
- AUTH_JKS_PASS=$(kubectl get secret cn -o json -n gluu | grep '"auth_openid_jks_pass":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
- ```
-The above password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
+        ```bash
+        cat obsigning.pem | base64 | tr -d '\n' > obsigningbase64.pem
+        cat obsigning-oajsdij8927123.key | base64 | tr -d '\n' > obsigningbase64.key
+        cat obtransport.pem | base64 | tr -d '\n' > obtransportbase64.pem
+        cat obtransport-sdfe4234234.key | base64 | tr -d '\n' > obtransportbase64.key
+        cat obtruststore.pem | base64 | tr -d '\n' > obtruststorebase64.pem
+        cat obtruststore-ertre3.key | base64 | tr -d '\n' > obtruststorebase64.key        
+        ```
+        
+    1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksCrt`
+    
+    1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObExtSigningJwksKey`
+
+    1.  Inject the base64 string passphrase of `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObExtSigningJwksPassPhrase`
+
+    1.  Copy the base64 string in `obtransportbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTransportCrt`
+    
+    1.  Copy the base64 string in `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKey`
+    
+    1.  Inject the base64 string passphrase of `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKeyPassPhrase`
+    
+    1.  Copy the base64 string in `obtruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTrustStoreCrt`
+    
+    1.  Copy the base64 string in `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKey`
+
+    1.  Inject the base64 string passphrase of `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKeyPassPhrase`        
+        
+    1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
+    
+    |Helm values configuration           | Description                                                                                                                      | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
+    |------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
+    |global.cnObExtSigningJwksUri        | external signing jwks uri string                                                                                                 |    empty     | `obextjwksuri.crt` parsed from the URI and added to the JVM                                            |
+    |global.cnObExtSigningJwksCrt        | Used in SSA Validation. base64 string for the external signing jwks crt. Activated when .global.cnObExtSigningJwksUri is set     |    empty     | `ob-ext-signing.crt`                                                                                   |
+    |global.cnObExtSigningJwksKey        | Used in SSA Validation. base64 string for the external signing jwks key . Activated when .global.cnObExtSigningJwksUri is set    |    empty     | `ob-ext-signing.key`. With the above crt `ob-ext-signing.jks`, and `ob-ext-signing.pkcs12` get created.|
+    |global.cnObExtSigningJwksPassPhrase | Needed if global.cnObExtSigningJwksKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                    |    empty     | `ob-ext-signing.pin`.                                                                                  |    
+    |global.cnObTransportCrt             | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.crt`                                                                                     |
+    |global.cnObTransportKey             | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
+    |global.cnObTransportKeyPassPhrase   | Needed if global.cnObTransportKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                         |    empty     | `ob-transport.pin`.                                                                                    |        
+    |global.cnObTrustStoreCrt            | Used in SSA Validation. base64 string for the truststore crt. Activated when .global.cnObExtSigningJwksUri is set                |    empty     | `ob-truststore.crt`                                                                                    |
+    |global.cnObTrustStoreKey            | Used in SSA Validation. base64 string for the truststore key. Activated when .global.cnObExtSigningJwksUri is set                |    empty     | `ob-truststore.key`. With the above crt `ob-truststore.jks`, and `ob-truststore.pkcs12` get created.   |
+    |global.cnObTrustStoreKeyPassPhrase  | Needed if global.cnObTrustStoreKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                        |    empty     | `ob-truststore.pin`.                                                                                   |            
+        
+    Please note that the password for the keystores created can be fetched by executing the following command:
+     
+     ```bash
+     AUTH_JKS_PASS=$(kubectl get secret cn -o json -n gluu | grep '"auth_openid_jks_pass":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
+     ```
+    The above password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
       
 ## Uninstalling the Chart
 
@@ -168,32 +202,9 @@ To uninstall/delete `my-release` deployment:
 
 If during installation the release was not defined, release name is checked by running `$ helm ls` then deleted using the previous command and the default release name.
 
-## Enabling mTLS in ingress-nginx
+## Loading web https certs and keys.
 
-!!!Note 
-    For MTLS, OBIE-issued certificates and keys should be used. 
-
-1.  Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication). Uncomment the following from your values.yaml or manually add them to your ingress. 
-
-    ```yaml
-        additionalAnnotations:
-          # Enable client certificate authentication. Keep this optional. We force it on the path level for /token and /register endpoints.
-          nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
-          # Create the secret containing the trusted ca certificates
-          nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/ca-secret"
-          # Specify the verification depth in the client certificates chain
-          nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
-          # Specify if certificates are passed to upstream server
-          nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
-    ```
-
-    In the above secret `ca-secret` inside namespace `gluu` is created.
-
-1.  Set `nginx-ingress.ingress.authServerProtectedToken` and `nginx-ingress.ingress.authServerProtectedRegister` to `true`.
-   
-### Loading web https certs and keys.
-
-| certificates and keys of interest in mTLS | Notes                                      |
+| certificates and keys of interest for https | Notes                                      |
 | ----------------------------------------  | ------------------------------------------ |
 | web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
 | web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
@@ -304,8 +315,8 @@ If during installation the release was not defined, release name is checked by r
     kubectl get secret cn -o json -n gluu | grep '"ssl_ca_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > ca.key
     kubectl get secret cn -o json -n gluu | grep '"ssl_cert":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > server.crt
     kubectl get secret cn -o json -n gluu | grep '"ssl_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > server.key
-    openssl req -new -newkey rsa:4096 -keyout client.key -out client.csr -nodes -subj '/CN=Openbanking'
-    openssl x509 -req -sha256 -days 365 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out client.crt
+    openssl req -new -newkey rsa:4096 -keyout jans_cli_client.key -out jans_cli_client.csr -nodes -subj '/CN=Openbanking'
+    openssl x509 -req -sha256 -days 365 -in jans_cli_client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out jans_cli_client.crt
     kubectl create secret generic ca-secret -n gluu --from-file=tls.crt=server.crt --from-file=tls.key=server.key --from-file=ca.crt=ca.crt
     cd ..
     ```
@@ -322,7 +333,7 @@ If during installation the release was not defined, release name is checked by r
     1.  Curl the protected `/token` endpoint.
     
         ```bash
-        curl -X POST -k --cert client.crt --key client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
+        curl -X POST -k --cert jans_cli_client.crt --key jans_cli_client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
         {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
         ```
          
@@ -333,7 +344,7 @@ If during installation the release was not defined, release name is checked by r
     1.  Run the jans-cli in interactive mode and try it out: 
        
         ```bash
-        python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.crt --key-file client.key -noverify
+        python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file jans_cli_client.crt --key-file jans_cli_client.key -noverify
         ```
            
 
@@ -347,12 +358,12 @@ If during installation the release was not defined, release name is checked by r
 
 1.  Follow [instructions](#loading-web-https-certs-and-keys) to rotate all associated certs and keys. This is normally done right after installation. Please note that the fqdn inside the crts and keys must be the same as the one provided during installation.
 
-1.  Move all your certs and keys inside one folder. Generate client side crt, key and create the secret for nginx ingress. This assumes the namespace Gluu has been installed in is `gluu`.
+1.  Move all your certs and keys inside one folder. Generate jans cli client side crt, key and create the secret for nginx ingress. This assumes the namespace Gluu has been installed in is `gluu`.
 
     ```bash
     cd certs
-    openssl req -new -newkey rsa:4096 -keyout client.key -out client.csr -nodes -subj '/CN=Openbanking'
-    openssl x509 -req -sha256 -days 365 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out client.crt
+    openssl req -new -newkey rsa:4096 -keyout jans_cli_client.key -out jans_cli_client.csr -nodes -subj '/CN=Openbanking'
+    openssl x509 -req -sha256 -days 365 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out jans_cli_client.crt
     kubectl create secret generic ca-secret -n gluu --from-file=tls.crt=web_https.crt --from-file=tls.key=web_https.key --from-file=ca.crt=ca.crt
     cd ..
     ```
@@ -376,7 +387,7 @@ If during installation the release was not defined, release name is checked by r
     1.  Curl the protected `/token` endpoint.
     
         ```bash
-        curl -X POST --cert client.crt --key client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
+        curl -X POST --cert jans_cli_client.crt --key jans_cli_client.key -u $TESTCLIENT:$TESTCLIENTSECRET https://demo.openbanking.org/jans-auth/restv1/token -d grant_type=client_credentials
         {"access_token":"07688c3e-69ea-403b-a35a-fa3877982c7a","token_type":"bearer","expires_in":299}
         ```
 
@@ -387,7 +398,7 @@ If during installation the release was not defined, release name is checked by r
     1.  Run the jans-cli in interactive mode and try it out: 
        
         ```bash
-        python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+        python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file jans_cli_client.crt --key-file jans_cli_client.key
         ```
 
 ## Using jans-cli
@@ -406,7 +417,7 @@ If during installation the release was not defined, release name is checked by r
 1.  Run the jans-cli in interactive mode and try it out: 
    
     ```bash
-    python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.pem --key-file client.key
+    python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file jans_cli_client.crt --key-file jans_cli_client.key
     ```
                  
 ## Helm values.yaml
@@ -464,7 +475,7 @@ config:
   email: support@gluu.org # Change to your email
   image:
     repository: janssenproject/configuration-manager
-    tag: 1.0.0_b3
+    tag: 1.0.0_b4
   orgName: Gluu # Change to your orgnization name
   resources:
     limits:
@@ -486,7 +497,7 @@ config-api:
   image:
     pullPolicy: Always
     repository: janssenproject/config-api
-    tag: 1.0.0_b3
+    tag: 1.0.0_b4
   replicas: 1
   resources:
     limits:
@@ -517,12 +528,15 @@ global:
   # base64 string for the external signing jwks crt and key. Used when .global.cnObExtSigningJwksUri is set.
   cnObExtSigningJwksCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks crt
   cnObExtSigningJwksKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks key
+  cnObExtSigningJwksKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks key passpharse if the key contains one
   # base64 string for the open banking transport crt and keys. Used when .global.cnObExtSigningJwksUri is set.
   cnObTransportCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your transport crt
   cnObTransportKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob transport key
+  cnObTransportKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob transport key passpharse if the key contains one
   # base64 string for the open banking truststore crt and keys. Used when .global.cnObExtSigningJwksUri is set.
   cnObTrustStoreCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
   cnObTrustStoreKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
+  cnObTrustStoreKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore key passpharse if the key contains one
   config:
     enabled: true
   #google/kubernetes
@@ -601,7 +615,7 @@ persistence:
   image:
     pullPolicy: Always
     repository: janssenproject/persistence-loader
-    tag: 1.0.0_b3
+    tag: 1.0.0_b4
   resources:
     limits:
       cpu: 300m

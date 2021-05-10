@@ -12,7 +12,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 
 |Service           | CPU Unit   |    RAM      |   Disk Space     | Processor Type | Required                                    |
 |------------------|------------|-------------|------------------|----------------|---------------------------------------------|
-|Auth-server            | 2.5        |    2.5GB    |   N/A            |  64 Bit        | Yes                                         |
+|Auth-server       | 2.5        |    2.5GB    |   N/A            |  64 Bit        | Yes                                         |
 |config - job      | 0.5        |    0.5GB    |   N/A            |  64 Bit        | Yes on fresh installs                       |
 |persistence - job | 0.5        |    0.5GB    |   N/A            |  64 Bit        | Yes on fresh installs                       |
 |nginx             | 1          |    1GB      |   N/A            |  64 Bit        | Yes.                                        |
@@ -56,6 +56,22 @@ Please calculate the minimum required resources as per services deployed. The fo
 
 ## Install Gluu using Helm
 
+#### Pre-Requirement
+
+The below certs and keys are needed to continue this tutorial.
+
+| Certificate / key                | Description                                                                             |
+|----------------------------------|-----------------------------------------------------------------------------------------|
+|OB Issuing CA                     | Used in nginx as a certificate authority                                                |
+|OB Root CA                        | Used in nginx as a certificate authority                                                |
+|OB Signing CA                     | Used in nginx as a certificate authority                                                |
+|OB AS Transport key               | Used for mTLS. This  will also be added to the JVM                                      |
+|OB AS Transport crt               | Used for mTLS. This  will also be added to the JVM                                      |
+|OB AS signing crt                 | Added to the JVM. Used in SSA Validation                                                | 
+|OB AS signing key                 | Added to the JVM. Used in SSA Validation                                                |
+|OB truststore crt                 | Added to the JVM. Used in SSA Validation                                                |
+|OB truststore key                 | Added to the JVM. Used in SSA Validation                                                |
+
 1.  Install [nginx-ingress](https://github.com/kubernetes/ingress-nginx) Helm [Chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
 
     ```bash
@@ -71,19 +87,34 @@ Please calculate the minimum required resources as per services deployed. The fo
     ```bash
     kubectl create ns gluu
     ```
-    
-1.  Enable mTLS. 
 
-    | certificates and keys of interest in mTLS | Notes                                      |
+1.  Enable https.
+
+    | certificates and keys of interest in https | Notes                                      |
     | ----------------------------------------  | ------------------------------------------ |
     | web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
     | web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
     | web_https.csr         | (nginx) web server certificate signing request. This is commonly referred to as server.csr |
-    | ca.crt                | Certificate authority certificate that signed/signs the web server certificate. |
-    | ca.key                | Certificate authority key that signed/signs the web server certificate.|
+    | web_https_ca.crt      | Certificate authority certificate that signed/signs the web server certificate. |
+    | web_https_ca.key      | Certificate authority key that signed/signs the web server certificate.|
     
-    These are used by nginx ingress for client-authentication and TLS. These may be provided to you by your domain provider or may be [self-signed](https://kubernetes.github.io/ingress-nginx/examples/PREREQUISITES/#client-certificate-authentication) and maintained. The auth-server needs these in order to validate client authentication.
-     
+    Please note you might be using letsencrypt here. We will use self-signed certs for https and will in a  later step load these certs and keys inside our deployment 
+    
+    1.  Generate the web https CA Key and Certificate:
+        
+        ```bash
+        openssl req -x509 -sha256 -newkey rsa:4096 -keyout web_https_ca.key -out web_https_ca.crt -days 356 -nodes -subj '/CN=My nginx CA'
+        ```
+       
+    1.  Generate the web https key, and certificate for the domain used i.e `demo.openbanking.org` and sign  with the web https CA Certificate:
+    
+        ```bash
+        openssl req -new -newkey rsa:4096 -keyout web_https.key -out web_https.csr -nodes -subj '/CN=demo.openbanking.org'
+        openssl x509 -req -sha256 -days 365 -in web_https.csr -CA web_https_ca.crt -CAkey web_https_ca.key -set_serial 01 -out web_https.crt
+        ```
+    
+1.  Enable mTLS. 
+         
     1.  Please note that enabling the following annotations in the values.yaml will enable  [client certificate authentication](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#client-certificate-authentication). Uncomment the following from the helm charts [`override-values.yaml`](#helm-valuesyaml)
 
         ```yaml
@@ -91,7 +122,7 @@ Please calculate the minimum required resources as per services deployed. The fo
               # Enable client certificate authentication. Keep this optional. We force it on the path level for /token and /register endpoints.
               nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
               # Create the secret containing the trusted ca certificates
-              nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/tls-ca-certificate"
+              nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/tls-ob-ca-certificates"
               # Specify the verification depth in the client certificates chain
               nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
               # Specify if certificates are passed to upstream server
@@ -100,10 +131,11 @@ Please calculate the minimum required resources as per services deployed. The fo
         
     1.  Set `nginx-ingress.ingress.authServerProtectedToken` and `nginx-ingress.ingress.authServerProtectedRegister` in the helm charts [`override-values.yaml`](#helm-valuesyaml) to `true`.
    
-    1.  Create a secret containing the CA certificate and the Server Certificate which is Signed by the CA. For more information read [here](https://kubernetes.github.io/ingress-nginx/examples/auth/client-certs/).
+    1.  Create a secret containing the OB CA certificates (issuing, root, and signing CAs) and the OB AS transport crt. For more information read [here](https://kubernetes.github.io/ingress-nginx/examples/auth/client-certs/).
     
         ```bash
-        kubectl create secret generic tls-ca-certificate -n gluu --from-file=tls.crt=web_https.crt --from-file=tls.key=web_https.key --from-file=ca.crt=ca.crt
+        cat web_https_ca.crt issuingca.crt rootca.crt signingca.crt >> ca.crt
+        kubectl create secret generic tls-ob-ca-certificates -n gluu --from-file=tls.crt=web_https.crt --from-file=tls.key=web_https.key --from-file=ca.crt=ca.crt
         ```
         
 1.  Inject OBIE signed certs, keys and uri: 
@@ -125,25 +157,34 @@ Please calculate the minimum required resources as per services deployed. The fo
     
     1.  Copy the base64 string in `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObExtSigningJwksKey`
 
+    1.  Inject the base64 string passphrase of `obsigningbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObExtSigningJwksPassPhrase`
+
     1.  Copy the base64 string in `obtransportbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTransportCrt`
     
     1.  Copy the base64 string in `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKey`
     
+    1.  Inject the base64 string passphrase of `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKeyPassPhrase`
+    
     1.  Copy the base64 string in `obtruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTrustStoreCrt`
     
-    1.  Copy the base64 string in `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKey`    
+    1.  Copy the base64 string in `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKey`
+
+    1.  Inject the base64 string passphrase of `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKeyPassPhrase`        
         
     1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
     
-    |Helm values configuration        | Description                                                                                                                   | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
-    |---------------------------------|-------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
-    |global.cnObExtSigningJwksUri     | external signing jwks uri string                                                                                              |    empty     | `obextjwksuri.crt` parsed from the URI and added to the JVM                                            |
-    |global.cnObExtSigningJwksCrt     | Used in SSA Validation. base64 string for the external signing jwks crt. Activated when .global.cnObExtSigningJwksUri is set  |    empty     | `ob-ext-signing.crt`                                                                                   |
-    |global.cnObExtSigningJwksKey     | Used in SSA Validation. base64 string for the external signing jwks key . Activated when .global.cnObExtSigningJwksUri is set |    empty     | `ob-ext-signing.key`. With the above crt `ob-ext-signing.jks`, and `ob-ext-signing.pkcs12` get created.|
-    |global.cnObTransportCrt          | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set              |    empty     | `ob-transport.crt`                                                                                     |
-    |global.cnObTransportKey          | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set              |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
-    |global.cnObTrustStoreCrt         | Used in SSA Validation. base64 string for the truststore crt. Activated when .global.cnObExtSigningJwksUri is set             |    empty     | `ob-truststore.crt`                                                                                    |
-    |global.cnObTrustStoreKey         | Used in SSA Validation. base64 string for the truststore key. Activated when .global.cnObExtSigningJwksUri is set             |    empty     | `ob-truststore.key`. With the above crt `ob-truststore.jks`, and `ob-truststore.pkcs12` get created.   |
+    |Helm values configuration           | Description                                                                                                                      | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
+    |------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
+    |global.cnObExtSigningJwksUri        | external signing jwks uri string                                                                                                 |    empty     | `obextjwksuri.crt` parsed from the URI and added to the JVM                                            |
+    |global.cnObExtSigningJwksCrt        | Used in SSA Validation. base64 string for the external signing jwks crt. Activated when .global.cnObExtSigningJwksUri is set     |    empty     | `ob-ext-signing.crt`                                                                                   |
+    |global.cnObExtSigningJwksKey        | Used in SSA Validation. base64 string for the external signing jwks key . Activated when .global.cnObExtSigningJwksUri is set    |    empty     | `ob-ext-signing.key`. With the above crt `ob-ext-signing.jks`, and `ob-ext-signing.pkcs12` get created.|
+    |global.cnObExtSigningJwksPassPhrase | Needed if global.cnObExtSigningJwksKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                    |    empty     | `ob-ext-signing.pin`.                                                                                  |    
+    |global.cnObTransportCrt             | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.crt`                                                                                     |
+    |global.cnObTransportKey             | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
+    |global.cnObTransportKeyPassPhrase   | Needed if global.cnObTransportKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                         |    empty     | `ob-transport.pin`.                                                                                    |        
+    |global.cnObTrustStoreCrt            | Used in SSA Validation. base64 string for the truststore crt. Activated when .global.cnObExtSigningJwksUri is set                |    empty     | `ob-truststore.crt`                                                                                    |
+    |global.cnObTrustStoreKey            | Used in SSA Validation. base64 string for the truststore key. Activated when .global.cnObExtSigningJwksUri is set                |    empty     | `ob-truststore.key`. With the above crt `ob-truststore.jks`, and `ob-truststore.pkcs12` get created.   |
+    |global.cnObTrustStoreKeyPassPhrase  | Needed if global.cnObTrustStoreKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                        |    empty     | `ob-truststore.pin`.                                                                                   |            
         
     Please note that the password for the keystores created can be fetched by executing the following command:
      
@@ -207,7 +248,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 
 1.  Load your web https certs and keys.
 
-    | certificates and keys of interest in mTLS | Notes                                      |
+    | certificates and keys of interest in https | Notes                                      |
     | ----------------------------------------  | ------------------------------------------ |
     | web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
     | web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
@@ -261,24 +302,26 @@ Please calculate the minimum required resources as per services deployed. The fo
                   items:
                     - key: web_https.key
                       path: web_https.key
-              - name: web-csr
-                secret:
-                  secretName: web-cert-key
-                  items:
-                    - key: web_https.csr
-                      path: web_https.csr
+              # optional
+              #- name: web-csr
+              #  secret:
+              #    secretName: web-cert-key
+              #    items:
+              #      - key: web_https.csr
+              #        path: web_https.csr
               - name: web-ca-cert
                 secret:
                   secretName: web-cert-key
                   items:
                     - key: ca.crt
                       path: ca.crt
-              - name: web-ca-key
-                secret:
-                  secretName: web-cert-key
-                  items:
-                    - key: ca.key
-                      path: ca.key                              
+              # optional
+              #- name: web-ca-key
+              #  secret:
+              #    secretName: web-cert-key
+              #    items:
+              #      - key: ca.key
+              #        path: ca.key                              
               containers:
                 - name: load-web-key-rotation
                   image: janssenproject/certmanager:1.0.0_b3
@@ -292,15 +335,17 @@ Please calculate the minimum required resources as per services deployed. The fo
                     - name: web-key
                       mountPath: /etc/certs/web_https.key
                       subPath: web_https.key
-                    - name: web-csr
-                      mountPath: /etc/certs/web_https.csr
-                      subPath: web_https.csr
+                    # optional
+                    #- name: web-csr
+                    #  mountPath: /etc/certs/web_https.csr
+                    #  subPath: web_https.csr
                     - name: web-ca-cert
                       mountPath: /etc/certs/ca.crt
                       subPath: ca.crt
-                    - name: web-ca-key
-                      mountPath: /etc/certs/ca.key
-                      subPath: ca.key   
+                    #optional
+                    #- name: web-ca-key
+                    #  mountPath: /etc/certs/ca.key
+                    #  subPath: ca.key   
                   args: ["patch", "web", "--opts", "source:from-files"]
         ```
         
@@ -331,11 +376,11 @@ Please calculate the minimum required resources as per services deployed. The fo
     TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
     ```
             
-1.  Using your `ca.crt` and `ca.key` that was provided during setup generate as many client certificates and keys as needed.
+1.  Using your `ca.crt` and `ca.key` that was provided during setup generate as many client certificates  and keys  for operating jans-cli as needed.
 
     ```bash
-    openssl req -new -newkey rsa:4096 -keyout client.key -out client.csr -nodes -subj '/CN=My Client'
-    openssl x509 -req -sha256 -days 365 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out client.crt
+    openssl req -new -newkey rsa:4096 -keyout jans_cli_client.key -out jans_cli_client.csr -nodes -subj '/CN=My jans cli client'
+    openssl x509 -req -sha256 -days 365 -in jans_cli_client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out jans_cli_client.crt
     ```
             
 1.  Run the jans-cli in interactive mode and try it out: 
@@ -424,7 +469,7 @@ config:
   email: support@gluu.org # Change to your email
   image:
     repository: janssenproject/configuration-manager
-    tag: 1.0.0_b3
+    tag: 1.0.0_b4
   orgName: Gluu # Change to your orgnization name
   resources:
     limits:
@@ -446,7 +491,7 @@ config-api:
   image:
     pullPolicy: Always
     repository: janssenproject/config-api
-    tag: 1.0.0_b3
+    tag: 1.0.0_b4
   replicas: 1
   resources:
     limits:
@@ -477,12 +522,15 @@ global:
   # base64 string for the external signing jwks crt and key. Used when .global.cnObExtSigningJwksUri is set.
   cnObExtSigningJwksCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks crt
   cnObExtSigningJwksKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks key
+  cnObExtSigningJwksKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external signing jwks key passpharse if the key contains one
   # base64 string for the open banking transport crt and keys. Used when .global.cnObExtSigningJwksUri is set.
   cnObTransportCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your transport crt
   cnObTransportKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob transport key
+  cnObTransportKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob transport key passpharse if the key contains one
   # base64 string for the open banking truststore crt and keys. Used when .global.cnObExtSigningJwksUri is set.
   cnObTrustStoreCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
   cnObTrustStoreKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
+  cnObTrustStoreKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore key passpharse if the key contains one
   config:
     enabled: true
   #google/kubernetes
@@ -543,7 +591,7 @@ nginx-ingress:
       # Enable client certificate authentication
       #nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
       # Create the secret containing the trusted ca certificates
-      #nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/tls-ca-certificate"
+      #nginx.ingress.kubernetes.io/auth-tls-secret: "gluu/tls-ob-ca-certificates"
       # Specify the verification depth in the client certificates chain
       #nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
       # Specify if certificates are passed to upstream server
@@ -552,7 +600,7 @@ nginx-ingress:
     hosts:
     - demo.openbanking.org # Change to your FQDN
     tls:
-    - secretName: tls-ca-certificate
+    - secretName: tls-ob-ca-certificates
       hosts:
       - demo.openbanking.org # Change to your FQDN
 persistence:
@@ -561,7 +609,7 @@ persistence:
   image:
     pullPolicy: Always
     repository: janssenproject/persistence-loader
-    tag: 1.0.0_b3
+    tag: 1.0.0_b4
   resources:
     limits:
       cpu: 300m
