@@ -139,7 +139,7 @@ The below certs and keys are needed to continue this tutorial.
         
 1.  Inject OBIE signed certs, keys and uri: 
 
-    1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the certificate transport pem file i.e `obtruststore.pem`, the transport key i.e `obtruststore-ertre3.key`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
+    1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the transport truststore p12 i.e `ob-transport-truststore.p12`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
     
     1.  base64 encrypt all `.pem` and `.key` files as they will be injected as base64 strings inside the helm [`override-values.yaml`](#helm-valuesyaml).
     
@@ -148,8 +148,6 @@ The below certs and keys are needed to continue this tutorial.
         cat obsigning-oajsdij8927123.key | base64 | tr -d '\n' > obsigningbase64.key
         cat obtransport.pem | base64 | tr -d '\n' > obtransportbase64.pem
         cat obtransport-sdfe4234234.key | base64 | tr -d '\n' > obtransportbase64.key
-        cat obtruststore.pem | base64 | tr -d '\n' > obtruststorebase64.pem
-        cat obtruststore-ertre3.key | base64 | tr -d '\n' > obtruststorebase64.key        
         ```
         
     1.  Copy the base64 string in `obsigningbase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksCrt`
@@ -164,13 +162,19 @@ The below certs and keys are needed to continue this tutorial.
     
     1.  Inject the base64 string passphrase of `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKeyPassPhrase`
     
-    1.  Generate your transport truststore or convert it to `.p12` format. 
+    1.  Generate your transport truststore or convert it to `.p12` format. Please name it as `ob-transport-truststore.p12` 
     
         ```bash
         cat obissuingca.pem obrootca.pem obsigningca.pem > transport-truststore.crt
-        keytool -importcert -file transport-truststore.crt -keystore ob_transport_trust.p12 -alias obkeystore
+        keytool -importcert -file transport-truststore.crt -keystore ob-transport-truststore.p12 -alias obkeystore
         ```
         
+    1.  base64 encrypt the `ob-transport-truststore.p12`
+    
+        ```bash
+        cat ob-transport-truststore.p12 | base64 | tr -d '\n' > obtransporttruststorebase64.pem
+        ```
+            
     1.  Copy the base64 string in `obtransporttruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTransportTrustStore`
         
     1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
@@ -527,10 +531,8 @@ global:
   cnObTransportCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your transport crt
   cnObTransportKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob transport key
   cnObTransportKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob transport key passpharse if the key contains one
-  # base64 string for the open banking truststore crt and keys. Used when .global.cnObExtSigningJwksUri is set.
-  cnObTrustStoreCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
-  cnObTrustStoreKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore crt
-  cnObTrustStoreKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob truststore key passpharse if the key contains one
+  # base64 string for the open banking AS transport truststore crt. This is generated from the OB issuing CA, OB Root CA and Signing CA. Used when .global.cnObExtSigningJwksUri is set.
+  cnObTransportTrustStore: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo=
   config:
     enabled: true
   #google/kubernetes
