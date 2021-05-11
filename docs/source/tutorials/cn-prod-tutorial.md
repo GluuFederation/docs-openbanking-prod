@@ -69,8 +69,7 @@ The below certs and keys are needed to continue this tutorial.
 |OB AS Transport crt               | Used for mTLS. This  will also be added to the JVM                                      |
 |OB AS signing crt                 | Added to the JVM. Used in SSA Validation                                                | 
 |OB AS signing key                 | Added to the JVM. Used in SSA Validation                                                |
-|OB truststore crt                 | Added to the JVM. Used in SSA Validation                                                |
-|OB truststore key                 | Added to the JVM. Used in SSA Validation                                                |
+|OB transport truststore           | Used in SSA Validation. Generated from OB Root CA nd Issuing CA                         |
 
 1.  Install [nginx-ingress](https://github.com/kubernetes/ingress-nginx) Helm [Chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
 
@@ -165,11 +164,14 @@ The below certs and keys are needed to continue this tutorial.
     
     1.  Inject the base64 string passphrase of `obtransportbase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTransportKeyPassPhrase`
     
-    1.  Copy the base64 string in `obtruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTrustStoreCrt`
+    1.  Generate your transport truststore or convert it to `.p12` format. 
     
-    1.  Copy the base64 string in `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKey`
-
-    1.  Inject the base64 string passphrase of `obtruststorebase64.key` into the helm chart [`override-values.yaml`](#helm-valuesyaml)  at `global.cnObTrustStoreKeyPassPhrase`        
+        ```bash
+        cat obissuingca.pem obrootca.pem obsigningca.pem > transport-truststore.crt
+        keytool -importcert -file transport-truststore.crt -keystore ob_transport_trust.p12 -alias obkeystore
+        ```
+        
+    1.  Copy the base64 string in `obtransporttruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTransportTrustStore`
         
     1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
     
@@ -182,9 +184,7 @@ The below certs and keys are needed to continue this tutorial.
     |global.cnObTransportCrt             | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.crt`                                                                                     |
     |global.cnObTransportKey             | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
     |global.cnObTransportKeyPassPhrase   | Needed if global.cnObTransportKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                         |    empty     | `ob-transport.pin`.                                                                                    |        
-    |global.cnObTrustStoreCrt            | Used in SSA Validation. base64 string for the truststore crt. Activated when .global.cnObExtSigningJwksUri is set                |    empty     | `ob-truststore.crt`                                                                                    |
-    |global.cnObTrustStoreKey            | Used in SSA Validation. base64 string for the truststore key. Activated when .global.cnObExtSigningJwksUri is set                |    empty     | `ob-truststore.key`. With the above crt `ob-truststore.jks`, and `ob-truststore.pkcs12` get created.   |
-    |global.cnObTrustStoreKeyPassPhrase  | Needed if global.cnObTrustStoreKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                        |    empty     | `ob-truststore.pin`.                                                                                   |            
+    |global.cnObTransportTrustStore      | Used in SSA Validation. base64 string for the transport truststore crt. Activated when .global.cnObExtSigningJwksUri is set      |    empty     | `ob-transport-truststore.p12`                                                                                    |
         
     Please note that the password for the keystores created can be fetched by executing the following command:
      
