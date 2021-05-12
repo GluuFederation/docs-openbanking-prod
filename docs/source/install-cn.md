@@ -198,7 +198,19 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
      AUTH_JKS_PASS=$(kubectl get secret cn -o json -n gluu | grep '"auth_openid_jks_pass":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
      ```
     The above password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
-      
+
+## Enable https.
+
+| certificates and keys of interest in https | Notes                                      |
+| ----------------------------------------  | ------------------------------------------ |
+| web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
+| web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
+| web_https.csr         | (nginx) web server certificate signing request. This is commonly referred to as server.csr |
+| web_https_ca.crt      | Certificate authority certificate that signed/signs the web server certificate. |
+| web_https_ca.key      | Certificate authority key that signed/signs the web server certificate.|
+
+Please note you might be using cert-manager here by specifying your issuer as an annotation at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml) . By default self-signed certs for https get automatically generated and used. 
+
 ## Uninstalling the Chart
 
 To uninstall/delete `my-release` deployment:
@@ -276,7 +288,7 @@ If during installation the release was not defined, release name is checked by r
                   path: ca.key                              
           containers:
             - name: load-web-key-rotation
-              image: janssenproject/certmanager:1.0.0_b3
+              image: janssenproject/certmanager:1.0.0_b4
               envFrom:
               - configMapRef:
                   name: gluu-config-cm  #This may be different in your Helm setup

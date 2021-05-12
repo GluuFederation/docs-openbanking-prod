@@ -97,7 +97,7 @@ The below certs and keys are needed to continue this tutorial.
     | web_https_ca.crt      | Certificate authority certificate that signed/signs the web server certificate. |
     | web_https_ca.key      | Certificate authority key that signed/signs the web server certificate.|
     
-    Please note you might be using letsencrypt here. We will use self-signed certs for https and will in a  later step load these certs and keys inside our deployment 
+    Please note you might be using cert-manager here by specifying your issuer as an annotation at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml) . We will use self-signed certs for https and will in a  later step load these certs and keys inside our deployment 
     
     1.  Generate the web https CA Key and Certificate:
         
@@ -130,7 +130,7 @@ The below certs and keys are needed to continue this tutorial.
         
     1.  Set `nginx-ingress.ingress.authServerProtectedToken` and `nginx-ingress.ingress.authServerProtectedRegister` in the helm charts [`override-values.yaml`](#helm-valuesyaml) to `true`.
    
-    1.  Create a secret containing the OB CA certificates (issuing, root, and signing CAs) and the OB AS transport crt. For more information read [here](https://kubernetes.github.io/ingress-nginx/examples/auth/client-certs/).
+    1.  Create a secret containing the OB CA certificates (issuing, root, and signing CAs). For more information read [here](https://kubernetes.github.io/ingress-nginx/examples/auth/client-certs/).
     
         ```bash
         cat web_https_ca.crt issuingca.crt rootca.crt signingca.crt >> ca.crt
@@ -273,7 +273,7 @@ The below certs and keys are needed to continue this tutorial.
         If using the common server names:
         
         ```bash
-        kubectl create secret generic web-cert-key --from-file=web_https.crt=server.crt --from-file=web_https.key=server.key --from-file=web_https.csr=server.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace>
+        kubectl create secret generic web-cert-key --from-file=web_https.crt=server.crt --from-file=web_https.key=server.key --from-file=web_https.csr=server.csr --from-file=ca.crt=web_https_ca.crt --from-file=ca.key=web_https_ca.key -n <gluu-namespace>
         ```
         
         
@@ -328,7 +328,7 @@ The below certs and keys are needed to continue this tutorial.
               #        path: ca.key                              
               containers:
                 - name: load-web-key-rotation
-                  image: janssenproject/certmanager:1.0.0_b3
+                  image: janssenproject/certmanager:1.0.0_b4
                   envFrom:
                   - configMapRef:
                       name: gluu-config-cm  #This may be different in your Helm setup
