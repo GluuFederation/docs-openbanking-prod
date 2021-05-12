@@ -192,12 +192,7 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
     |global.cnObTransportKeyPassPhrase   | Needed if global.cnObTransportKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                         |    empty     | `ob-transport.pin`.                                                                                    |        
     |global.cnObTransportTrustStore      | Used in SSA Validation. base64 string for the transport truststore crt. Activated when .global.cnObExtSigningJwksUri is set      |    empty     | `ob-transport-truststore.p12`                                                                                    |
         
-    Please note that the password for the keystores created can be fetched by executing the following command:
-     
-     ```bash
-     AUTH_JKS_PASS=$(kubectl get secret cn -o json -n gluu | grep '"auth_openid_jks_pass":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
-     ```
-    The above password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
+    Please note that the password for the keystores created `ob-ext-signing.pkcs12`, and `ob-transport.pkcs12` is `changeit`. This password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
 
 ## Enable https.
 
