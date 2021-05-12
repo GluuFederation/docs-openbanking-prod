@@ -31,7 +31,7 @@ The client registration custom script will use configuration parameters like SSA
 |trustKeyStore          |Used in SSA Validation, Trust store |/etc/certs/obieDir/ob_transport_root.p12|
 |trustKeyStorePassword  |Used in SSA Validation, Trust store Password, currently plaintext, but should be encrypted|abcdefg|
 |transportKeyStore      |Used in SSA validation, a .p12 file presented by AS to the token URL |/etc/certs/obieDir/axv5umcvtmbmjpwjfqgevb_openbanking_pre_production_issuing_ca_.p12		|
-|transportKeyStorePassword      |Used in SSA validation |default is `changeit`		|
+|transportKeyStorePassword      |Used in SSA validation |abcdefg		|
 |tokenUrl|Used in SSA validation to obtain token to query SCIM endpoint. Details here - https://openbanking.atlassian.net/wiki/spaces/DZ/pages/1150124033/Directory+2.0+Technical+Overview+v1.5#Directory2.0TechnicalOverviewv1.5-ManageDirectoryInformation |https://matls-sso.openbankingtest.org.uk/as/token.oauth2|
 |tppUrl|Used in SSA validation to query SCIM endpoint. Details here - https://openbanking.atlassian.net/wiki/spaces/DZ/pages/1150124033/Directory+2.0+Technical+Overview+v1.5#Directory2.0TechnicalOverviewv1.5-ManageDirectoryInformation |https://matls-api.openbankingtest.org.uk/scim/v2/OBThirdPartyProviders/|
 |jwks_endpoint |Used for signing software statement and request object for DCR|https://keystore.openbankingtest.org.uk/keystore/openbanking.jwks|
