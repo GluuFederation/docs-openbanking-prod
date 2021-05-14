@@ -25,7 +25,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 #### Setup Cluster
 
 -  Follow this [guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
- to install a cluster with worker nodes. This setup must used three `t2.xlarge` instances distributed in three different zones. Please make sure that you have all the `IAM` policies for the AWS user that will be creating the cluster and volumes.
+ to install a cluster with worker nodes. This setup must use three `t2.xlarge` instances distributed in three different zones. Please make sure that you have all the `IAM` policies for the AWS user that will be creating the cluster and volumes.
 
 #### Requirements
 
@@ -137,7 +137,7 @@ The below certs and keys are needed to continue this tutorial.
         kubectl create secret generic tls-ob-ca-certificates -n gluu --from-file=tls.crt=web_https.crt --from-file=tls.key=web_https.key --from-file=ca.crt=ca.crt
         ```
         
-1.  Inject OBIE signed certs, keys and uri: 
+1.  Inject OBIE signed certs, keys and jwks uri: 
 
     1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the transport truststore p12 i.e `ob-transport-truststore.p12`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
     
