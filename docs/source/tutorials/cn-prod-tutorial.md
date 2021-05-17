@@ -1,14 +1,14 @@
 # Gluu Openbanking Cloud Native Production tutorial setup
-
+<!--
 ## Cloud Native Distribution
 
 
 ## Getting Started with Kubernetes
-
+-->
 
 ## System Requirements for cloud deployments
 
-Please calculate the minimum required resources as per services deployed. The following table contains default recommended resources to start with. Depending on the use of each service the resources may be increased or decreased. 
+Please calculate the minimum required resources as per services deployed. The following table contains default recommended resources to start with. Depending on the use of each service, the resources may be increased or decreased. 
 
 |Service           | CPU Unit   |    RAM      |   Disk Space     | Processor Type | Required                                    |
 |------------------|------------|-------------|------------------|----------------|---------------------------------------------|
@@ -24,8 +24,7 @@ Please calculate the minimum required resources as per services deployed. The fo
   
 #### Setup Cluster
 
--  Follow this [guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
- to install a cluster with worker nodes. This setup must use three `t2.xlarge` instances distributed in three different zones. Please make sure that you have all the `IAM` policies for the AWS user that will be creating the cluster and volumes.
+-  Follow this [guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) to install a cluster with worker nodes. This setup must use three `t2.xlarge` instances distributed in three different zones. Please make sure that you have all the `IAM` policies for the AWS user that will be creating the cluster and volumes.
 
 #### Requirements
 
@@ -58,7 +57,7 @@ Please calculate the minimum required resources as per services deployed. The fo
 
 #### Pre-Requirement
 
-The below certs and keys are needed to continue this tutorial.
+The below certificates and keys are needed to continue this tutorial.
 
 | Certificate / key                | Description                                                                             |
 |----------------------------------|-----------------------------------------------------------------------------------------|
@@ -97,7 +96,7 @@ The below certs and keys are needed to continue this tutorial.
     | web_https_ca.crt      | Certificate authority certificate that signed/signs the web server certificate. |
     | web_https_ca.key      | Certificate authority key that signed/signs the web server certificate.|
     
-    Please note you might be using cert-manager here by specifying your issuer as an annotation at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml) . We will use self-signed certs for https and will in a  later step load these certs and keys inside our deployment 
+    Please note you might be using cert-manager here by specifying your issuer as an annotation at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml) . We will use self-signed certs for https and later will load these certs and keys inside our deployment 
     
     1.  Generate the web https CA Key and Certificate:
         
@@ -137,9 +136,9 @@ The below certs and keys are needed to continue this tutorial.
         kubectl create secret generic tls-ob-ca-certificates -n gluu --from-file=tls.crt=web_https.crt --from-file=tls.key=web_https.key --from-file=ca.crt=ca.crt
         ```
         
-1.  Inject OBIE signed certs, keys and jwks uri: 
+1.  Inject OBIE signed certs, keys and JWKs URI: 
 
-    1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the transport truststore p12 i.e `ob-transport-truststore.p12`, and the jwks uri `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
+    1.  When using OBIE signed certificates and keys, there are  many objects that can be injected. The certificate signing pem file i.e `obsigning.pem`, the signing key i.e `obsigning-oajsdij8927123.key`, the certificate transport pem file i.e `obtransport.pem`, the transport key i.e `obtransport-sdfe4234234.key`, the transport truststore p12 i.e `ob-transport-truststore.p12`, and the JWKs URI `https://mykeystore.openbanking.wow/xxxxx/xxxxx.jwks`.
     
     1.  base64 encrypt all `.pem` and `.key` files as they will be injected as base64 strings inside the helm [`override-values.yaml`](#helm-valuesyaml).
     
@@ -177,7 +176,7 @@ The below certs and keys are needed to continue this tutorial.
             
     1.  Copy the base64 string in `obtransporttruststorebase64.pem` into the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObTransportTrustStore`
         
-    1.  Add the jwks uri to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
+    1.  Add the JWKs URI to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
     
     |Helm values configuration           | Description                                                                                                                      | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
     |------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
@@ -197,7 +196,7 @@ The below certs and keys are needed to continue this tutorial.
      ```
     The above password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
     
-1.  Modify other values in helm chart [`override-values.yaml`](#helm-valuesyaml) configuration to fit your setup
+1.  Modify other values in the helm chart [`override-values.yaml`](#helm-valuesyaml) configuration to fit your setup
 
     |Helm values configuration                | Description                                                                                         | default      |
     |-----------------------------------------|--------------------------------|-----------------------------|
