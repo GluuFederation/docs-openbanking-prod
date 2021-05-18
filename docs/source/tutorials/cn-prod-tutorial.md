@@ -1,10 +1,8 @@
 # Gluu Openbanking Cloud Native Production tutorial setup
-<!--
+
 ## Cloud Native Distribution
 
-
 ## Getting Started with Kubernetes
--->
 
 ## System Requirements for cloud deployments
 
