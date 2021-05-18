@@ -56,7 +56,7 @@ Get a client and its associated password. Here, we will use the client id and se
         curl -X GET https://bank.gluu.org/jans-config-api/api/v1/config/scripts -H "Accept: application/json" -H "Authorization:Bearer ad34ac-8f2d-4bec-aed3-343adasda2" -H "Content-Type: application/json"
         ```     
                
-    1.  The following command will add a new custom script (Obtain token with write scope) and if it is successful it will display the added script in JSON format. The scriptformat.json file has script details according to the custom script schema.
+    1.  The following command will add a new custom script (Obtain token with write scope) and if it is successful it will display the added script in JSON format. The scriptformat.json file has script details according to the custom script schema. It should have the entire script inside the scriptformat.json as a string value under script field. To convert a multiline script into a string requires converting newlines into \n. So curl is not a suitable choice for adding new script, jans-cli is better options.    
     
         ```bash
         curl -X POST "https://<FQDN>/jans-config-api/api/v1/config/scripts" -H  "Accept: application/json" -H "Authorization:Bearer <access_token>" -H "Content-Type: application/json" --data @/home/user/scriptformat.json
