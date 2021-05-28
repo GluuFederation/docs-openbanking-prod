@@ -176,12 +176,15 @@ The below certificates and keys are needed to continue this tutorial.
         
     1.  Add the JWKs URI to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
     
+    1.  Add the kid as the alias for the JKS used for the OB AS external signing crt. This is a kid value.Used in SSA Validation, kid used while encoding a JWT sent to token URL i.e XkwIzWy44xWSlcWnMiEc8iq9s2G. This kid value should exist inside the jwks uri endpoint.
+    
     |Helm values configuration           | Description                                                                                                                      | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
     |------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
     |global.cnObExtSigningJwksUri        | external signing jwks uri string                                                                                                 |    empty     | `obextjwksuri.crt` parsed from the URI and added to the JVM                                            |
     |global.cnObExtSigningJwksCrt        | Used in SSA Validation. base64 string for the external signing jwks crt. Activated when .global.cnObExtSigningJwksUri is set     |    empty     | `ob-ext-signing.crt`                                                                                   |
     |global.cnObExtSigningJwksKey        | Used in SSA Validation. base64 string for the external signing jwks key . Activated when .global.cnObExtSigningJwksUri is set    |    empty     | `ob-ext-signing.key`. With the above crt `ob-ext-signing.jks`, and `ob-ext-signing.pkcs12` get created.|
-    |global.cnObExtSigningJwksPassPhrase | Needed if global.cnObExtSigningJwksKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                    |    empty     | `ob-ext-signing.pin`.                                                                                  |    
+    |global.cnObExtSigningJwksPassPhrase | Needed if global.cnObExtSigningJwksKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                    |    empty     | `ob-ext-signing.pin`.                                                                                  |
+    |global.cnObExtSigningAlias          | This is a kid value.Used in SSA Validation, kid used while encoding a JWT sent to token URL i.e XkwIzWy44xWSlcWnMiEc8iq9s2G      |    empty     |  Alias of the entry inside the keystore `ob-ext-signing.jks`.                                          |        
     |global.cnObTransportCrt             | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.crt`                                                                                     |
     |global.cnObTransportKey             | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
     |global.cnObTransportKeyPassPhrase   | Needed if global.cnObTransportKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                         |    empty     | `ob-transport.pin`.                                                                                    |        
@@ -524,6 +527,7 @@ global:
   cnObExtSigningJwksCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external OB AS signing jwks crt
   cnObExtSigningJwksKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external OB AS signing jwks key
   cnObExtSigningJwksKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external OB AS signing jwks key passpharse if the key contains one
+  cnObExtSigningAlias: XkwIzWy44xWSlcWnMiEc8iq9s2G #Change to  a kid value used in SSA Validation, kid used while encoding a JWT sent to token URL. This kid value should exist inside the jwks uri endpoint.
   # base64 string for the open banking transport crt and keys. Used when .global.cnObExtSigningJwksUri is set.
   cnObTransportCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your AS transport crt
   cnObTransportKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob AS transport key
