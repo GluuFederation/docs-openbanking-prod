@@ -202,6 +202,29 @@ If the provided FQDN for Gluu is not globally resolvable map Gluus FQDN at `/etc
      ```
     The above password is needed in custom scripts such as in [client registeration](https://gluu.org/docs/openbanking/scripts/client-registration/#configuring-keys-certificates-and-ssa-validation-endpoints).
 
+## Specify signing key kid for AS
+
+Specify a the signing key that will be used by the AS:
+
+1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
+   
+    ```bash
+    TESTCLIENT=$(kubectl get cm cn -o json -n gluu | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
+    TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
+    ```
+    
+1.  Get a token , here the crt and key used need to be a crt and key that can pass mTLS:
+
+    ```bash
+    curl -k -u $TESTCLIENT:$TESTCLIENTSECRET https://<FQDN>/jans-auth/restv1/token -d "grant_type=client_credentials&scope=https://jans.io/oauth/jans-auth-server/config/properties.write" --cert mtls.pem --key mtls.key
+    ```
+    
+1.  Add the entry `staticKid` to force the AS to use a specific signing key. Please modify `XhCYDfFM7UFXHfykNaLk1aLCnZM` to the kid to be used:          
+
+    ```bash
+    curl -k -X PATCH "https://<FQDN>/jans-config-api/api/v1/jans-auth-server/config" -H  "accept: application/json" -H  "Content-Type: application/json-patch+json" -H "Authorization:Bearer 170e8412-1d55-4b19-ssss-8fcdeaafb954" -d "[{\"op\":\"add\",\"path\":\"/staticKid\",\"value\":\"XhCYDfFM7UFXHfykNaLk1aLCnZM\"}]"
+    ```
+    
 ## Enable https.
 
 | certificates and keys of interest in https | Notes                                      |
