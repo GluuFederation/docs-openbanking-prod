@@ -448,7 +448,7 @@ auth-server:
   image:
     pullPolicy: IfNotPresent
     repository: janssenproject/auth-server
-    tag: 1.0.0_b4
+    tag: 1.0.0_b5
   replicas: 1
   resources:
     limits:
@@ -516,7 +516,7 @@ config-api:
   image:
     pullPolicy: Always
     repository: janssenproject/config-api
-    tag: 1.0.0_b4
+    tag: 1.0.0_b5
   replicas: 1
   resources:
     limits:
@@ -633,7 +633,7 @@ persistence:
   image:
     pullPolicy: Always
     repository: janssenproject/persistence-loader
-    tag: 1.0.0_b4
+    tag: 1.0.0_b5
   resources:
     limits:
       cpu: 300m
