@@ -31,5 +31,9 @@ The core software is developed at the [Linux Foundation Janssen Project](https:/
 * **Bank Regulatory Directory**: This is hosted by the federation operator which publishes public key material and other metadata about participants in the open  banking ecosystem.
 * **Fintech / Payment Processor**: A service that wants to call the Open Banking API or to get data or to process a payment.  
 
+# PKI infrastructure
+
+![Overview](./img/PKI_Infra.png)
+
 ## Contribute
 We want to keep improving our docs. Please help us improve by submitting any improvements to our [Documentation Github](https://github.com/GluuFederation/docs-open-banking-prod). If you're a Github pro, submit a pull request. If not, just open an issue on any typos, bugs, or improvements you'd like to see addressed. We need your help... even if you're not a coder, you can contribute!
