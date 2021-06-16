@@ -1,6 +1,6 @@
 ## Generate/install keys and certs for Gluu Open Banking Identity Platform 
 
-This section covers details about setting up the keys and certificates in both VM and Cloud-Native distribution.
+This section covers details about setting up the keys and certificates in Cloud-Native distribution.
 
 * For MTLS keys, see the document about [Enabling NGINX MTLS Ingress](https://gluu.org/docs/openbanking/install-cn/#enabling-mtls-in-ingress-nginx)
 
