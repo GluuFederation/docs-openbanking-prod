@@ -657,7 +657,8 @@ persistence:
   image:
     pullPolicy: Always
     repository: janssenproject/persistence-loader
-    tag: 1.0.0_b5
+    # 1.0.0_b5 image tag is out but currently contains a bug that is being fixed
+    tag: 1.0.0_b4
   resources:
     limits:
       cpu: 300m
