@@ -478,6 +478,16 @@ If during installation the release was not defined, release name is checked by r
 
 ```yaml
 auth-server:
+  #HorizontalPodAutoscaler
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 50
+    # metrics if targetCPUUtilizationPercentage is not set
+    #metrics: []
+    #Scaling Policies
+    #behavior: {}
   dnsPolicy: ""
   dnsConfig: {}
   image:
@@ -548,6 +558,16 @@ config:
   dnsPolicy: ""
   dnsConfig: {}
 config-api:
+  #HorizontalPodAutoscaler
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 50
+    # metrics if targetCPUUtilizationPercentage is not set
+    #metrics: []
+    #Scaling Policies
+    #behavior: {}
   dnsPolicy: ""
   dnsConfig: {}
   image:
