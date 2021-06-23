@@ -177,14 +177,17 @@ The below certificates and keys are needed to continue this tutorial.
     1.  Add the JWKs URI to the helm chart [`override-values.yaml`](#helm-valuesyaml) at `global.cnObExtSigningJwksUri`
     
     1.  Add the kid as the alias for the JKS used for the OB AS external signing crt. This is a kid value.Used in SSA Validation, kid used while encoding a JWT sent to token URL i.e XkwIzWy44xWSlcWnMiEc8iq9s2G. This kid value should exist inside the jwks uri endpoint.
-    
+
+    1.  Specify the signing key that will be used by the AS [`override-values.yaml`](#helm-valuesyaml) at `global.cnObStaticSigningKeyKid`.
+         
     |Helm values configuration           | Description                                                                                                                      | default      | Associated files created in auth-server pod at `/etc/certs`                                            |
     |------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------------------------------------|
     |global.cnObExtSigningJwksUri        | external signing jwks uri string                                                                                                 |    empty     | `obextjwksuri.crt` parsed from the URI and added to the JVM                                            |
     |global.cnObExtSigningJwksCrt        | Used in SSA Validation. base64 string for the external signing jwks crt. Activated when .global.cnObExtSigningJwksUri is set     |    empty     | `ob-ext-signing.crt`                                                                                   |
     |global.cnObExtSigningJwksKey        | Used in SSA Validation. base64 string for the external signing jwks key . Activated when .global.cnObExtSigningJwksUri is set    |    empty     | `ob-ext-signing.key`. With the above crt `ob-ext-signing.jks`, and `ob-ext-signing.pkcs12` get created.|
     |global.cnObExtSigningJwksPassPhrase | Needed if global.cnObExtSigningJwksKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                    |    empty     | `ob-ext-signing.pin`.                                                                                  |
-    |global.cnObExtSigningAlias          | This is a kid value.Used in SSA Validation, kid used while encoding a JWT sent to token URL i.e XkwIzWy44xWSlcWnMiEc8iq9s2G      |    empty     |  Alias of the entry inside the keystore `ob-ext-signing.jks`.                                          |        
+    |global.cnObExtSigningAlias          | This is a kid value.Used in SSA Validation, kid used while encoding a JWT sent to token URL i.e XkwIzWy44xWSlcWnMiEc8iq9s2G      |    empty     |  Alias of the entry inside the keystore `ob-ext-signing.jks`.                                          |
+    |global.cnObStaticSigningKeyKid      | This is a kid value.Used to force the AS to use a specific signing key i.e XkwIzWy44xWSlcWnMiEc8iq9s2G                           |    empty     |  Alias of the entry inside the keystore `ob-ext-signing.jks`.                                          |                
     |global.cnObTransportCrt             | Used in SSA Validation. base64 string for the transport crt. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.crt`                                                                                     |
     |global.cnObTransportKey             | Used in SSA Validation. base64 string for the transport key. Activated when .global.cnObExtSigningJwksUri is set                 |    empty     | `ob-transport.key`. With the above crt `ob-transport.jks`, and `ob-transport.pkcs12` get created.      |
     |global.cnObTransportKeyPassPhrase   | Needed if global.cnObTransportKey has a passphrase . Activated when .global.cnObExtSigningJwksUri is set                         |    empty     | `ob-transport.pin`.                                                                                    |        
@@ -359,27 +362,6 @@ The below certificates and keys are needed to continue this tutorial.
             kubectl apply -f load-web-key-rotation.yaml -n <gluu-namespace>
         ```
           
-1.  Specify a the signing key that will be used by the AS:
-
-    1.  Get a client and its associated password. Here, we will use the client id and secret created for config-api.
-       
-        ```bash
-        TESTCLIENT=$(kubectl get cm cn -o json -n gluu | grep '"jca_client_id":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]')
-        TESTCLIENTSECRET=$(kubectl get secret cn -o json -n gluu | grep '"jca_client_pw":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d)
-        ```
-        
-    1.  Get a token , here the crt and key used need to be a crt and key that can pass mTLS:
-    
-        ```bash
-        curl -k -u $TESTCLIENT:$TESTCLIENTSECRET https://<FQDN>/jans-auth/restv1/token -d "grant_type=client_credentials&scope=https://jans.io/oauth/jans-auth-server/config/properties.write" --cert mtls.pem --key mtls.key
-        ```
-        
-    1.  Add the entry `staticKid` to force the AS to use a specific signing key. Please modify `XhCYDfFM7UFXHfykNaLk1aLCnZM` to the kid to be used:          
-    
-        ```bash
-        curl -k -X PATCH "https://<FQDN>/jans-config-api/api/v1/jans-auth-server/config" -H  "accept: application/json" -H  "Content-Type: application/json-patch+json" -H "Authorization:Bearer 170e8412-1d55-4b19-ssss-8fcdeaafb954" -d "[{\"op\":\"add\",\"path\":\"/staticKid\",\"value\":\"XhCYDfFM7UFXHfykNaLk1aLCnZM\"}]"
-        ```
-        
 1.  Preform a rolling restart for the auth-server and config-api
 
     ```bash
@@ -477,6 +459,8 @@ config:
   city: Austin # Change to your city
   configmap:
     cnAuthServerBackend: "auth-server:8080"
+    # Jetty header size in bytes in the auth server
+    cnJettyRequestHeaderSize: 8192
     cnSqlDbDialect: mysql
     cnSqlDbHost: gluu.cluster-xxxxxxx.eu-central.rds.amazonaws.com # Change to your Aurora DB endpoint
     cnSqlDbPort: 3306
@@ -549,6 +533,7 @@ global:
   cnObExtSigningJwksKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external OB AS signing jwks key
   cnObExtSigningJwksKeyPassPhrase: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your external OB AS signing jwks key passpharse if the key contains one
   cnObExtSigningAlias: XkwIzWy44xWSlcWnMiEc8iq9s2G #Change to  a kid value used in SSA Validation, kid used while encoding a JWT sent to token URL. This kid value should exist inside the jwks uri endpoint.
+  cnObStaticSigningKeyKid: "" #Change to  a kid value. Open banking  signing AS kid to force the AS to use a specific signing key
   # base64 string for the open banking transport crt and keys. Used when .global.cnObExtSigningJwksUri is set.
   cnObTransportCrt: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your AS transport crt
   cnObTransportKey: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo= # Change to your ob AS transport key
