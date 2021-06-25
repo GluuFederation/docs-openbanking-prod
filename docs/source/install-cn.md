@@ -325,7 +325,7 @@ If during installation the release was not defined, release name is checked by r
                   path: ca.key                              
           containers:
             - name: load-web-key-rotation
-              image: janssenproject/certmanager:1.0.0_b4
+              image: janssenproject/certmanager:1.0.0_b6
               envFrom:
               - configMapRef:
                   name: gluu-config-cm  #This may be different in your Helm setup
@@ -493,7 +493,7 @@ auth-server:
   image:
     pullPolicy: IfNotPresent
     repository: janssenproject/auth-server
-    tag: 1.0.0_b5
+    tag: 1.0.0_b6
   replicas: 1
   resources:
     limits:
@@ -541,7 +541,7 @@ config:
   email: support@gluu.org # Change to your email
   image:
     repository: janssenproject/configuration-manager
-    tag: 1.0.0_b4
+    tag: 1.0.0_b6
   orgName: Gluu # Change to your orgnization name
   resources:
     limits:
@@ -573,7 +573,7 @@ config-api:
   image:
     pullPolicy: Always
     repository: janssenproject/config-api
-    tag: 1.0.0_b5
+    tag: 1.0.0_b6
   replicas: 1
   resources:
     limits:
@@ -691,8 +691,7 @@ persistence:
   image:
     pullPolicy: Always
     repository: janssenproject/persistence-loader
-    # 1.0.0_b5 image tag is out but currently contains a bug that is being fixed
-    tag: 1.0.0_b4
+    tag: 1.0.0_b6
   resources:
     limits:
       cpu: 300m
