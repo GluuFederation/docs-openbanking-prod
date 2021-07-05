@@ -240,7 +240,7 @@ The below certificates and keys are needed to continue this tutorial.
   
 1.  Wait for your pods to be up and running.  
 
-1.  **This step is optional**. Only if you generated your own SAN web https cert and key. Load your web https certs and keys.
+1.  **This step is optional**. Only if you generated or provided your own SAN web https cert and key. Load your web https certs and keys.
 
     | certificates and keys of interest in https | Notes                                      |
     | ----------------------------------------  | ------------------------------------------ |
