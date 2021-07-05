@@ -94,7 +94,7 @@ The below certificates and keys are needed to continue this tutorial.
     | web_https_ca.crt      | Certificate authority certificate that signed/signs the web server certificate. |
     | web_https_ca.key      | Certificate authority key that signed/signs the web server certificate.|
     
-    Please note that we are using [cert-manager](https://cert-manager.io/docs/installation/kubernetes/) here by specifying the issuer as an annotation at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml). You may choose to use self provided https **SAN** certs , or self-signed **SAN** certs for https and later  load these certs and keys inside our deployment
+    Please note that we are using [cert-manager](https://cert-manager.io/docs/installation/kubernetes/) here by specifying the issuer as an annotation `cert-manager.io/issuer: "letsencrypt-prod"` at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml). You may choose to use self provided https **SAN** certs , or self-signed **SAN** certs for https and later  load these certs and keys inside your deployment
     
 1.  Enable mTLS. 
          
@@ -602,7 +602,7 @@ nginx-ingress:
     authServerProtectedToken: false
     #/jans-auth/restv1/register
     authServerProtectedRegister: false
-      # in the format of {cert-manager.io/cluster-issuer: nameOfClusterIssuer, kubernetes.io/tls-acme: "true"}
+      # in the format of {cert-manager.io/cluster-issuer: nameOfClusterIssuer}
     additionalAnnotations: {}
       # Enable client certificate authentication
       #nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
