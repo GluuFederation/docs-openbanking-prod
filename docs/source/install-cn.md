@@ -263,17 +263,17 @@ If during installation the release was not defined, release name is checked by r
 | web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
 | web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
 | web_https.csr         | (nginx) web server certificate signing request. This is commonly referred to as server.csr |
-| ca.crt                | Certificate authority certificate that signed/signs the web server certificate. |
-| ca.key                | Certificate authority key that signed/signs the web server certificate.|
+| web_https_ca.crt                | Certificate authority certificate that signed/signs the web server certificate. |
+| web_https_ca.key                | Certificate authority key that signed/signs the web server certificate.|
     
 
 !!! Note
-    This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` to `/etc/certs`. This step is important in order for mTLS to fully work as nginx-ingress will pass the client certificate down to the auth-server and the auth-server will validate the client certificate.
+    This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `web_https_ca.crt`, and `web_https_ca.key` to `/etc/certs`. This step is important in order for mTLS to fully work as nginx-ingress will pass the client certificate down to the auth-server and the auth-server will validate the client certificate.
     
-1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
+1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `web_https_ca.crt`, and `web_https_ca.key`. Note that this may already exist in your deployment.
 
     ```bash
-        kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace> 
+        kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt=web_https_ca.crt --from-file=ca.key=web_https_ca.key -n <gluu-namespace> 
     ```
     
 1.  Create a file named `load-web-key-rotation.yaml` with the following contents :
@@ -365,10 +365,10 @@ If during installation the release was not defined, release name is checked by r
     ```bash
     mkdir certs
     cd certs
-    kubectl get secret cn -o json -n gluu | grep '"ssl_ca_cert":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > ca.crt
-    kubectl get secret cn -o json -n gluu | grep '"ssl_ca_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > ca.key
-    kubectl get secret cn -o json -n gluu | grep '"ssl_cert":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > server.crt
-    kubectl get secret cn -o json -n gluu | grep '"ssl_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > server.key
+    kubectl get secret cn -o json -n gluu | grep '"ssl_ca_cert":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > web_https_ca.crt
+    kubectl get secret cn -o json -n gluu | grep '"ssl_ca_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > web_https_ca.key
+    kubectl get secret cn -o json -n gluu | grep '"ssl_cert":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > web_https.crt
+    kubectl get secret cn -o json -n gluu | grep '"ssl_key":' | sed -e 's#.*:\(\)#\1#' | tr -d '"' | tr -d "," | tr -d '[:space:]' | base64 -d > web_https.key
     openssl req -new -newkey rsa:4096 -keyout jans_cli_client.key -out jans_cli_client.csr -nodes -subj '/CN=Openbanking'
     openssl x509 -req -sha256 -days 365 -in jans_cli_client.csr -CA ca.crt -CAkey ca.key -set_serial 02 -out jans_cli_client.crt
     kubectl create secret generic ca-secret -n gluu --from-file=tls.crt=server.crt --from-file=tls.key=server.key --from-file=ca.crt=ca.crt

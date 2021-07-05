@@ -94,20 +94,7 @@ The below certificates and keys are needed to continue this tutorial.
     | web_https_ca.crt      | Certificate authority certificate that signed/signs the web server certificate. |
     | web_https_ca.key      | Certificate authority key that signed/signs the web server certificate.|
     
-    Please note you might be using cert-manager here by specifying your issuer as an annotation at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml) . We will use self-signed certs for https and later will load these certs and keys inside our deployment 
-    
-    1.  Generate the web https CA Key and Certificate:
-        
-        ```bash
-        openssl req -x509 -sha256 -newkey rsa:4096 -keyout web_https_ca.key -out web_https_ca.crt -days 356 -nodes -subj '/CN=My nginx CA'
-        ```
-       
-    1.  Generate the web https key, and certificate for the domain used i.e `demo.openbanking.org` and sign  with the web https CA Certificate:
-    
-        ```bash
-        openssl req -new -newkey rsa:4096 -keyout web_https.key -out web_https.csr -nodes -subj '/CN=demo.openbanking.org'
-        openssl x509 -req -sha256 -days 365 -in web_https.csr -CA web_https_ca.crt -CAkey web_https_ca.key -set_serial 01 -out web_https.crt
-        ```
+    Please note that we are using [cert-manager](https://cert-manager.io/docs/installation/kubernetes/) here by specifying the issuer as an annotation at [`nginx-ingress.ingress.additionalAnnotations`](#helm-valuesyaml). You may choose to use self provided https **SAN** certs , or self-signed **SAN** certs for https and later  load these certs and keys inside our deployment
     
 1.  Enable mTLS. 
          
@@ -253,24 +240,24 @@ The below certificates and keys are needed to continue this tutorial.
   
 1.  Wait for your pods to be up and running.  
 
-1.  Load your web https certs and keys.
+1.  **This step is optional**. Only if you generated your own SAN web https cert and key. Load your web https certs and keys.
 
     | certificates and keys of interest in https | Notes                                      |
     | ----------------------------------------  | ------------------------------------------ |
     | web_https.crt         | (nginx) web server certificate. This is commonly referred to as server.crt |
     | web_https.key         | (nginx) web server key. This is commonly referred to as server.key |
     | web_https.csr         | (nginx) web server certificate signing request. This is commonly referred to as server.csr |
-    | ca.crt                | Certificate authority certificate that signed/signs the web server certificate. |
-    | ca.key                | Certificate authority key that signed/signs the web server certificate.|
+    | web_https_ca.crt                | Certificate authority certificate that signed/signs the web server certificate. |
+    | web_https_ca.key                | Certificate authority key that signed/signs the web server certificate.|
         
     
     !!! Note
-        This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key` to `/etc/certs`. This step is important in order for mTLS to fully work as nginx-ingress will pass the client certificate down to the auth-server and the auth-server will validate the client certificate.
+        This will load `web_https.crt`, `web_https.key`, `web_https.csr`, `web_https_ca.crt`, and `web_https_ca.key` to `/etc/certs`. This step is important in order for mTLS to fully work as nginx-ingress will pass the client certificate down to the auth-server and the auth-server will validate the client certificate.
         
-    1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `ca.crt`, and `ca.key`. Note that this may already exist in your deployment.
+    1.  Create a secret with `web_https.crt`, `web_https.key`, `web_https.csr`, `web_https_ca.crt`, and `web_https_ca.key`. Note that this may already exist in your deployment.
     
         ```bash
-            kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt --from-file=ca.key -n <gluu-namespace>
+            kubectl create secret generic web-cert-key --from-file=web_https.crt --from-file=web_https.key --from-file=web_https.csr --from-file=ca.crt=web_https_ca.crt --from-file=ca.key=web_https_ca.key -n <gluu-namespace>
         ```
                
         If using the common server names:
