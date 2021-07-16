@@ -474,6 +474,38 @@ If during installation the release was not defined, release name is checked by r
     python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file jans_cli_client.crt --key-file jans_cli_client.key
     ```
 
+## Adding custom scopes upon installation
+
+1. Download the original scopes file
+
+	```
+	wget https://raw.githubusercontent.com/JanssenProject/docker-jans-persistence-loader/master/templates/scopes.ob.ldif
+    ```
+
+1. Adjust that file to add the custom scopes needed.
+
+1. Create a configmap to hold the file:
+
+	```
+	kubectl create cm custom-scopes -n gluu --from-file=scopes.ob.ldif
+	```
+
+1. Inside your override yaml you have the ability to inject additional volumes and volume mounts. Inside the `persistence` key add the following: 
+
+	```yaml
+	persistence:
+		volumes:
+			- name: custom-scopes
+				configMap:
+					name: custom-scopes
+		volumeMounts:
+			- name: custom-scopes
+				mountPath: "/app/templates/scopes.ob.ldif"
+				subPath: scopes.ob.ldif
+	```
+
+1. Now you are ready to install with the custom scopes added.
+
 ## Helm values.yaml
 
 === "auth-server"
