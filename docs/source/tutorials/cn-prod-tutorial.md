@@ -318,7 +318,7 @@ The below certificates and keys are needed to continue this tutorial.
               #        path: ca.key                              
               containers:
                 - name: load-web-key-rotation
-                  image: janssenproject/certmanager:1.0.0_b7
+                  image: janssenproject/certmanager:1.0.0_b8
                   envFrom:
                   - configMapRef:
                       name: gluu-config-cm  #This may be different in your Helm setup
@@ -413,7 +413,7 @@ Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configur
 === "auth-server"
     | Key | Type | Default | Description |
     |-----|------|---------|-------------|
-    | auth-server | object | `{"dnsConfig":{},"dnsPolicy":"","hpa":{"behavior":{},"enabled":true,"maxReplicas":10,"metrics":[],"minReplicas":1,"targetCPUUtilizationPercentage":50},"image":{"pullPolicy":"IfNotPresent","repository":"janssenproject/auth-server","tag":"1.0.0_b7"},"livenessProbe":{"exec":{"command":["python3","/app/scripts/healthcheck.py"]},"initialDelaySeconds":30,"periodSeconds":30,"timeoutSeconds":5},"readinessProbe":{"exec":{"command":["python3","/app/scripts/healthcheck.py"]},"initialDelaySeconds":25,"periodSeconds":25,"timeoutSeconds":5},"replicas":1,"resources":{"limits":{"cpu":"2500m","memory":"2500Mi"},"requests":{"cpu":"2500m","memory":"2500Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | OAuth Authorization Server, the OpenID Connect Provider, the UMA Authorization Server--this is the main Internet facing component of Gluu. It's the service that returns tokens, JWT's and identity assertions. This service must be Internet facing. |
+    | auth-server | object | `{"dnsConfig":{},"dnsPolicy":"","hpa":{"behavior":{},"enabled":true,"maxReplicas":10,"metrics":[],"minReplicas":1,"targetCPUUtilizationPercentage":50},"image":{"pullPolicy":"IfNotPresent","repository":"janssenproject/auth-server","tag":"1.0.0_b8"},"livenessProbe":{"exec":{"command":["python3","/app/scripts/healthcheck.py"]},"initialDelaySeconds":30,"periodSeconds":30,"timeoutSeconds":5},"readinessProbe":{"exec":{"command":["python3","/app/scripts/healthcheck.py"]},"initialDelaySeconds":25,"periodSeconds":25,"timeoutSeconds":5},"replicas":1,"resources":{"limits":{"cpu":"2500m","memory":"2500Mi"},"requests":{"cpu":"2500m","memory":"2500Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | OAuth Authorization Server, the OpenID Connect Provider, the UMA Authorization Server--this is the main Internet facing component of Gluu. It's the service that returns tokens, JWT's and identity assertions. This service must be Internet facing. |
     | auth-server.dnsConfig | object | `{}` | Add custom dns config |
     | auth-server.dnsPolicy | string | `""` | Add custom dns policy |
     | auth-server.hpa | object | `{"behavior":{},"enabled":true,"maxReplicas":10,"metrics":[],"minReplicas":1,"targetCPUUtilizationPercentage":50}` | Configure the HorizontalPodAutoscaler |
@@ -421,7 +421,7 @@ Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configur
     | auth-server.hpa.metrics | list | `[]` | metrics if targetCPUUtilizationPercentage is not set |
     | auth-server.image.pullPolicy | string | `"IfNotPresent"` | Image pullPolicy to use for deploying. |
     | auth-server.image.repository | string | `"janssenproject/auth-server"` | Image  to use for deploying. |
-    | auth-server.image.tag | string | `"1.0.0_b7"` | Image  tag to use for deploying. |
+    | auth-server.image.tag | string | `"1.0.0_b8"` | Image  tag to use for deploying. |
     | auth-server.livenessProbe | object | `{"exec":{"command":["python3","/app/scripts/healthcheck.py"]},"initialDelaySeconds":30,"periodSeconds":30,"timeoutSeconds":5}` | Configure the liveness healthcheck for the auth server if needed. |
     | auth-server.livenessProbe.exec | object | `{"command":["python3","/app/scripts/healthcheck.py"]}` | Executes the python3 healthcheck. https://github.com/JanssenProject/docker-jans-auth-server/blob/master/scripts/healthcheck.py |
     | auth-server.readinessProbe | object | `{"exec":{"command":["python3","/app/scripts/healthcheck.py"]},"initialDelaySeconds":25,"periodSeconds":25,"timeoutSeconds":5}` | Configure the readiness healthcheck for the auth server if needed. https://github.com/JanssenProject/docker-jans-auth-server/blob/master/scripts/healthcheck.py |
@@ -440,7 +440,7 @@ Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configur
 === "config"
     | Key | Type | Default | Description |
     |-----|------|---------|-------------|
-    | config | object | `{"city":"Austin","configmap":{"cnCacheType":"NATIVE_PERSISTENCE","cnConfigGoogleSecretNamePrefix":"gluu","cnConfigGoogleSecretVersionId":"latest","cnConfigKubernetesConfigMap":"cn","cnGoogleProjectId":"google-project-to-save-config-and-secrets-to","cnGoogleSecretManagerPassPhrase":"Test1234#","cnGoogleSecretManagerServiceAccount":"SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo=","cnGoogleSpannerDatabaseId":"","cnGoogleSpannerInstanceId":"","cnJettyRequestHeaderSize":8192,"cnMaxRamPercent":"75.0","cnPassportEnabled":false,"cnRedisSentinelGroup":"","cnRedisSslTruststore":"","cnRedisType":"STANDALONE","cnRedisUrl":"redis.redis.svc.cluster.local:6379","cnRedisUseSsl":false,"cnSamlEnabled":false,"cnSecretGoogleSecretNamePrefix":"gluu","cnSecretGoogleSecretVersionId":"latest","cnSecretKubernetesSecret":"cn","cnSqlDbDialect":"mysql","cnSqlDbHost":"my-release-mysql.default.svc.cluster.local","cnSqlDbName":"jans","cnSqlDbPort":3306,"cnSqlDbTimezone":"UTC","cnSqlDbUser":"jans","cnSqlPasswordFile":"/etc/jans/conf/sql_password","cnSqldbUserPassword":"Test1234#","lbAddr":""},"countryCode":"US","dnsConfig":{},"dnsPolicy":"","email":"support@gluu.org","image":{"repository":"janssenproject/configuration-manager","tag":"1.0.0_b7"},"orgName":"Gluu","redisPassword":"P@assw0rd","resources":{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}},"state":"TX","usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Configuration parameters for setup and initial configuration secret and config layers used by Gluu services. |
+    | config | object | `{"city":"Austin","configmap":{"cnCacheType":"NATIVE_PERSISTENCE","cnConfigGoogleSecretNamePrefix":"gluu","cnConfigGoogleSecretVersionId":"latest","cnConfigKubernetesConfigMap":"cn","cnGoogleProjectId":"google-project-to-save-config-and-secrets-to","cnGoogleSecretManagerPassPhrase":"Test1234#","cnGoogleSecretManagerServiceAccount":"SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo=","cnGoogleSpannerDatabaseId":"","cnGoogleSpannerInstanceId":"","cnJettyRequestHeaderSize":8192,"cnMaxRamPercent":"75.0","cnPassportEnabled":false,"cnRedisSentinelGroup":"","cnRedisSslTruststore":"","cnRedisType":"STANDALONE","cnRedisUrl":"redis.redis.svc.cluster.local:6379","cnRedisUseSsl":false,"cnSamlEnabled":false,"cnSecretGoogleSecretNamePrefix":"gluu","cnSecretGoogleSecretVersionId":"latest","cnSecretKubernetesSecret":"cn","cnSqlDbDialect":"mysql","cnSqlDbHost":"my-release-mysql.default.svc.cluster.local","cnSqlDbName":"jans","cnSqlDbPort":3306,"cnSqlDbTimezone":"UTC","cnSqlDbUser":"jans","cnSqlPasswordFile":"/etc/jans/conf/sql_password","cnSqldbUserPassword":"Test1234#","lbAddr":""},"countryCode":"US","dnsConfig":{},"dnsPolicy":"","email":"support@gluu.org","image":{"repository":"janssenproject/configuration-manager","tag":"1.0.0_b8"},"orgName":"Gluu","redisPassword":"P@assw0rd","resources":{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}},"state":"TX","usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Configuration parameters for setup and initial configuration secret and config layers used by Gluu services. |
     | config.city | string | `"Austin"` | City. Used for certificate creation. |
     | config.configmap.cnCacheType | string | `"NATIVE_PERSISTENCE"` | Cache type. `NATIVE_PERSISTENCE`, `REDIS`. or `IN_MEMORY`. Defaults to `NATIVE_PERSISTENCE` . |
     | config.configmap.cnConfigKubernetesConfigMap | string | `"cn"` | The name of the Kubernetes ConfigMap that will hold the configuration layer |
@@ -460,7 +460,7 @@ Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configur
     | config.dnsPolicy | string | `""` | Add custom dns policy |
     | config.email | string | `"support@gluu.org"` | Email address of the administrator usually. Used for certificate creation. |
     | config.image.repository | string | `"janssenproject/configuration-manager"` | Image  to use for deploying. |
-    | config.image.tag | string | `"1.0.0_b7"` | Image  tag to use for deploying. |
+    | config.image.tag | string | `"1.0.0_b8"` | Image  tag to use for deploying. |
     | config.orgName | string | `"Gluu"` | Organization name. Used for certificate creation. |
     | config.resources | object | `{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}}` | Resource specs. |
     | config.resources.limits.cpu | string | `"300m"` | CPU limit. |
@@ -477,7 +477,7 @@ Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configur
 === "config-api"
     | Key | Type | Default | Description |
     |-----|------|---------|-------------|
-    | config-api | object | `{"dnsConfig":{},"dnsPolicy":"","hpa":{"behavior":{},"enabled":true,"maxReplicas":10,"metrics":[],"minReplicas":1,"targetCPUUtilizationPercentage":50},"image":{"pullPolicy":"IfNotPresent","repository":"janssenproject/config-api","tag":"1.0.0_b7"},"livenessProbe":{"httpGet":{"path":"/health-check/live","port":8074},"initialDelaySeconds":30,"periodSeconds":30,"timeoutSeconds":5},"readinessProbe":{"httpGet":{"path":"/health-check/ready","port":8074},"initialDelaySeconds":25,"periodSeconds":25,"timeoutSeconds":5},"replicas":1,"resources":{"limits":{"cpu":"1000m","memory":"400Mi"},"requests":{"cpu":"1000m","memory":"400Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Config Api endpoints can be used to configure the auth-server, which is an open-source OpenID Connect Provider (OP) and UMA Authorization Server (AS). |
+    | config-api | object | `{"dnsConfig":{},"dnsPolicy":"","hpa":{"behavior":{},"enabled":true,"maxReplicas":10,"metrics":[],"minReplicas":1,"targetCPUUtilizationPercentage":50},"image":{"pullPolicy":"IfNotPresent","repository":"janssenproject/config-api","tag":"1.0.0_b8"},"livenessProbe":{"httpGet":{"path":"/health-check/live","port":8074},"initialDelaySeconds":30,"periodSeconds":30,"timeoutSeconds":5},"readinessProbe":{"httpGet":{"path":"/health-check/ready","port":8074},"initialDelaySeconds":25,"periodSeconds":25,"timeoutSeconds":5},"replicas":1,"resources":{"limits":{"cpu":"1000m","memory":"400Mi"},"requests":{"cpu":"1000m","memory":"400Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Config Api endpoints can be used to configure the auth-server, which is an open-source OpenID Connect Provider (OP) and UMA Authorization Server (AS). |
     | config-api.dnsConfig | object | `{}` | Add custom dns config |
     | config-api.dnsPolicy | string | `""` | Add custom dns policy |
     | config-api.hpa | object | `{"behavior":{},"enabled":true,"maxReplicas":10,"metrics":[],"minReplicas":1,"targetCPUUtilizationPercentage":50}` | Configure the HorizontalPodAutoscaler |
@@ -485,7 +485,7 @@ Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configur
     | config-api.hpa.metrics | list | `[]` | metrics if targetCPUUtilizationPercentage is not set |
     | config-api.image.pullPolicy | string | `"IfNotPresent"` | Image pullPolicy to use for deploying. |
     | config-api.image.repository | string | `"janssenproject/config-api"` | Image  to use for deploying. |
-    | config-api.image.tag | string | `"1.0.0_b7"` | Image  tag to use for deploying. |
+    | config-api.image.tag | string | `"1.0.0_b8"` | Image  tag to use for deploying. |
     | config-api.livenessProbe | object | `{"httpGet":{"path":"/jans-config-api/api/v1/health/live","port":8074},"initialDelaySeconds":30,"periodSeconds":30,"timeoutSeconds":5}` | Configure the liveness healthcheck for the auth server if needed. |
     | config-api.livenessProbe.httpGet | object | `{"path":"/jans-config-api/api/v1/health/live","port":8074}` | http liveness probe endpoint |
     | config-api.readinessProbe.httpGet | object | `{"path":"/jans-config-api/api/v1/health/ready","port":8074}` | http readiness probe endpoint |
@@ -558,12 +558,12 @@ Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configur
 === "persistence"
     | Key | Type | Default | Description |
     |-----|------|---------|-------------|
-    | persistence | object | `{"dnsConfig":{},"dnsPolicy":"","image":{"pullPolicy":"IfNotPresent","repository":"janssenproject/persistence-loader","tag":"1.0.0_b7"},"resources":{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Job to generate data and intial config for Gluu Server persistence layer. |
+    | persistence | object | `{"dnsConfig":{},"dnsPolicy":"","image":{"pullPolicy":"IfNotPresent","repository":"janssenproject/persistence-loader","tag":"1.0.0_b8"},"resources":{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Job to generate data and intial config for Gluu Server persistence layer. |
     | persistence.dnsConfig | object | `{}` | Add custom dns config |
     | persistence.dnsPolicy | string | `""` | Add custom dns policy |
     | persistence.image.pullPolicy | string | `"IfNotPresent"` | Image pullPolicy to use for deploying. |
     | persistence.image.repository | string | `"janssenproject/persistence-loader"` | Image  to use for deploying. |
-    | persistence.image.tag | string | `"1.0.0_b7"` | Image  tag to use for deploying. |
+    | persistence.image.tag | string | `"1.0.0_b8"` | Image  tag to use for deploying. |
     | persistence.resources | object | `{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}}` | Resource specs. |
     | persistence.resources.limits.cpu | string | `"300m"` | CPU limit |
     | persistence.resources.limits.memory | string | `"300Mi"` | Memory limit. |
@@ -606,7 +606,7 @@ auth-server:
     # -- Image  to use for deploying.
     repository: janssenproject/auth-server
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b7
+    tag: 1.0.0_b8
   # -- Service replica number.
   replicas: 1
   # -- Resource specs.
@@ -696,7 +696,7 @@ config:
     # -- Image  to use for deploying.
     repository: janssenproject/configuration-manager
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b7
+    tag: 1.0.0_b8
   # -- Organization name. Used for certificate creation.
   orgName: Gluu
   # -- Resource specs.
@@ -752,7 +752,7 @@ config-api:
     # -- Image  to use for deploying.
     repository: janssenproject/config-api
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b7
+    tag: 1.0.0_b8
   # -- Service replica number.
   replicas: 1
   # -- Resource specs.
@@ -931,7 +931,7 @@ persistence:
     # -- Image  to use for deploying.
     repository: janssenproject/persistence-loader
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b7
+    tag: 1.0.0_b8
   # -- Resource specs.
   resources:
     limits:
