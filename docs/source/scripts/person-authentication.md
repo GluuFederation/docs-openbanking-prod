@@ -35,7 +35,7 @@ python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /pers
 ```
 
 ### Methods
-You can get see the [Person Authentication script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/OpenBanking.py)
+You can get the [Person Authentication script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/OpenBanking.py)
 
 Following are the ***mandatory*** functions which need to be implemented in order to perform authentication - 
 
