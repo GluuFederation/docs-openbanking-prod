@@ -985,22 +985,42 @@ nginx-ingress:
   ingress:
     # -- Enable endpoint /.well-known/openid-configuration
     openidConfigEnabled: true
+    # -- openid-configuration ingress resource labels. key app is taken
+    openidConfigLabels: { }
     # -- Enable endpoint /.well-known/uma2-configuration
     uma2ConfigEnabled: true
+    # -- uma2 config ingress resource labels. key app is taken
+    uma2ConfigLabels: { }
     # -- Enable endpoint /.well-known/webfinger
     webfingerEnabled: true
+    # -- webfinger ingress resource labels. key app is taken
+    webfingerLabels: { }
     # -- Enable endpoint /.well-known/simple-web-discovery
     webdiscoveryEnabled: true
+    # -- webdiscovery ingress resource labels. key app is taken
+    webdiscoveryLabels: { }
     # Enable config API endpoints /jans-config-api
     configApiEnabled: true
+    # -- configAPI ingress resource labels. key app is taken
+    configApiLabels: { }
     # -- Enable endpoint /.well-known/fido-configuration
     u2fConfigEnabled: true
+    # -- u2f config ingress resource labels. key app is taken
+    u2fConfigLabels: { }
     # -- Enable Auth server endpoints /jans-auth
     authServerEnabled: true
+    # -- Auth server config ingress resource labels. key app is taken
+    authServerLabels: { }
     # -- Enable mTLS on Auth server endpoint /jans-auth/restv1/token
     authServerProtectedToken: false
+    # -- Auth server protected token ingress resource labels. key app is taken
+    authServerProtectedTokenLabels: { }
     # -- Enable mTLS onn Auth server endpoint /jans-auth/restv1/register
     authServerProtectedRegister: false
+    # -- Auth server protected token ingress resource labels. key app is taken
+    authServerProtectedRedisterLabels: { }
+    # -- Additional labels that will be added across all ingress definitions in the format of {mylabel: "myapp"}
+    additionalLabels: { }
     # -- Additional annotations that will be added across all ingress definitions in the format of {cert-manager.io/issuer: "letsencrypt-prod"}
     # Enable client certificate authentication
     # nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional"
