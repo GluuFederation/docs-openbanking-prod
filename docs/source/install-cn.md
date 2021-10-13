@@ -471,7 +471,7 @@ If during installation the release was not defined, release name is checked by r
 1.  Run the jans-cli in interactive mode and try it out: 
    
     ```bash
-    python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file jans_cli_client.crt --key-file jans_cli_client.key
+    python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET -CC jans_cli_client.crt -CK jans_cli_client.key
     ```
 
 ## Adding custom scopes upon installation

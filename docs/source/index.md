@@ -35,5 +35,9 @@ The core software is developed at the [Linux Foundation Janssen Project](https:/
 
 ![Overview](./img/PKI_Infra.png)
 
+# Cloud Native Architecture
+
+![Overview](./img/cn/gluucloudnative-OB%20distribution.svg)
+
 ## Contribute
 We want to keep improving our docs. Please help us improve by submitting any improvements to our [Documentation Github](https://github.com/GluuFederation/docs-open-banking-prod). If you're a Github pro, submit a pull request. If not, just open an issue on any typos, bugs, or improvements you'd like to see addressed. We need your help... even if you're not a coder, you can contribute!

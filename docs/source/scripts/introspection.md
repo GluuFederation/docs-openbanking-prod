@@ -32,7 +32,7 @@ python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /Intr
 
 1. IntrospectionType class and initialization: 
 
-    ```
+    ```python3
     class Introspection(IntrospectionType):
         def __init__(self, currentTimeMillis):
             self.currentTimeMillis = currentTimeMillis
@@ -49,7 +49,7 @@ python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /Intr
 
 2. This method is called after introspection response is ready. This method can modify the introspection response.
 
-    ```
+    ```python3
     # Returns boolean, true - apply introspection method, false - ignore it.
     # Note : responseAsJsonObject - is org.codehaus.jettison.json.JSONObject, you can use any method to manipulate json
     # context is reference of org.gluu.oxauth.service.external.context.ExternalIntrospectionContext (in https://github.com/GluuFederation/oxauth project)

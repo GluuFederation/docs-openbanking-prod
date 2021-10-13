@@ -380,7 +380,7 @@ The below certificates and keys are needed to continue this tutorial.
 1.  Run the jans-cli in interactive mode and try it out: 
    
     ```bash
-    python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET --cert-file client.crt --key-file client.key
+    python3 jans-cli-linux-amd64.pyz --host demo.openbanking.org --client-id $TESTCLIENT --client_secret $TESTCLIENTSECRET -CC client.crt -CK client.key
     ```
     
 Go have fun and test more [scenarios](https://gluu.org/docs/openbanking/configuration-instructions/).

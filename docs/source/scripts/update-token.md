@@ -28,48 +28,48 @@ python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /upda
 
 ## Methods
 
-1. UpdateTokenType class and default methods
+1.  UpdateTokenType class and default methods
 
-```
-class UpdateToken(UpdateTokenType):
+    ```python3
+    class UpdateToken(UpdateTokenType):
+    
+        def __init__(self, currentTimeMillis):
+            self.currentTimeMillis = currentTimeMillis
+    
+        def init(self, customScript, configurationAttributes):
+            return True
+    
+        def destroy(self, configurationAttributes):
+            return True
+    
+        def getApiVersion(self):
+            return 11
+    ```
 
-    def __init__(self, currentTimeMillis):
-        self.currentTimeMillis = currentTimeMillis
+2.  modifyIdToken () : the crucial business logic. This script overrides the header and claims. 
 
-    def init(self, customScript, configurationAttributes):
+    ```python3
+        # Returns boolean, true - indicates that script applied changes
+        # Note :
+        # jsonWebResponse - is JwtHeader, you can use any method to manipulate JWT
+        # context is reference of io.jans.oxauth.service.external.context.ExternalUpdateTokenContext (in https://github.com/GluuFederation/oxauth project, )
+        def modifyIdToken(self, jsonWebResponse, context):
+                  
+             #read from session 
+        sessionIdService = CdiUtil.bean(SessionIdService)
+        sessionId = sessionIdService.getSessionByDn(context.getGrant().getSessionDn()) # fetch from persistence
+            openbanking_intent_id = sessionId.getSessionAttributes().get("openbanking_intent_id")
+        acr = sessionId.getSessionAttributes().get("acr_ob")
+    
+                # header claims
+        jsonWebResponse.getHeader().setClaim("custom_header_name", "custom_header_value")
+                
+        #custom claims
+        jsonWebResponse.getClaims().setClaim("openbanking_intent_id", openbanking_intent_id)
+                
+        #regular claims        
+        jsonWebResponse.getClaims().setClaim("sub", openbanking_intent_id)
+    
         return True
-
-    def destroy(self, configurationAttributes):
-        return True
-
-    def getApiVersion(self):
-        return 11
-```
-
-2. modifyIdToken () : the crucial business logic. This script overrides the header and claims. 
-
-```
-    # Returns boolean, true - indicates that script applied changes
-    # Note :
-    # jsonWebResponse - is JwtHeader, you can use any method to manipulate JWT
-    # context is reference of io.jans.oxauth.service.external.context.ExternalUpdateTokenContext (in https://github.com/GluuFederation/oxauth project, )
-    def modifyIdToken(self, jsonWebResponse, context):
-              
-         #read from session 
-	sessionIdService = CdiUtil.bean(SessionIdService)
-	sessionId = sessionIdService.getSessionByDn(context.getGrant().getSessionDn()) # fetch from persistence
-        openbanking_intent_id = sessionId.getSessionAttributes().get("openbanking_intent_id")
-	acr = sessionId.getSessionAttributes().get("acr_ob")
-
-            # header claims
-	jsonWebResponse.getHeader().setClaim("custom_header_name", "custom_header_value")
-			
-	#custom claims
-	jsonWebResponse.getClaims().setClaim("openbanking_intent_id", openbanking_intent_id)
-			
-	#regular claims        
-	jsonWebResponse.getClaims().setClaim("sub", openbanking_intent_id)
-
-	return True
-	
-```
+        
+    ```

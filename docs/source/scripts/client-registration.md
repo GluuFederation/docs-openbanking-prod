@@ -100,7 +100,7 @@ The following are the ***mandatory*** functions which need to be implemented in 
 
 1. Create a class of the type ```ClientRegistrationType``` and initialize the script
 
-    ```
+    ```python3
     class ClientRegistration(ClientRegistrationType):
 
         def __init__(self, currentTimeMillis):
@@ -127,7 +127,7 @@ The following are the ***mandatory*** functions which need to be implemented in 
 
 2. The createClient method contains the main business logic:
 
-    ```
+    ```python3
     def createClient(self, registerRequest, client, configurationAttributes):
 
         # 1. obtain client id. certProperty contains the httpRequest.getHeader("X-ClientCert"), inshort client certificate passed to the /register endpoint
@@ -161,23 +161,23 @@ The following are the ***mandatory*** functions which need to be implemented in 
 
 3. Miscellaneous mandatory functions
 
-Used for signing the software statement:
+   Used for signing the software statement:
+    
+   ```python3
+   def getSoftwareStatementJwks(self, context):
+       return JwtUtil.getJSONWebKeys(self.jwks_endpoint).toString()
+   ```
 
-    ```
-    def getSoftwareStatementJwks(self, context):
-         return JwtUtil.getJSONWebKeys(self.jwks_endpoint).toString()
-    ```
-
- HMAC not applicable, return an empty string:  
+   HMAC not applicable, return an empty string:  
  
-    ```
-    def getDcrHmacSecret(self, context):
-        return ""
-    ```    
+   ```python3
+   def getDcrHmacSecret(self, context):
+       return ""
+   ```    
 
-Used for signing the request object (DCR): 
-
-    ```
-    def getDcrJwks(self, context):
-        return JwtUtil.getJSONWebKeys(self.jwks_endpoint).toString()
-    ```
+   Used for signing the request object (DCR): 
+    
+   ```python3
+   def getDcrJwks(self, context):
+       return JwtUtil.getJSONWebKeys(self.jwks_endpoint).toString()
+   ```

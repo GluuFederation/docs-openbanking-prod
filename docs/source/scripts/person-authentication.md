@@ -41,7 +41,7 @@ Following are the ***mandatory*** functions which need to be implemented in orde
 
 1. Initialization and mandatory methods
 
-    ```
+    ```python3
     class PersonAuthentication(PersonAuthenticationType):
         def __init__(self, currentTimeMillis):
             self.currentTimeMillis = currentTimeMillis   
@@ -77,7 +77,7 @@ Following are the ***mandatory*** functions which need to be implemented in orde
     
 2. The first function which is invoked in a person authentication script is getPageForStep. Typically we use it to present a login screen to the user. Now that we want to re-direct to a 3rd party for login and consent, we should ensure that ``` getPageForStep ``` returns ``` /redirect.xhtml ```. The ``` redirect.xhtml ``` is responsible for taking the flow to step 3.
 
-    ```
+    ```python3
     def getPageForStep(self, configurationAttributes, step):
             print "Person Authentication. getPageForStep... %s" % step
             if step == 1:
@@ -87,7 +87,7 @@ Following are the ***mandatory*** functions which need to be implemented in orde
     
 3. PrepareForStep (Redirecting to third party): This is where we put the business logic for redirection to a 3rd party consent app. Parse request object, build URL of 3rd party of consent app and redirect to that app.
 
-    ```
+    ```python3
      def prepareForStep(self, configurationAttributes, requestParameters, step):
         
             jwkSet = JWKSet.load( URL(self.tpp_jwks_url));
@@ -120,42 +120,41 @@ Following are the ***mandatory*** functions which need to be implemented in orde
 At this stage, lets treat the consent app as a black box. After the consent flow, the consent app should return to https://<hostname>/jans-auth/postlogin.htm. This takes us to the authenticate() method in the Person Authentication Script
 
 This is what needs to be done here - 
-* To access request parameters use 
+* To access request parameters use:
 
-    ```  
-     signedRequest = ServerUtil.getFirstValue(requestParameters, "request") 
-    ```
+  ```python3  
+  signedRequest = ServerUtil.getFirstValue(requestParameters, "request") 
+  ```
     
 * Add claims to session (those which you hope to find in access_token, refresh_token and id_token. The Introspection and UpdateToken script reads these session variables) 
 
-    ```
-        sessionIdService = CdiUtil.bean(SessionIdService)
-        sessionId = sessionIdService.getSessionId() # fetch from persistence
-        sessionId.getSessionAttributes().put("openbanking_intent_id",openbanking_intent_id )
-        sessionId.getSessionAttributes().put("acr_ob", acr_ob )
-    ```
+  ```python3
+  sessionIdService = CdiUtil.bean(SessionIdService)
+  sessionId = sessionIdService.getSessionId() # fetch from persistence
+  sessionId.getSessionAttributes().put("openbanking_intent_id",openbanking_intent_id )
+  sessionId.getSessionAttributes().put("acr_ob", acr_ob )
+  ```
 
 4. Miscellaneous mandatory methods: 
 
-Signifies that this Person Authentication has only 1 step. Typically wherever 2FA methods are involved, there will be 2 steps.
+   Signifies that this Person Authentication has only 1 step. Typically wherever 2FA methods are involved, there will be 2 steps.
+    
+   ```python3
+   def getCountAuthenticationSteps(self, configurationAttributes):
+       return 1
+   ```
 
-    ```
-        def getCountAuthenticationSteps(self, configurationAttributes):
-            return 1
+   By setting the step number, this method is used to restart a step in the event of something.
 
-    ```
-
-By setting the step number, this method is used to restart a step in the event of something.
-
-    ```
-    def getNextStep(self, configurationAttributes, requestParameters, step):
-        return -1
-    ``` 
+   ```python3
+   def getNextStep(self, configurationAttributes, requestParameters, step):
+       return -1
+   ``` 
 
 5. All **session variables** should be returned from this method
 
-    ```
-    def getExtraParametersForStep(self, configurationAttributes, step):
-              return Arrays.asList("openbanking_intent_id", "acr_ob")
-    ```
+   ```python3
+   def getExtraParametersForStep(self, configurationAttributes, step):
+       return Arrays.asList("openbanking_intent_id", "acr_ob")
+   ```
 
