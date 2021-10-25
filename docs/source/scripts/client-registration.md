@@ -159,18 +159,7 @@ The following are the ***mandatory*** functions which need to be implemented in 
         return True 
     ```
 
-3. The updateClient method
-
-  This updateClient method is called when the PUT method is called on registration endpoint to update client details. This method should return True for successful update and to reject any update request this method should return False when the request fulfills the condition to reject it:
-
-    
-   ```python3
-   def   updateClient(self, context):
-        print "Client registration. UpdateClient method"
-        return True
-   ```
-
-4. Miscellaneous mandatory functions
+3. Miscellaneous mandatory functions
 
    Used for signing the software statement:
     
@@ -191,4 +180,17 @@ The following are the ***mandatory*** functions which need to be implemented in 
    ```python3
    def getDcrJwks(self, context):
        return JwtUtil.getJSONWebKeys(self.jwks_endpoint).toString()
+   ```
+
+An important method of DCR flow to update the client details 
+
+* The updateClient method
+
+  This updateClient method is called when the PUT method is called on registration endpoint to update client details. This method should return True for successful update and to reject any update request this method should return False when the request fulfills the condition to reject it:
+
+    
+   ```python3
+   def   updateClient(self, context):
+        print "Client registration. UpdateClient method"
+        return True
    ```
