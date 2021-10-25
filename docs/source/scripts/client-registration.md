@@ -128,7 +128,7 @@ The following are the ***mandatory*** functions which need to be implemented in 
 2. The createClient method contains the main business logic:
 
     ```python3
-    def createClient(self, registerRequest, client, configurationAttributes):
+    def createClient(self, context):
 
         # 1. obtain client id. certProperty contains the httpRequest.getHeader("X-ClientCert"), inshort client certificate passed to the /register endpoint
         cert = CertUtils.x509CertificateFromPem(configurationAttributes.get("certProperty").getValue1())
