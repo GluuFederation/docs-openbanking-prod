@@ -125,7 +125,7 @@ The following are the ***mandatory*** functions which need to be implemented in 
             return True
     ```
 
-2. The createClient method contains the main business logic:
+2. The createClient method contains the main business logic, here the context refers to io.jans.as.server.service.external.context.DynamicClientRegistrationContext. It has several useful methods for SSA validations and options to create and throw custom exception (http status, error and error description):
 
     ```python3
     def createClient(self, context):
@@ -160,6 +160,16 @@ The following are the ***mandatory*** functions which need to be implemented in 
     ```
 
 3. Miscellaneous mandatory functions
+  This updateClient method is called when the PUT method is called to update client details. This method should return True for successful update, to reject any update call this method should return False when desired condition to reject update request arises:
+
+    
+   ```python3
+   def   updateClient(self, context):
+        print "Client registration. UpdateClient method"
+        return True
+   ```
+
+4. Miscellaneous mandatory functions
 
    Used for signing the software statement:
     
