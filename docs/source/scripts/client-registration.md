@@ -159,8 +159,9 @@ The following are the ***mandatory*** functions which need to be implemented in 
         return True 
     ```
 
-3. Miscellaneous mandatory functions
-  This updateClient method is called when the PUT method is called to update client details. This method should return True for successful update, to reject any update call this method should return False when desired condition to reject update request arises:
+3. The updateClient method
+
+  This updateClient method is called when the PUT method is called on registration endpoint to update client details. This method should return True for successful update and to reject any update request this method should return False when the request fulfills the condition to reject it:
 
     
    ```python3
