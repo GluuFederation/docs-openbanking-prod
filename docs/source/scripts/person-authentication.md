@@ -5,7 +5,7 @@ This document will explain how to use open banking's interception script to conf
 
 ### Configuration Prerequisites
 * A Janssen Authorization Server installation
-* [Person authentication script] (https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/OpenBanking.py)  - included in the default Janssen OpenBanking distribution
+* [Person authentication script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/person_authentication/OpenBanking.py)  - included in the default Janssen OpenBanking distribution
 * Setting configuration Parameters
 
 ## Adding the custom script
