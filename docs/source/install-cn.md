@@ -602,11 +602,28 @@ If during installation the release was not defined, release name is checked by r
 === "global"
     | Key | Type | Default | Description |
     |-----|------|---------|-------------|
-    | global | object | `{"alb":{"ingress":false},"auth-server":{"authServerServiceName":"auth-server","enabled":true},"awsStorageType":"io1","cloud":{"testEnviroment":false},"cnGoogleApplicationCredentials":"/etc/jans/conf/google-credentials.json","cnObExtSigningAlias":"","cnObExtSigningJwksCrt":"","cnObExtSigningJwksKey":"","cnObExtSigningJwksKeyPassPhrase":"","cnObExtSigningJwksUri":"","cnObStaticSigningKeyKid":"","cnObTransportAlias":"","cnObTransportCrt":"","cnObTransportKey":"","cnObTransportKeyPassPhrase":"","cnObTransportTrustStore":"","cnPersistenceType":"sql","config":{"enabled":true},"config-api":{"configApiServerServiceName":"config-api","enabled":true},"configAdapterName":"kubernetes","configSecretAdapter":"kubernetes","distribution":"openbanking","fqdn":"demoexample.gluu.org","gcePdStorageType":"pd-standard","isFqdnRegistered":false,"istio":{"enabled":false,"ingress":false,"namespace":"istio-system"},"lbIp":"","nginx-ingress":{"enabled":true},"opendj":{"enabled":false},"persistence":{"enabled":true},"storageClass":{"allowVolumeExpansion":true,"allowedTopologies":[],"mountOptions":["debug"],"parameters":{},"provisioner":"microk8s.io/hostpath","reclaimPolicy":"Retain","volumeBindingMode":"WaitForFirstConsumer"},"upgrade":{"enabled":false},"usrEnvs":{"normal":{},"secret":{}}}` | Parameters used globally across all services helm charts. |
+    | global | object | `{"alb":{"ingress":false},"auth-server":{"appLoggers":{"auditStatsLogLevel":"INFO","auditStatsLogTarget":"FILE","authLogLevel":"INFO","authLogTarget":"STDOUT","httpLogLevel":"INFO","httpLogTarget":"FILE","ldapStatsLogLevel":"INFO","ldapStatsLogTarget":"FILE","persistenceDurationLogLevel":"INFO","persistenceDurationLogTarget":"FILE","persistenceLogLevel":"INFO","persistenceLogTarget":"FILE","scriptLogLevel":"INFO","scriptLogTarget":"FILE"},"authServerServiceName":"auth-server","enabled":true},"auth-server-key-rotation":{"enabled":false},"awsStorageType":"io1","azureStorageAccountType":"Standard_LRS","azureStorageKind":"Managed","casa":{"casaServiceName":"casa"},"client-api":{"appLoggers":{"clientApiLogLevel":"INFO","clientApiLogTarget":"STDOUT"},"clientApiServerServiceName":"client-api","enabled":false},"cloud":{"testEnviroment":false},"cnGoogleApplicationCredentials":"/etc/jans/conf/google-credentials.json","cnJackrabbitCluster":true,"cnObExtSigningAlias":"","cnObExtSigningJwksCrt":"","cnObExtSigningJwksKey":"","cnObExtSigningJwksKeyPassPhrase":"","cnObExtSigningJwksUri":"","cnObStaticSigningKeyKid":"","cnObTransportAlias":"","cnObTransportCrt":"","cnObTransportKey":"","cnObTransportKeyPassPhrase":"","cnObTransportTrustStore":"","cnPersistenceType":"ldap","config":{"enabled":true},"config-api":{"appLoggers":{"configApiLogLevel":"INFO","configApiLogTarget":"STDOUT"},"configApiServerServiceName":"config-api","enabled":true},"configAdapterName":"kubernetes","configSecretAdapter":"kubernetes","cr-rotate":{"enabled":false},"distribution":"default","fido2":{"appLoggers":{"fido2LogLevel":"INFO","fido2LogTarget":"STDOUT","persistenceLogLevel":"INFO","persistenceLogTarget":"FILE"},"enabled":false,"fido2ServiceName":"fido2"},"fqdn":"demoexample.gluu.org","gcePdStorageType":"pd-standard","isFqdnRegistered":false,"istio":{"enabled":false,"ingress":false,"namespace":"istio-system"},"jackrabbit":{"enabled":false,"jackRabbitServiceName":"jackrabbit"},"lbIp":"","nginx-ingress":{"enabled":true},"opendj":{"enabled":false,"ldapServiceName":"opendj"},"oxpassport":{"oxPassportServiceName":"oxpassport"},"oxshibboleth":{"enabled":false,"oxShibbolethServiceName":"oxshibboleth"},"persistence":{"enabled":true},"scim":{"appLoggers":{"ldapStatsLogLevel":"INFO","ldapStatsLogTarget":"FILE","persistenceDurationLogLevel":"INFO","persistenceDurationLogTarget":"FILE","persistenceLogLevel":"INFO","persistenceLogTarget":"FILE","scimLogLevel":"INFO","scimLogTarget":"STDOUT","scriptLogLevel":"INFO","scriptLogTarget":"FILE"},"enabled":false,"scimServiceName":"scim"},"storageClass":{"allowVolumeExpansion":true,"allowedTopologies":[],"mountOptions":["debug"],"parameters":{},"provisioner":"microk8s.io/hostpath","reclaimPolicy":"Retain","volumeBindingMode":"WaitForFirstConsumer"},"upgrade":{"enabled":false},"usrEnvs":{"normal":{},"secret":{}}}` | Parameters used globally across all services helm charts. |
     | global.alb.ingress | bool | `false` | Activates ALB ingress |
+    | global.auth-server-key-rotation.enabled | bool | `false` | Boolean flag to enable/disable the auth-server-key rotation cronjob chart. |
+    | global.auth-server.appLoggers | object | `{"auditStatsLogLevel":"INFO","auditStatsLogTarget":"FILE","authLogLevel":"INFO","authLogTarget":"STDOUT","httpLogLevel":"INFO","httpLogTarget":"FILE","ldapStatsLogLevel":"INFO","ldapStatsLogTarget":"FILE","persistenceDurationLogLevel":"INFO","persistenceDurationLogTarget":"FILE","persistenceLogLevel":"INFO","persistenceLogTarget":"FILE","scriptLogLevel":"INFO","scriptLogTarget":"FILE"}` | App loggers can be configured to define where the logs will be redirected to and the level of each in which it should be displayed. |
+    | global.auth-server.appLoggers.auditStatsLogLevel | string | `"INFO"` | jans-auth_audit.log level |
+    | global.auth-server.appLoggers.auditStatsLogTarget | string | `"FILE"` | jans-auth_script.log target |
+    | global.auth-server.appLoggers.authLogLevel | string | `"INFO"` | jans-auth.log level |
+    | global.auth-server.appLoggers.authLogTarget | string | `"STDOUT"` | jans-auth.log target |
+    | global.auth-server.appLoggers.httpLogLevel | string | `"INFO"` | http_request_response.log level |
+    | global.auth-server.appLoggers.httpLogTarget | string | `"FILE"` | http_request_response.log target |
+    | global.auth-server.appLoggers.ldapStatsLogLevel | string | `"INFO"` | jans-auth_persistence_ldap_statistics.log level |
+    | global.auth-server.appLoggers.ldapStatsLogTarget | string | `"FILE"` | jans-auth_persistence_ldap_statistics.log target |
+    | global.auth-server.appLoggers.persistenceDurationLogLevel | string | `"INFO"` | jans-auth_persistence_duration.log level |
+    | global.auth-server.appLoggers.persistenceDurationLogTarget | string | `"FILE"` | jans-auth_persistence_duration.log target |
+    | global.auth-server.appLoggers.persistenceLogLevel | string | `"INFO"` | jans-auth_persistence.log level |
+    | global.auth-server.appLoggers.persistenceLogTarget | string | `"FILE"` | jans-auth_persistence.log target |
+    | global.auth-server.appLoggers.scriptLogLevel | string | `"INFO"` | jans-auth_script.log level |
+    | global.auth-server.appLoggers.scriptLogTarget | string | `"FILE"` | jans-auth_script.log target |
     | global.auth-server.authServerServiceName | string | `"auth-server"` | Name of the auth-server service. Please keep it as default. |
     | global.auth-server.enabled | bool | `true` | Boolean flag to enable/disable auth-server chart. You should never set this to false. |
     | global.cloud.testEnviroment | bool | `false` | Boolean flag if enabled will strip resources requests and limits from all services. |
+    | global.cnGoogleApplicationCredentials | string | `"/etc/jans/conf/google-credentials.json"` | Base64 encoded service account. The sa must have roles/secretmanager.admin to use Google secrets and roles/spanner.databaseUser to use Spanner. |
     | global.cnObExtSigningAlias | string | `""` | Open banking external signing AS Alias. This is a kid value.Used in SSA Validation, kid used while encoding a JWT sent to token URL i.e XkwIzWy44xWSlcWnMiEc8iq9s2G |
     | global.cnObExtSigningJwksCrt | string | `""` | Open banking external signing jwks AS certificate authority string. Used in SSA Validation. This must be encoded using base64.. Used when `.global.cnObExtSigningJwksUri` is set. |
     | global.cnObExtSigningJwksKey | string | `""` | Open banking external signing jwks AS key string. Used in SSA Validation. This must be encoded using base64. Used when `.global.cnObExtSigningJwksUri` is set. |
@@ -619,6 +636,9 @@ If during installation the release was not defined, release name is checked by r
     | global.cnObTransportKeyPassPhrase | string | `""` | Open banking AS transport key passphrase to unlock AS transport key. This must be encoded using base64. |
     | global.cnObTransportTrustStore | string | `""` | Open banking AS transport truststore crt. This is normally generated from the OB issuing CA, OB Root CA and Signing CA. Used when .global.cnObExtSigningJwksUri is set. Used in SSA Validation. This must be encoded using base64. |
     | global.cnPersistenceType | string | `"sql"` | Persistence backend to run Gluu with ldap|couchbase|hybrid|sql|spanner. |
+    | global.config-api.appLoggers | object | `{"configApiLogLevel":"INFO","configApiLogTarget":"STDOUT"}` | App loggers can be configured to define where the logs will be redirected to and the level of each in which it should be displayed. |
+    | global.config-api.appLoggers.configApiLogLevel | string | `"INFO"` | configapi.log level |
+    | global.config-api.appLoggers.configApiLogTarget | string | `"STDOUT"` | configapi.log target |
     | global.config-api.configApiServerServiceName | string | `"config-api"` | Name of the config-api service. Please keep it as default. |
     | global.config-api.enabled | bool | `true` | Boolean flag to enable/disable the config-api chart. |
     | global.config.enabled | bool | `true` | Boolean flag to enable/disable the configuration chart. This normally should never be false |
@@ -666,12 +686,13 @@ If during installation the release was not defined, release name is checked by r
 === "persistence"
     | Key | Type | Default | Description |
     |-----|------|---------|-------------|
-    | persistence | object | `{"dnsConfig":{},"dnsPolicy":"","image":{"pullPolicy":"IfNotPresent","repository":"janssenproject/persistence-loader","tag":"1.0.0_b11"},"resources":{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Job to generate data and intial config for Gluu Server persistence layer. |
+    | persistence | object | `{"dnsConfig":{},"dnsPolicy":"","image":{"pullPolicy":"IfNotPresent","pullSecrets":[],"repository":"janssenproject/persistence-loader","tag":"1.0.0_b12"},"resources":{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}},"usrEnvs":{"normal":{},"secret":{}},"volumeMounts":[],"volumes":[]}` | Job to generate data and intial config for Gluu Server persistence layer. |
     | persistence.dnsConfig | object | `{}` | Add custom dns config |
     | persistence.dnsPolicy | string | `""` | Add custom dns policy |
     | persistence.image.pullPolicy | string | `"IfNotPresent"` | Image pullPolicy to use for deploying. |
+    | persistence.image.pullSecrets | list | `[]` | Image Pull Secrets |
     | persistence.image.repository | string | `"janssenproject/persistence-loader"` | Image  to use for deploying. |
-    | persistence.image.tag | string | `"1.0.0_b11"` | Image  tag to use for deploying. |
+    | persistence.image.tag | string | `"1.0.0_b12"` | Image  tag to use for deploying. |
     | persistence.resources | object | `{"limits":{"cpu":"300m","memory":"300Mi"},"requests":{"cpu":"300m","memory":"300Mi"}}` | Resource specs. |
     | persistence.resources.limits.cpu | string | `"300m"` | CPU limit |
     | persistence.resources.limits.memory | string | `"300Mi"` | Memory limit. |
@@ -714,9 +735,9 @@ auth-server:
     # -- Image  to use for deploying.
     repository: janssenproject/auth-server
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b11
+    tag: 1.0.0_b12
     # -- Image Pull Secrets
-    pullSecrets: [ ]     
+    pullSecrets: [ ]
   # -- Service replica number.
   replicas: 1
   # -- Resource specs.
@@ -792,6 +813,30 @@ config:
     cnCacheType: NATIVE_PERSISTENCE
     # -- The name of the Kubernetes ConfigMap that will hold the configuration layer
     cnConfigKubernetesConfigMap: cn
+    # [google_envs] Envs related to using Google
+    # -- Service account with roles roles/secretmanager.admin base64 encoded string. This is used often inside the services to reach the configuration layer. Used only when global.configAdapterName and global.configSecretAdapter is set to google.
+    cnGoogleSecretManagerServiceAccount: SWFtTm90YVNlcnZpY2VBY2NvdW50Q2hhbmdlTWV0b09uZQo=
+    # -- Project id of the google project the secret manager belongs to. Used only when global.configAdapterName and global.configSecretAdapter is set to google.
+    cnGoogleProjectId: google-project-to-save-config-and-secrets-to
+    # [google_spanner_envs] Envs related to using Google Secret Manager to store config and secret layer
+    # -- Google Spanner ID. Used only when global.cnPersistenceType is spanner.
+    cnGoogleSpannerInstanceId: ""
+    # -- Google Spanner Database ID. Used only when global.cnPersistenceType is spanner.
+    cnGoogleSpannerDatabaseId: ""
+    # [google_spanner_envs] END
+    # [google_secret_manager_envs] Envs related to using Google Secret Manager to store config and secret layer
+    # -- Secret version to be used for secret configuration. Defaults to latest and should normally always stay that way. Used only when global.configAdapterName and global.configSecretAdapter is set to google.
+    cnSecretGoogleSecretVersionId: "latest"
+    # -- Prefix for Gluu secret in Google Secret Manager. Defaults to gluu. If left gluu-secret secret will be created. Used only when global.configAdapterName and global.configSecretAdapter is set to google.
+    cnSecretGoogleSecretNamePrefix: gluu
+    # -- Passphrase for Gluu secret in Google Secret Manager. This is used for encrypting and decrypting data from the Google Secret Manager. Used only when global.configAdapterName and global.configSecretAdapter is set to google.
+    cnGoogleSecretManagerPassPhrase: Test1234#
+    # -- Secret version to be used for configuration. Defaults to latest and should normally always stay that way. Used only when global.configAdapterName and global.configSecretAdapter is set to google. Used only when global.configAdapterName and global.configSecretAdapter is set to google.
+    cnConfigGoogleSecretVersionId: "latest"
+    # -- Prefix for Gluu configuration secret in Google Secret Manager. Defaults to gluu. If left intact gluu-configuration secret will be created. Used only when global.configAdapterName and global.configSecretAdapter is set to google.
+    cnConfigGoogleSecretNamePrefix: gluu
+    # [google_secret_manager_envs] END
+    # [google_envs] END
     # -- Value passed to Java option -XX:MaxRAMPercentage
     cnMaxRamPercent: "75.0"
     # -- Kubernetes secret name holding configuration keys. Used when global.configSecretAdapter is set to kubernetes which is the default.
@@ -804,11 +849,11 @@ config:
   email: support@gluu.org
   image:
     # -- Image  to use for deploying.
-    repository: janssenproject/configuration-manager
+    repository: janssenproject/configurator
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b11
+    tag: 1.0.0_b12
     # -- Image Pull Secrets
-    pullSecrets: [ ]     
+    pullSecrets: [ ]
   # -- Organization name. Used for certificate creation.
   orgName: Gluu
   # -- Resource specs.
@@ -864,9 +909,9 @@ config-api:
     # -- Image  to use for deploying.
     repository: janssenproject/config-api
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b11
+    tag: 1.0.0_b12
     # -- Image Pull Secrets
-    pullSecrets: [ ]     
+    pullSecrets: [ ]
   # -- Service replica number.
   replicas: 1
   # -- Resource specs.
@@ -893,7 +938,7 @@ config-api:
   readinessProbe:
     # -- http readiness probe endpoint
     httpGet:
-      path: jans-config-api/api/v1/health/ready
+      path: /jans-config-api/api/v1/health/ready
       port: 8074
     initialDelaySeconds: 25
     periodSeconds: 25
@@ -923,6 +968,37 @@ global:
     authServerServiceName: auth-server
     # -- Boolean flag to enable/disable auth-server chart. You should never set this to false.
     enabled: true
+    # -- App loggers can be configured to define where the logs will be redirected to and the level of each in which it should be displayed.
+    appLoggers:
+      # -- jans-auth.log target
+      authLogTarget: "STDOUT"
+      # -- jans-auth.log level
+      authLogLevel: "INFO"
+      # -- http_request_response.log target
+      httpLogTarget: "FILE"
+      # -- http_request_response.log level
+      httpLogLevel: "INFO"
+      # -- jans-auth_persistence.log target
+      persistenceLogTarget: "FILE"
+      # -- jans-auth_persistence.log level
+      persistenceLogLevel: "INFO"
+      # -- jans-auth_persistence_duration.log target
+      persistenceDurationLogTarget: "FILE"
+      # -- jans-auth_persistence_duration.log level
+      persistenceDurationLogLevel: "INFO"
+      # -- jans-auth_persistence_ldap_statistics.log target
+      ldapStatsLogTarget: "FILE"
+      # -- jans-auth_persistence_ldap_statistics.log level
+      ldapStatsLogLevel: "INFO"
+      # -- jans-auth_script.log target
+      scriptLogTarget: "FILE"
+      # -- jans-auth_script.log level
+      scriptLogLevel: "INFO"
+      # -- jans-auth_script.log target
+      auditStatsLogTarget: "FILE"
+      # -- jans-auth_audit.log level
+      auditStatsLogLevel: "INFO"
+  awsStorageType: io1
   cloud:
     # -- Boolean flag if enabled will strip resources requests and limits from all services.
     testEnviroment: false
@@ -957,13 +1033,23 @@ global:
   configAdapterName: kubernetes
   # -- The config backend adapter that will hold Gluu secret layer. google|kubernetes
   configSecretAdapter: kubernetes
+  # -- Base64 encoded service account. The sa must have roles/secretmanager.admin to use Google secrets and roles/spanner.databaseUser to use Spanner.
+  cnGoogleApplicationCredentials: /etc/jans/conf/google-credentials.json
   config-api:
     # -- Name of the config-api service. Please keep it as default.
     configApiServerServiceName: config-api
     # -- Boolean flag to enable/disable the config-api chart.
     enabled: true
+    # -- App loggers can be configured to define where the logs will be redirected to and the level of each in which it should be displayed.
+    appLoggers:
+      # -- configapi.log target
+      configApiLogTarget: "STDOUT"
+      # -- configapi.log level
+      configApiLogLevel: "INFO"
   # -- Fully qualified domain name to be used for Gluu installation. This address will be used to reach Gluu services.
   fqdn: demoexample.gluu.org
+  # -- GCE storage kind if using Google disks
+  gcePdStorageType: pd-standard
   # -- Boolean flag to enable mapping global.lbIp  to global.fqdn inside pods on clouds that provide static ip for loadbalancers. On cloud that provide only addresses to the LB this flag will enable a script to actively scan config.configmap.lbAddr and update the hosts file inside the pods automatically.
   isFqdnRegistered: false
   istio:
@@ -978,6 +1064,7 @@ global:
   nginx-ingress:
     # -- Boolean flag to enable/disable the nginx-ingress definitions chart.
     enabled: true
+  # --  Gluu distributions supported are: default|openbanking.
   distribution: openbanking
   persistence:
     # -- Boolean flag to enable/disable the persistence chart.
@@ -1045,6 +1132,7 @@ nginx-ingress:
     - secretName: tls-certificate
       hosts:
       - demoexample.gluu.org
+
 # -- Job to generate data and intial config for Gluu Server persistence layer.
 persistence:
   # -- Add custom normal and secret envs to the service
@@ -1065,9 +1153,9 @@ persistence:
     # -- Image  to use for deploying.
     repository: janssenproject/persistence-loader
     # -- Image  tag to use for deploying.
-    tag: 1.0.0_b11
+    tag: 1.0.0_b12
     # -- Image Pull Secrets
-    pullSecrets: [ ]    
+    pullSecrets: [ ]
   # -- Resource specs.
   resources:
     limits:
