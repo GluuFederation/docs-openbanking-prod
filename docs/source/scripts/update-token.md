@@ -73,3 +73,9 @@ python3 jans-cli-linux-amd64.pyz --operation-id post-config-scripts --data /upda
         return True
         
     ```
+3. The getRefreshTokenLifetimeInSeconds method: This method adds the ability to specify refersh_token lifetime via update_token script. If this method return 0 then built-in configuration property of AS is used to define RT lifetime refreshTokenLifetime.  
+
+   ```python3
+        def getRefreshTokenLifetimeInSeconds(self, context):
+            return 0
+   ```
