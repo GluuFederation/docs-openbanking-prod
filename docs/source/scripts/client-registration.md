@@ -182,7 +182,7 @@ The following are the ***mandatory*** functions which need to be implemented in 
        return JwtUtil.getJSONWebKeys(self.jwks_endpoint).toString()
    ```
 
-An important method of DCR flow to update the client details 
+4. An important method of DCR flow to update the client details 
 
 * The updateClient method
 
