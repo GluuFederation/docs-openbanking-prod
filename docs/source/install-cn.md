@@ -653,7 +653,6 @@ If during installation the release was not defined, release name is checked by r
     | global.lbIp | string | `""` | The Loadbalancer IP created by nginx or istio on clouds that provide static IPs. This is not needed if `global.fqdn` is globally resolvable. |
     | global.nginx-ingress.enabled | bool | `true` | Boolean flag to enable/disable the nginx-ingress definitions chart. |
     | global.persistence.enabled | bool | `true` | Boolean flag to enable/disable the persistence chart. |
-    | global.upgrade.enabled | bool | `false` | Boolean flag used when running helm upgrade command. This allows upgrading the chart without immutable objects errors. |
     | global.usrEnvs | object | `{"normal":{},"secret":{}}` | Add custom normal and secret envs to the service. Envs defined in global.userEnvs will be globally available to all services |
     | global.usrEnvs.normal | object | `{}` | Add custom normal envs to the service. variable1: value1 |
     | global.usrEnvs.secret | object | `{}` | Add custom secret envs to the service. variable1: value1 |
@@ -1069,9 +1068,6 @@ global:
   persistence:
     # -- Boolean flag to enable/disable the persistence chart.
     enabled: true
-  upgrade:
-    # -- Boolean flag used when running helm upgrade command. This allows upgrading the chart without immutable objects errors.
-    enabled: false
 
 # -- Nginx ingress definitions chart
 nginx-ingress:
