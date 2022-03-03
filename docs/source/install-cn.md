@@ -68,7 +68,7 @@ Please calculate the minimum required resources as per services deployed. The fo
        
         ```bash
         sudo su -
-        wget https://raw.githubusercontent.com/GluuFederation/cloud-native-edition/master/automation/startopenabankingdemo.sh && chmod u+x startopenabankingdemo.sh && ./startopenabankingdemo.sh  
+        wget https://raw.githubusercontent.com/GluuFederation/flex/main/automation/startopenabankingdemo.sh && chmod u+x startopenabankingdemo.sh && ./startopenabankingdemo.sh  
         ```
     
     1.  [Map](#non-registered-fqdn) your vm ip to the fqdn `demoexample.gluu.org`
