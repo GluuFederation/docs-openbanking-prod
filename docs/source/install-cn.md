@@ -1,5 +1,18 @@
 # Installation Guide
 
+## VM Based Distribution
+
+We recommend the Cloud Native Distribution for the best performance and user experience. However, for development and testing we also support its VM distribution.
+
+Run the following command to download the installer (`install.py`)
+```
+wget https://raw.githubusercontent.com/JanssenProject/jans/main/jans-linux-setup/jans_setup/install.py
+```
+Run the following command to excute the installer: 
+```
+sudo python3 install.py --profile openbanking
+```
+
 ## Cloud Native Distribution
 
 
