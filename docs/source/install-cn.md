@@ -2,7 +2,7 @@
 
 ## VM Based Distribution
 
-We recommend the Cloud Native Distribution for the best performance and user experience. However, for development and testing we also support its VM distribution.
+We recommend the Cloud Native Distribution for best performance and user experience. However, for development and testing we also support its VM distribution.
 
 Run the following command to download the installer (`install.py`)
 ```
