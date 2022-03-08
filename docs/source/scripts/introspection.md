@@ -5,7 +5,7 @@ Introspection scripts allows to modify response of Introspection Endpoint (spec)
 
 ## Configuration Prerequisites
 - A Janssen Authorization Server installation
-- [Introspection script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/introspection/IntrospectionScript.py) - included in the default Janssen OpenBanking distribution
+- [Introspection script](https://github.com/JanssenProject/jans/blob/main/jans-linux-setup/jans_setup/openbanking/static/extension/introspection/IntrospectionScript.py) - included in the default Janssen OpenBanking distribution
 - Setting configuration Parameters
 
 ## Adding the custom script
