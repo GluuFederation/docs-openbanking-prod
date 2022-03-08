@@ -4,7 +4,7 @@ This script can be used to add custom claims to the id_token. As per the open ba
 
 ## Configuration Prerequisites
 - A Janssen Authorization Server installation
-- [Update Token script](https://github.com/JanssenProject/jans-setup/blob/openbank/static/extension/update_token/UpdateToken.py) - included in the default Janssen OpenBanking distribution
+- [Update Token script](https://github.com/JanssenProject/jans/blob/main/jans-linux-setup/jans_setup/openbanking/static/extension/update_token/UpdateToken.py) - included in the default Janssen OpenBanking distribution
 - Setting configuration Parameters
 
 ## Adding the custom script
