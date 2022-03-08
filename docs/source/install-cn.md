@@ -107,7 +107,7 @@ Please calculate the minimum required resources as per services deployed. The fo
     kubectl create ns gluu
     helm repo add gluu https://gluufederation.github.io/cloud-native-edition/pygluu/kubernetes/templates/helm
     helm repo update
-    helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.0
+    helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.2
     ```
           
 ## Non registered FQDN      
