@@ -1,5 +1,7 @@
 # Installation Guide
 
+
+<!---
 ## VM Based Distribution
 
 We recommend the Cloud Native Distribution for best performance and user experience. However, for development and testing we also support its VM distribution.
@@ -12,6 +14,7 @@ Run the following command to excute the installer:
 ```
 sudo python3 install.py --profile openbanking
 ```
+-->
 
 ## Cloud Native Distribution
 
