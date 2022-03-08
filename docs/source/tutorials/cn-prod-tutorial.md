@@ -230,7 +230,7 @@ The below certificates and keys are needed to continue this tutorial.
         kubectl apply -f gluu_modified_coredns_cm.yaml
         ```    
     
-1.  Install gluu openbanking distribution:    
+1.  Install gluu openbanking distribution, [refere here](https://artifacthub.io/packages/helm/gluu-flex/gluu)  for the latest version details:    
    
     ```bash
     helm repo add gluu https://gluufederation.github.io/cloud-native-edition/pygluu/kubernetes/templates/helm
