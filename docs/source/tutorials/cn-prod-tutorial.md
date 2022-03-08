@@ -235,7 +235,7 @@ The below certificates and keys are needed to continue this tutorial.
     ```bash
     helm repo add gluu https://gluufederation.github.io/cloud-native-edition/pygluu/kubernetes/templates/helm
     helm repo update
-    helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.0
+    helm install <release-name> gluu/gluu -n <namespace> -f override-values.yaml --version=5.0.2
     ```
   
 1.  Wait for your pods to be up and running.  
