@@ -1,6 +1,6 @@
 ## VM Based Distribution
 
-We recommend the Cloud Native Distribution for great performance and user experience. However, for development and testing we also support its VM distribution.
+We recommend the Cloud Native Distribution for production environment. However, for development and testing we also support its VM distribution.
 
 ## VM Preparation
 
@@ -75,7 +75,7 @@ openssl req -new -key server.key -out server.csr
 openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -set_serial 100 -days 365 -outform PEM -out server.crt
 ```
 
-Now, store the server key (`server.key`) and certificate (`server.crt`) file in some location (preferably inside `/etc/certs`) and set its path in the `.conf` file (`/etc/apache2/sites-enabled/https_jans.conf`) with  `SSLCertificateFile` and  `SSLCertificateKeyFile` directives at Line 29-30 as:
+Now, store the server key (`server.key`) and certificate (`server.crt`) file in some location (preferably inside `/etc/certs`) and set its path in the `.conf` file (`/etc/apache2/sites-enabled/https_jans.conf`) with  `SSLCertificateFile` and  `SSLCertificateKeyFile` directives:
 
 ```
 	SSLCertificateFile /etc/certs/bankgluu/server.crt
