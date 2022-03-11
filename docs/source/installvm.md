@@ -48,7 +48,7 @@ The installation script will install required tools, programs, packages and then
 | Enter maximum RAM for applications in MB | Maximum  |
 | RDBM Type | Backend type. Currently only MySQL is supported |
 | Use remote RDBM | Select if connecting to an external MySQL server |
-| Enter Openbanking static kid : GkwIzWy88xWSlcWnLiEc8ip9s2M| The fallback key when key is not passed in requests (as required by Openbanking)|
+| Enter Openbanking static kid | The fallback key when key is not passed in requests (as required by Openbanking)|
 | Use external key | If yes, link to an external Open Banking key file |
 
 Before the last question installer process will display the selected choices and confirms to proceed. as
