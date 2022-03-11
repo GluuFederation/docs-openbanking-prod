@@ -1,6 +1,6 @@
 ## VM Based Distribution
 
-We recommend the Cloud Native Distribution for production environment. However, for development and testing we also support its VM distribution.
+This section covers details on installing Gluu Openbanking Indentity Platform 1.0 in a VM. We recommend the Cloud Native Distribution for production environment. However, for development and testing we also support its VM distribution.
 
 ## VM Preparation
 
