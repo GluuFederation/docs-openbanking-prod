@@ -1,6 +1,6 @@
 # Pushed Authorization Requests(PAR) and JWT Secured Authorization Response Mode(JARM)
 This section covers details of two important features required by openbanking ecosystem. The Gluu Open Banking Identity Platform 
-supports [PAR](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-par-07) and [JARM](https://github.com/JanssenProject/docs/issues/24) standards.  
+supports [PAR](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-par-07) and [JARM](https://openid.net/specs/openid-financial-api-jarm-ID1.html) specification.  
 These two features are bundled in the installation so when you install the Gluu Openbanking Identity Platform the Authorization 
 Server(AS) will support these features by default. The older/existing installation may require to update WAR/ image. Moreover, these features are also [FAPI certified for Brazil Open Banking (Based on FAPI 1 Advanced Final).](https://openid.net/certification/#FAPI_OPs)
 
