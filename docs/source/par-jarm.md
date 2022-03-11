@@ -32,4 +32,4 @@ Here clients are enabled to request the transmission of the authorization respon
 This mechanism enhances the security of the standard authorization response since it adds support for signing and encryption,sender authentication, 
 audience restriction. It also provides protection from replay, credential leakage, and mix-up attacks. It can be combined with any response type.
 
-For this feature AS supports new response modes ("query.jwt","fragment.jwt","form_post.jwt","jwt") and additional signing, encryption algorithms. 
+For this feature AS supports new response modes (`query.jwt`,`fragment.jwt`,`form_post.jwt`,`jwt`) and additional signing, encryption algorithms. 
