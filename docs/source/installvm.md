@@ -123,4 +123,4 @@ The command line utility keytool is installed with JDK, it can be used to import
 
 ## Accessing the Platform
 
-After successful installation, access the Gluu Open Banking Platform using either [our CLI](https://gluu.org/docs/openbanking/jans-cli/) or [curl](https://gluu.org/docs/openbanking/curl/).
+After successful installation, access the Gluu Open Banking Platform using either [jans-cli](https://gluu.org/docs/openbanking/jans-cli/) or [curl](https://gluu.org/docs/openbanking/curl/).
