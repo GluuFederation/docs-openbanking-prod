@@ -21,9 +21,9 @@ Moreover, there are two new client configuration as:
 
     *     parLifetime: An integer parameter representing the lifetime (in seconds) of 
           the pushed authorization request. 
-    *     requirePar - Boolean parameter indicating whether the only means of initiating 
-          an authorization request the client is allowed to use is a pushed authorization 
-          request. If omitted, the default value is "false".
+    *     requirePar - Boolean parameter indicating whether the only means of 
+          initiating an authorization request the client is allowed to use is a 
+          pushed authorization request. If omitted, the default value is "false".
 
 ## JWT Secured Authorization Response Mode-JARM
    
