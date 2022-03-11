@@ -55,7 +55,7 @@ Before the last question installer process will display the selected choices and
 
 | Prompt | Description |
 | ---- | --------- |
-| Proceed with these values [Y|n]| Confirmation before setting up the services. 
+| Proceed with these values [Y/n]| Confirmation before setting up the services. 
  
 ### Uninstalling Janssen Server
 
