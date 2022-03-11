@@ -80,14 +80,14 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -set_serial 100 -days 
 Now, store the server key (`server.key`) and certificate (`server.crt`) file in some location (preferably inside `/etc/certs`) and set its path in the apache `.conf` file (`/etc/apache2/sites-enabled/https_jans.conf`) with  `SSLCertificateFile` and  `SSLCertificateKeyFile` directives:
 
 ```
-	SSLCertificateFile /etc/certs/bankgluu/server.crt
-	SSLCertificateKeyFile /etc/certs/bankgluu/server.key
+SSLCertificateFile /etc/certs/bankgluu/server.crt
+SSLCertificateKeyFile /etc/certs/bankgluu/server.key
 ```
 
 The path of CA certificate file should be set to SSLCACertificateFile directive as:
 
 ```
-	SSLCACertificateFile /etc/apache2/certs/matls.pem    
+SSLCACertificateFile /etc/apache2/certs/matls.pem    
 ```
 
 The following commands will create client’s private key (`client.key`), CSR (`client.csr`) and certificate (`client.crt`):
