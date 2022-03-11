@@ -52,7 +52,9 @@ The installation script will install required tools, programs, packages and then
 | Use external key | If yes, link to an external Open Banking key file |
 
 Before the last question installer process will display the selected choices and confirms to proceed. as
+
 | Prompt | Description |
+| ---- | --------- |
 | Proceed with these values [Y|n]| Confirmation before setting up the services. 
  
 ### Uninstalling Janssen Server
