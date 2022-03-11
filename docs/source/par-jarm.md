@@ -15,7 +15,7 @@ authorization endpoint.
 We have a new configuration property for PAR as:
 
     *     parEndpoint - String, corresponds to pushed_authorization_request_endpoint 
-          as defined by spec.
+          as defined by specification.
 
 Moreover, there are two new client configuration as:
 
