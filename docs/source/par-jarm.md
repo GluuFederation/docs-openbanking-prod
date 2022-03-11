@@ -1,7 +1,7 @@
 # Pushed Authorization Requests(PAR) and JWT Secured Authorization Response Mode(JARM)
-This section covers details of two important features required by openbanking ecosystem. The Gluu Open Banking Identity Platform 
+This section covers details of two important features required by open banking ecosystem. The Gluu Open Banking Identity Platform 
 supports [PAR](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-par-07) and [JARM](https://openid.net/specs/openid-financial-api-jarm-ID1.html) specification.  
-These two features are bundled in the installation so when you install the Gluu Openbanking Identity Platform the Authorization 
+These two features are bundled in the installation so when you install the Gluu Open Banking Identity Platform the Authorization 
 Server(AS) will support these features by default. The older/existing installation may require to update WAR/ image. 
 
 Moreover, these features are also [FAPI certified for Brazil Open Banking (Based on FAPI 1 Advanced Final).](https://openid.net/certification/#FAPI_OPs)
@@ -12,7 +12,8 @@ in return the clients gets a reference (named as request URI value) that will be
 PAR enables the OAuth clients to push the payload of an authorization request directly to the authorization server in exchange for a 
 request URI value. This request URI value is used as reference to the authorization request payload data in a subsequent call to the 
 authorization endpoint.
-    We can set different PAR lifetime for the different clients. PAR lifetime will be 600 seconds if it is unspecified.
+
+    We can set different PAR lifetimes for different clients. PAR lifetime will be 600 seconds if it is unspecified.
 
 We have a new configuration property for PAR as:
 
