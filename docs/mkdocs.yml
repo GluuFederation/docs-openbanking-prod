@@ -43,7 +43,7 @@ markdown_extensions:
 nav:
 - Overview: index.md
 - Installation:
-    - Cloud Native Distribution (recommended for production): install-cn.md
+    - Cloud Native Distribution: install-cn.md
     - VM Distribution (recommended for development/ testing): installvm.md
 #- Use Cases:
 #    - Authorization: use-cases/authz.md
