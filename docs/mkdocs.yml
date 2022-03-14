@@ -44,7 +44,7 @@ nav:
 - Overview: index.md
 - Installation:
     - Cloud Native Distribution: install-cn.md
-    - VM Distribution (recommended for development/ testing): installvm.md
+    - VM Distribution (recommended only for development/ testing): installvm.md
 #- Use Cases:
 #    - Authorization: use-cases/authz.md
 #    - CIBA: use-cases/ciba.md
