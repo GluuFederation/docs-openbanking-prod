@@ -63,7 +63,7 @@ Execute the installation script with the `-uninstall` argument.
 
 ## MTLS Configuration
 
-For MTLS, OBIE-issued certificates and keys should be used. The following discussion assumes that the file `ca.crt` has a CA certificate and `ca.key` has a CA private key. 
+For MTLS, OBIE-issued (for openbanking UK) certificates and keys should be used. The following discussion assumes that the file `ca.crt` has a CA certificate and `ca.key` has a CA private key. 
 Following command generates self-signed ca.crt and ca.key: 
 ```
 openssl req -newkey rsa:2048 -nodes -keyform PEM -keyout ca.key -x509 -days 3650 -outform PEM -out ca.crt
