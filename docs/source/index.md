@@ -7,7 +7,7 @@ The Gluu Open Banking Identity Platform is a specific profile of the [Gluu Serve
 * Dynamic Client Registration using software statements  
 * Payment Authorization  
 * Identity - eKYC  
-* Client Initiated Authentication (mobile / out of band)  
+* Client Initiated Authentication (mobile / out-of-band)  
 
 Other services needed by enterprises--but not by banks--have been disabled. The goal is to reduce the security surface area to make the platform easy to deploy, easy to keep up to date, and easy to rollout new features with zero downtime.
 
