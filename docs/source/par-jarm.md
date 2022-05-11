@@ -15,18 +15,18 @@ authorization endpoint.
 
     We can set different PAR lifetimes for different clients. PAR lifetime will be 600 seconds if it is unspecified.
 
-We have a new configuration property for PAR as:
+We have two new configuration property for PAR as:
 
     *     parEndpoint - String, corresponds to pushed_authorization_request_endpoint 
           as defined by specification.
-
-Moreover, there are two new client configuration as:
-
-    *     parLifetime: An integer parameter representing the lifetime (in seconds) of 
-          the pushed authorization request. 
     *     requirePar - Boolean parameter indicating whether the only means of 
           initiating an authorization request the client is allowed to use is a 
           pushed authorization request. If omitted, the default value is "false".
+
+Moreover, there is a new client configuration as:
+
+    *     parLifetime: An integer parameter representing the lifetime (in seconds) of 
+          the pushed authorization request. 
 
 ## JWT Secured Authorization Response Mode-JARM
    
